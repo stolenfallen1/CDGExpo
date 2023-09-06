@@ -9,7 +9,9 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+          gestureEnabled: false, // disable swipe gesture for navigating back
+        }}>
         <Stack.Screen
           name="Home"
           component={HomeScreen}

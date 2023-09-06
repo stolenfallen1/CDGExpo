@@ -1,4 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
+// Components
 import Settings from "../components/navigation/functionComponents/Settings";
 import BottomNav from "../components/navigation/bottomNav/BottomNav";
 
