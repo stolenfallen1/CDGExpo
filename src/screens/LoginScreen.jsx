@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { useSetRecoilState } from "recoil";
+import { authTokenState } from "../atoms/authTokenState";
 
 export default function LoginScreen() {
-  const navigation = useNavigation();
   const [idnumber, setIdnumber] = useState("");
   const [password, setPassword] = useState("");
+
+  const setAuthToken = useSetRecoilState(authTokenState);
+
+  const navigation = useNavigation();
 
   const handleLoginPress = async () => {
     try {
@@ -17,9 +22,11 @@ export default function LoginScreen() {
         },
         body: JSON.stringify({ idnumber, password }),
       });
-
+  
       if (response.ok) {
-        // login successful, show success message and navigate to dashboard
+        const data = await response.json();
+        // login successful, store token in Recoil atom
+        setAuthToken(data.access_token);
         alert("Login successful!");
         navigation.navigate("Dashboard");
       } else {
@@ -36,7 +43,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}
-        label="Email"
+        label="ID"
         value={idnumber}
         onChangeText={setIdnumber}
       />

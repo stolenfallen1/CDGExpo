@@ -141,3 +141,5 @@ const navData = [
     rule: "browse_purchaseRequestMaster",
   },
 ];
+
+export default navData;

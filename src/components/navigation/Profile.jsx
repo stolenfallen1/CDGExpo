@@ -1,9 +1,16 @@
 import React from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, Text } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { useRecoilValue } from "recoil";
+import { authTokenState } from "../../atoms/authTokenState";
 
 export default function Logout() {
+  const authToken = useRecoilValue(authTokenState);
+
+  // Test purposes
+  console.log(authToken);
+
   const navigation = useNavigation();
 
   const handleLogoutPress = () => {
@@ -18,6 +25,8 @@ export default function Logout() {
         {
           text: "OK",
           onPress: () => {
+            // delete token from Recoil atom
+            // navigate to login screen
             navigation.navigate("Login");
           },
         },
@@ -27,12 +36,25 @@ export default function Logout() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {/* Profile data */}
-      <Image />
-      <Text>Firstname</Text>
-      <Text>Lastname</Text>
+      {/* <Image /> */}
+      <Text style={styles.text}>Hello World</Text>
       <Button onPress={handleLogoutPress}>Logout</Button>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 40,
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+});
