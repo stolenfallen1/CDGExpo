@@ -1,9 +1,9 @@
 import { RecoilRoot } from "recoil";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./src/screens/HomeScreen";
-import LoginScreen from "./src/screens/LoginScreen";
-import Dashboard from "./src/screens/Dashboard";
+import HomeScreen from "./src/screens/home/HomeScreen";
+import LoginScreen from "./src/screens/login/LoginScreen";
+import Dashboard from "./src/screens/dashboard/Dashboard";
 
 const Stack = createStackNavigator();
 

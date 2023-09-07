@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useSetRecoilState } from "recoil";
-import { authTokenState } from "../atoms/authTokenState";
+import { authTokenState } from "../../atoms/authTokenState";
 
 export default function LoginScreen() {
   const [idnumber, setIdnumber] = useState("");

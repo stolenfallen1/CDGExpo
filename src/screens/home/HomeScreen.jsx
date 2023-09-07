@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import CDUHLOGO from "../../assets/HomeScreenAssets/CDUH-logo.png";
+import CDUHLOGO from "../../../assets/HomeScreenAssets/CDUH-logo.png";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
