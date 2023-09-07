@@ -75,17 +75,18 @@ export default function Profile() {
           <Text style={styles.text}>
             Birthdate: {userData.user.details.birthdate}
           </Text>
+          <Button
+            style={{ backgroundColor: "#2596be" }}
+            mode="contained"
+            onPress={handleLogoutPress}
+          >
+            Logout
+          </Button>
         </View>
       ) : (
-        <Text>Loading...</Text>
+        // Loading state
+        <View></View>
       )}
-      <Button
-        style={{ backgroundColor: "#2596be" }}
-        mode="contained"
-        onPress={handleLogoutPress}
-      >
-        Logout
-      </Button>
     </View>
   );
 }

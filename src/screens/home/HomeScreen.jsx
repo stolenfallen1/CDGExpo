@@ -2,9 +2,22 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import CDUHLOGO from "../../../assets/HomeScreenAssets/CDUH-logo.png";
+import HomeSplash from "./HomeSplash";
+import { useState, useEffect } from "react";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const [isSplashReady, setSplashReady] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSplashReady(true);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   const handleHomePress = () => {
     navigation.navigate("Login");
@@ -12,17 +25,23 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image source={CDUHLOGO} style={styles.cduLogo} />
-      </View>
-      <Button
-        style={{ backgroundColor: "#2596be" }}
-        mode="contained"
-        onPress={handleHomePress}
-      >
-        Get started
-      </Button>
-      <Text style={styles.textFooter}>© Alright reserved 2023</Text>
+      {isSplashReady ? (
+        <>
+          <View style={styles.imageContainer}>
+            <Image source={CDUHLOGO} style={styles.cduLogo} />
+          </View>
+          <Button
+            style={{ backgroundColor: "#2596be" }}
+            mode="contained"
+            onPress={handleHomePress}
+          >
+            Get started
+          </Button>
+          <Text style={styles.textFooter}>© Alright reserved 2023</Text>
+        </>
+      ) : (
+        <HomeSplash />
+      )}
     </View>
   );
 }

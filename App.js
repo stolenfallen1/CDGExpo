@@ -11,9 +11,11 @@ function App() {
   return (
     <RecoilRoot>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{
+        <Stack.Navigator
+          screenOptions={{
             gestureEnabled: false, // disable swipe gesture for navigating back
-          }}>
+          }}
+        >
           <Stack.Screen
             name="Home"
             component={HomeScreen}
