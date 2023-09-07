@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Alert, Text, Image } from "react-native";
 import { Button } from "react-native-paper";
-import userImage from "../../../assets/ProfileAssets/default_user_img.webp";
+import userImage from "../../assets/ProfileAssets/default_user_img.webp";
 import { useNavigation } from "@react-navigation/native";
 import { useRecoilValue } from "recoil";
-import { authTokenState } from "../../atoms/authTokenState";
+import { authTokenState } from "../atoms/authTokenState";
 import axios from "axios";
 
 export default function Profile() {

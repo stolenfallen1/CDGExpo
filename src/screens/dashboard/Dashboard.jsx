@@ -1,17 +1,8 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
-// Components
-import Settings from "../../components/navigation/functionComponents/Settings";
-import BottomNav from "../../components/navigation/bottomNav/BottomNav";
+import React from 'react';
+import AppNavigator from "../../navigation/AppNavigator";
 
-const Drawer = createDrawerNavigator();
-
-export default function DrawerNav() {
+export default function Dashboard() {
   return (
-    <>
-      <Drawer.Navigator initialRouteName="Dashboard">
-        <Drawer.Screen name="Settings" component={Settings} />
-      </Drawer.Navigator>
-      <BottomNav/>
-    </>
+      <AppNavigator />
   );
 }
