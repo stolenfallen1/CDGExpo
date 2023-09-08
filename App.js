@@ -6,6 +6,8 @@ import HomeScreen from "./src/screens/home/HomeScreen";
 import LoginScreen from "./src/screens/login/LoginScreen";
 import Dashboard from "./src/screens/dashboard/Dashboard";
 import DrawerContent from "./src/navigation/DrawerContent";
+import Profile from "./src/components/Profile";
+import VendorsSupplier from "./src/navigation/MasterFiles/VendorsSupplier";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,6 +28,10 @@ function App() {
           />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen
+            name="Profile"
+            component={Profile}
+          />
+          <Stack.Screen
             name="Dashboard"
             options={{ headerShown: false }}
           >
@@ -35,6 +41,7 @@ function App() {
               </Drawer.Navigator>
             )}
           </Stack.Screen>
+          <Stack.Screen name="Vendor/Supplier" component={VendorsSupplier} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

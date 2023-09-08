@@ -1,8 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { routes } from '../navData/menuItem';
-import { useState } from 'react';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { routes } from "../navData/menuItem";
+import { useState } from "react";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const DrawerContent = ({ navigation }) => {
   const [expandedItems, setExpandedItems] = useState([]);
@@ -26,7 +27,11 @@ const DrawerContent = ({ navigation }) => {
               style={styles.menuItemButton}
             >
               <Text style={styles.menuItemText}>
-                {isExpanded ? '-' : '+'}
+                {isExpanded ? (
+                  <Icon name="caretup" size={10} color="#2596be" />
+                ) : (
+                  <Icon name="caretdown" size={10} color="#2596be" />
+                )}
               </Text>
               <Text style={styles.menuItemText}>{item.name}</Text>
             </TouchableOpacity>
@@ -47,9 +52,19 @@ const DrawerContent = ({ navigation }) => {
     });
   };
 
+  const handleProfile = () => {
+    navigation.navigate("Profile");
+  };
+
   return (
     <View style={styles.container}>
       <DrawerContentScrollView>
+        <TouchableOpacity onPress={handleProfile}>
+          <Image
+            source={require("../../assets/ProfileAssets/default_user_img.webp")}
+            style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: "#f7f7f7" }}
+          />
+        </TouchableOpacity>
         {renderMenuItems(routes)}
       </DrawerContentScrollView>
     </View>
@@ -61,14 +76,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuItemButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
   },
   menuItemText: {
     fontSize: 16,
     marginLeft: 10,
-    color: '#000',
+    color: "#000",
   },
 });
 

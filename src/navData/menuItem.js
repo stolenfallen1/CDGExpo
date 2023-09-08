@@ -1,5 +1,5 @@
 // Master Files
-import VendorSupplier from '../navigation/MasterFiles/VendorsSupplier'
+import VendorsSupplier from '../navigation/MasterFiles/VendorsSupplier';
 // Items Management
 import ItemsMaster from '../navigation/MasterFiles/ItemManagement/ItemsMaster'
 import ItemsServices from '../navigation/MasterFiles/ItemManagement/ItemsServices'
@@ -30,7 +30,7 @@ export const routes = [
     screens: [
       {
         name: 'Vendor/Supplier',
-        component: VendorSupplier,
+        component: VendorsSupplier,
       },
       {
         name: 'Item Management',
