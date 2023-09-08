@@ -1,145 +1,139 @@
-const navData = [
+// Master Files
+import VendorSupplier from '../navigation/MasterFiles/VendorsSupplier'
+// Items Management
+import ItemManagement from "../navigation/MasterFiles/ItemManagement"
+import ItemsMaster from '../navigation/MasterFiles/ItemManagement/ItemsMaster'
+import ItemsServices from '../navigation/MasterFiles/ItemManagement/ItemsServices'
+// Tools
+import AuditTrails from "../navigation/Tools/AuditTrails"
+import SetupOptions from "../navigation/Tools/SetupOptions"
+// Import Data
+import ImportData from "../navigation/Tools/ImportData"
+import ImportVendor from "../navigation/Tools/ImportData/ImportVendor"
+import PurchaseOrders from "../navigation/Tools/ImportData/PurchaseOrders"
+// Transactions
+import Audit from "../navigation/Transaction/Audit"
+// Inventory Management
+import InventoryManagement from "../navigation/Transaction/InventoryMangement"
+import Deliveries from "../navigation/Transaction/InventoryManagement/Deliveries"
+import PurchaseReturns from "../navigation/Transaction/InventoryManagement/PurchaseReturns"
+import StockIssue from "../navigation/Transaction/InventoryManagement/StockIssue"
+import StockRequisitions from "../navigation/Transaction/InventoryManagement/StockRequisitions"
+import StockTransfers from "../navigation/Transaction/InventoryManagement/StockTransfers"
+// Procurement
+import Procurement from "../navigation/Transaction/Procurements"
+import Canvas from "../navigation/Transaction/Procurements/Canvas"
+import PurchaseOrder from "../navigation/Transaction/Procurements/PurchaseOrder"
+import PurchaseRequest from "../navigation/Transaction/Procurements/PurchaseRequest"
+import RequestQuatation from "../navigation/Transaction/Procurements/RequestQuatation"
+
+
+export const routes = [
   {
-    name: "Master Files",
-    alias: "master-files",
-    rule: "browse_ItemMaster",
+    name: 'Master Files',
     screens: [
       {
-        name: "Vendors . Supplier",
-        alias: "vendors",
-        rule: "browse_vendors",
+        name: 'Vendor/Supplier',
+        component: VendorSupplier,
       },
       {
-        name: "Item Management",
-        alias: "item-management",
-        rule: "browse_ItemMaster",
+        name: 'Item Management',
+        component: ItemManagement, // wala pa
         screens: [
           {
-            name: "Items and Services",
-            alias: "item-services",
-            rule: "browse_ItemMaster",
+            name: 'Items Master',
+            component: ItemsMaster,
           },
           {
-            name: "Item Master By Location",
-            alias: "item-locations",
-            rule: "browse_ItemMaster",
+            name: 'Items Services',
+            component: ItemsServices,
           },
         ],
       },
     ],
   },
   {
-    name: "Transaction",
-    alias: "transactions",
-    rule: "browse_purchaseRequestMaster",
+    name: 'Tools',
     screens: [
       {
-        name: "Audit",
-        alias: "audit",
-        rule: "browse_audits",
+        name: 'Audit Trails',
+        component: AuditTrails,
       },
       {
-        name: "Procurements",
-        alias: "procurements",
-        rule: "browse_purchaseRequestMaster",
-        screens: [
-          {
-            name: "Purchase request",
-            alias: "purchase-request",
-            rule: "browse_purchaseRequestMaster",
-          },
-          {
-            name: "Request for quotation",
-            alias: "request-quotation",
-            rule: "browse_purchaseRequestMaster",
-          },
-          {
-            name: "Canvas",
-            alias: "canvas",
-            rule: "browse_canvasMaster",
-          },
-          {
-            name: "Purchase order",
-            alias: "purchase-order",
-            rule: "browse_purchaseOrderMaster",
-          },
-        ],
+        name: 'Setup Options',
+        component: SetupOptions,
       },
       {
-        name: "Inventory Mngt",
-        alias: "inventory-mngt",
-        rule: "browse_RRMaster",
+        name: 'Import Data',
+        component: ImportData,  // wala pa
         screens: [
           {
-            name: "Deliveries",
-            alias: "deliveries",
-            rule: "browse_RRMaster",
+            name: 'Import Vendor',
+            component: ImportVendor,
           },
           {
-            name: "Stock transfers",
-            alias: "stock-transfers",
-            rule: "browse_purchaseRequestMaster",
-          },
-          {
-            name: "Stock requisitions",
-            alias: "stock-requisition",
-            rule: "browse_purchaseRequestMaster",
-          },
-          {
-            name: "Purchase returns",
-            alias: "purchase-return",
-            rule: "browse_purchaseRequestMaster",
-          },
-          {
-            name: "Stock issuances",
-            alias: "stock-issuance",
-            rule: "browse_purchaseRequestMaster",
+            name: 'Purchase Order',
+            component: PurchaseOrders,
           },
         ],
       },
     ],
   },
   {
-    name: "Tools",
-    icon: "mdi-cog",
-    alias: "tools",
-    rule: "browse_purchaseRequestMaster",
+    name: 'Transaction',
     screens: [
       {
-        name: "Import data",
-        alias: "import-data",
-        icon: "mdi-note-multiple",
-        rule: "browse_purchaseRequestMaster",
+        name: 'Audit',
+        component: Audit,
+      },
+      {
+        name: 'Inventory Management',
+        component: InventoryManagement, // wala pa
         screens: [
           {
-            name: "Import vendors",
-            alias: "import-vendors",
-            rule: "browse_purchaseRequestMaster",
+            name: 'Deliveries',
+            component: Deliveries,
           },
           {
-            name: "Purchase orders",
-            alias: "purchase-orders",
-            rule: "browse_purchaseRequestMaster",
+            name: 'Purchase Returns',
+            component: PurchaseReturns,
+          },
+          {
+            name: 'Stock Issue',
+            component: StockIssue,
+          },
+          {
+            name: 'Stock Requisitions',
+            component: StockRequisitions,
+          },
+          {
+            name: 'Stock Transfer',
+            component: StockTransfers,
           },
         ],
       },
       {
-        name: "Audit trails",
-        alias: "audit-trails",
-        rule: "browse_purchaseRequestMaster",
-      },
-      {
-        name: "Setup options",
-        alias: "setup-options",
-        rule: "browse_RRMaster",
+        name: 'Procurement',
+        component: Procurement, // wala pa
+        screens: [
+          {
+            name: 'Canvas',
+            component: Canvas,
+          },
+          {
+            name: 'Purchase Order',
+            component: PurchaseOrder,
+          },
+          {
+            name: 'Purchase Request',
+            component: PurchaseRequest,
+          },
+          {
+            name: 'Request Quotation',
+            component: RequestQuatation,
+          },
+        ],
       },
     ],
-  },
-  {
-    name: "Report",
-    alias: "manage-supplier",
-    rule: "browse_purchaseRequestMaster",
   },
 ];
-
-export default navData;
