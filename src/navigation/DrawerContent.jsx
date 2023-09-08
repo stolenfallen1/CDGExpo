@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { routes } from "../navData/menuItem";
-import { useState } from "react";
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { routes } from '../navData/menuItem';
+import { useState } from 'react';
 
 const DrawerContent = ({ navigation }) => {
   const [expandedItems, setExpandedItems] = useState([]);
@@ -16,22 +16,19 @@ const DrawerContent = ({ navigation }) => {
   };
 
   const renderMenuItems = (menuItems, level = 0) => {
-    console.log("menuItems:", menuItems);
-    console.log("expandedItems:", expandedItems);
     return menuItems.map((item) => {
       if (item.screens) {
         const isExpanded = expandedItems.includes(item.name);
-        console.log("isExpanded:", isExpanded);
         return (
           <View key={item.name} style={{ marginLeft: level * 20 }}>
-            <TouchableOpacity onPress={() => toggleItem(item.name)}>
-              <DrawerItem
-                label={item.name}
-                icon={() => (
-                  <Text>{isExpanded ? "-" : "+"}</Text>
-                )}
-                onPress={() => {}}
-              />
+            <TouchableOpacity
+              onPress={() => toggleItem(item.name)}
+              style={styles.menuItemButton}
+            >
+              <Text style={styles.menuItemText}>
+                {isExpanded ? '-' : '+'}
+              </Text>
+              <Text style={styles.menuItemText}>{item.name}</Text>
             </TouchableOpacity>
             {isExpanded && renderMenuItems(item.screens, level + 1)}
           </View>
@@ -43,6 +40,7 @@ const DrawerContent = ({ navigation }) => {
             label={item.name}
             onPress={() => navigation.navigate(item.component)}
             style={{ marginLeft: (level + 1) * 20 }}
+            labelStyle={styles.menuItemText}
           />
         );
       }
@@ -50,12 +48,28 @@ const DrawerContent = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <DrawerContentScrollView>
         {renderMenuItems(routes)}
       </DrawerContentScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  menuItemButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  menuItemText: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: '#000',
+  },
+});
 
 export default DrawerContent;

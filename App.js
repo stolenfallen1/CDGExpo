@@ -31,7 +31,7 @@ function App() {
           >
             {() => (
               <Drawer.Navigator drawerContent={DrawerContent}>
-                <Drawer.Screen name="Dashboard" component={Dashboard} />
+                <Drawer.Screen name="CDG IT" component={Dashboard} />
               </Drawer.Navigator>
             )}
           </Stack.Screen>
