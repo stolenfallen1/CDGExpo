@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { routes } from "../navData/menuItem";
 import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/AntDesign";
 
 const DrawerContent = ({ navigation }) => {
@@ -21,16 +22,16 @@ const DrawerContent = ({ navigation }) => {
       if (item.screens) {
         const isExpanded = expandedItems.includes(item.name);
         return (
-          <View key={item.name} style={{ marginLeft: level * 20 }}>
+          <View key={item.name}>
             <TouchableOpacity
               onPress={() => toggleItem(item.name)}
               style={styles.menuItemButton}
             >
               <Text style={styles.menuItemText}>
                 {isExpanded ? (
-                  <Icon name="caretup" size={10} color="#2596be" />
+                  <Icon name="caretup" size={14} style={{ color: "blue" }} />
                 ) : (
-                  <Icon name="caretdown" size={10} color="#2596be" />
+                  <Icon name="caretdown" size={14} style={{ color: "blue" }} />
                 )}
               </Text>
               <Text style={styles.menuItemText}>{item.name}</Text>
@@ -44,27 +45,19 @@ const DrawerContent = ({ navigation }) => {
             key={item.name}
             label={item.name}
             onPress={() => navigation.navigate(item.component)}
-            style={{ marginLeft: (level + 1) * 20 }}
             labelStyle={styles.menuItemText}
+            icon={() => (
+              <Ionicons name={item.iconName} size={18} color={item.iconColor} />
+            )}
           />
         );
       }
     });
   };
 
-  const handleProfile = () => {
-    navigation.navigate("Profile");
-  };
-
   return (
     <View style={styles.container}>
       <DrawerContentScrollView>
-        <TouchableOpacity onPress={handleProfile}>
-          <Image
-            source={require("../../assets/ProfileAssets/default_user_img.webp")}
-            style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: "#f7f7f7" }}
-          />
-        </TouchableOpacity>
         {renderMenuItems(routes)}
       </DrawerContentScrollView>
     </View>
@@ -74,6 +67,8 @@ const DrawerContent = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 50,
+    paddingRight: 5,
   },
   menuItemButton: {
     flexDirection: "row",

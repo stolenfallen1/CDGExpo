@@ -31,6 +31,8 @@ export const routes = [
       {
         name: 'Vendor/Supplier',
         component: VendorsSupplier,
+        iconName: 'person',
+        iconColor: '#2596be',
       },
       {
         name: 'Item Management',
@@ -38,10 +40,14 @@ export const routes = [
           {
             name: 'Items Master',
             component: ItemsMaster,
+            iconName: 'cube',
+            iconColor: '#2596be',
           },
           {
             name: 'Items Services',
             component: ItemsServices,
+            iconName: 'settings-outline', 
+            iconColor: '#2596be',
           },
         ],
       },
@@ -53,10 +59,14 @@ export const routes = [
       {
         name: 'Audit Trails',
         component: AuditTrails,
+        iconName: 'document-text',
+        iconColor: '#2596be',
       },
       {
         name: 'Setup Options',
         component: SetupOptions,
+        iconName: 'options',
+        iconColor: '#2596be',
       },
       {
         name: 'Import Data',
@@ -64,10 +74,14 @@ export const routes = [
           {
             name: 'Import Vendor',
             component: ImportVendor,
+            iconName: 'person-add',
+            iconColor: '#2596be',
           },
           {
             name: 'Purchase Order',
             component: PurchaseOrders,
+            iconName: 'cart',
+            iconColor: '#2596be',
           },
         ],
       },
@@ -79,6 +93,8 @@ export const routes = [
       {
         name: 'Audit',
         component: Audit,
+        iconName: 'document-text',
+        iconColor: '#2596be',
       },
       {
         name: 'Inventory Management',
@@ -86,22 +102,32 @@ export const routes = [
           {
             name: 'Deliveries',
             component: Deliveries,
+            iconName: 'md-car', 
+            iconColor: '#2596be',
           },
           {
             name: 'Purchase Returns',
             component: PurchaseReturns,
+            iconName: 'arrow-undo',
+            iconColor: '#2596be',
           },
           {
             name: 'Stock Issue',
             component: StockIssue,
+            iconName: 'cube-outline',
+            iconColor: '#2596be',
           },
           {
             name: 'Stock Requisitions',
             component: StockRequisitions,
+            iconName: 'clipboard',
+            iconColor: '#2596be',
           },
           {
             name: 'Stock Transfer',
             component: StockTransfers,
+            iconName: 'swap-horizontal',
+            iconColor: '#2596be',
           },
         ],
       },
@@ -111,18 +137,26 @@ export const routes = [
           {
             name: 'Canvas',
             component: Canvas,
+            iconName: 'documents',
+            iconColor: '#2596be',
           },
           {
             name: 'Purchase Order',
             component: PurchaseOrder,
+            iconName: 'cart',
+            iconColor: '#2596be',
           },
           {
             name: 'Purchase Request',
             component: PurchaseRequest,
+            iconName: 'clipboard-outline', 
+            iconColor: '#2596be',
           },
           {
             name: 'Request Quotation',
             component: RequestQuatation,
+            iconName: 'document-attach',
+            iconColor: '#2596be',
           },
         ],
       },

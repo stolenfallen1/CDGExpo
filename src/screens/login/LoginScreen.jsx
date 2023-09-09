@@ -4,12 +4,14 @@ import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useSetRecoilState } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
+import { userRoleState } from "../../atoms/userRoleState";
 
 export default function LoginScreen() {
   const [idnumber, setIdnumber] = useState("");
   const [password, setPassword] = useState("");
 
   const setAuthToken = useSetRecoilState(authTokenState);
+  const setUserRole = useSetRecoilState(userRoleState);
 
   const navigation = useNavigation();
 
@@ -25,8 +27,11 @@ export default function LoginScreen() {
   
       if (response.ok) {
         const data = await response.json();
-        // login successful, store token in Recoil atom
+        // login successful, store token and user role in Recoil atom
         setAuthToken(data.access_token);
+        setUserRole(data.user.role.name);
+        console.log(data.access_token);
+        console.log(data.user.role.name);
         alert("Login successful!");
         navigation.navigate("Dashboard");
       } else {
