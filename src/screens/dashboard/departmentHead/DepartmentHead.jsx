@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const departmentHead = () => {
+const DepartmentHead = () => {
   return (
     <View>
-      <Text>departmentHead</Text>
+      <Text>DepartmentHead</Text>
     </View>
   )
 }
 
-export default departmentHead
+export default DepartmentHead
