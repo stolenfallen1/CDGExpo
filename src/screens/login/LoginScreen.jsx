@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { Button, Input } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useSetRecoilState } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
@@ -24,7 +25,7 @@ export default function LoginScreen() {
         },
         body: JSON.stringify({ idnumber, password }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         // login successful, store token and user role in Recoil atom
@@ -46,26 +47,25 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.textInput}
+      <Input
         label="ID"
         value={idnumber}
         onChangeText={setIdnumber}
+        leftIcon={<Ionicons name="md-person" size={18} color="gray" />}
       />
-      <TextInput
-        style={styles.textInput}
+      <Input
         label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        leftIcon={<Ionicons name="ios-lock-closed" size={18} color="gray" />}
       />
       <Button
-        style={{ backgroundColor: "#2596be" }}
-        mode="contained"
+        title={"Login"}
+        raised={true}
+        buttonStyle={{ backgroundColor: "#2596BE", paddingHorizontal: 25 }}
         onPress={handleLoginPress}
-      >
-        Login
-      </Button>
+      />
     </View>
   );
 }
@@ -77,10 +77,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 40,
-  },
-  textInput: {
-    width: 335,
-    marginBottom: 20,
-    backgroundColor: "#cce3eb",
   },
 });

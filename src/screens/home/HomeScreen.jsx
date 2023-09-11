@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import { Button } from "react-native-paper";
+import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import CDUHLOGO from "../../../assets/HomeScreenAssets/CDUH-logo.png";
 import HomeSplash from "./HomeSplash";
@@ -31,12 +31,11 @@ export default function HomeScreen() {
             <Image source={CDUHLOGO} style={styles.cduLogo} />
           </View>
           <Button
-            style={{ backgroundColor: "#2596be" }}
-            mode="contained"
+            title={"Get Started"}
+            raised={true}
+            buttonStyle={{ backgroundColor: "#2596BE", paddingHorizontal: 25 }}
             onPress={handleHomePress}
-          >
-            Get started
-          </Button>
+          />
           <Text style={styles.textFooter}>© Alright reserved 2023</Text>
         </>
       ) : (
