@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
+import CardData from "../../../components/CardData";
+import SearchFilter from "../../../components/SearchFilter";
 
 const ComptrollerDashboard = () => {
   return (
     <View>
-      <Text>ComptrollerDashboard</Text>
+      <SearchFilter />
+      <CardData />
     </View>
-  )
-}
+  );
+};
 
-export default ComptrollerDashboard
+export default ComptrollerDashboard;
