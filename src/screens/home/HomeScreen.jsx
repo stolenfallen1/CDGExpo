@@ -12,7 +12,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setSplashReady(true);
-    }, 2000);
+    }, 4000);
 
     return () => {
       clearTimeout(timeoutId);
