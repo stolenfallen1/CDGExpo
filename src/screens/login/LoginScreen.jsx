@@ -8,8 +8,8 @@ import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("");
-  const [password, setPassword] = useState("");
+  const [idnumber, setIdnumber] = useState("administrator");
+  const [password, setPassword] = useState("administrator");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);

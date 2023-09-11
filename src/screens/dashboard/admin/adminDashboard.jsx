@@ -15,13 +15,10 @@ const AdminDashboard = () => {
       headers: { Authorization: `Bearer ${authToken}` },
     };
 
-    axios
-      .get(
-        "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=1&tab=1",
-        config
-      )
+    axios.get("http://10.4.15.206:8004/api/purchase-request?page=1&per_page=1&tab=1",config)
       .then((response) => {
-        setPurchaseRequests(response.data);
+        setPurchaseRequests(response.data.data);
+        console.log(purchaseRequests, "test")
       })
       .catch((error) => {
         console.error(error);
@@ -31,24 +28,16 @@ const AdminDashboard = () => {
   return (
     <View>
       <SearchFilter />
-      {purchaseRequests}
-      {/* {purchaseRequests &&
-        purchaseRequests(item) => ({
-
-          item
-        })
-        // <CardData
-        //   key={item.id}
-        //   prNo={item.prNo}
-        //   dateRequest={item.dateRequest}
-        //   requesting={item.requesting}
-        //   itemGroup={item.itemGroup}
-        //   category={item.category}
-        //   prStatus={item.prStatus}
-        //   dateApproved={item.dateApproved}
-        //   remarks={item.remarks}
-        // />
-      } */}
+      {purchaseRequests.map((purchaseRequest)=>{
+        <CardData
+          key={purchaseRequest.id}
+          prNo={'7467346746'}
+        />
+      })}
+      <CardData
+        key={'1'}
+        prNo={'7467346746'}
+      />
     </View>
   );
 };
