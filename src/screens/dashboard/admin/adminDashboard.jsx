@@ -1,5 +1,5 @@
-import { View, Text, ScrollView } from "react-native";
-import React, { useState, useEffect } from "react";
+import { ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
@@ -30,11 +30,16 @@ const AdminDashboard = () => {
     fetchData();
   }, [authToken]);
 
+  const bottomSheetRef = useRef(null);
+  const openBottomSheet = () => {
+    bottomSheetRef.current?.present();
+  };
+
   return (
     <ScrollView>
       <SearchFilter />
       {Object.keys(data).map((key) => (
-        <View key={key}>
+        <TouchableOpacity key={key} onPress={openBottomSheet}>
           <CardData
             prId={data[key].code}
             transactionDate={data[key].pr_Transaction_Date}
@@ -42,8 +47,9 @@ const AdminDashboard = () => {
             itemGroup={data[key].item_group.name}
             category={data[key].category.name}
             justification={data[key].pr_Justication}
+            ref={bottomSheetRef}
           />
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
