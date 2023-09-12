@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
@@ -7,38 +7,45 @@ import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
 
 const AdminDashboard = () => {
-  const [purchaseRequests, setPurchaseRequests] = useState([]);
   const authToken = useRecoilValue(authTokenState);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const config = {
-      headers: { Authorization: `Bearer ${authToken}` },
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=10&tab=1",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setData(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    axios.get("http://10.4.15.206:8004/api/purchase-request?page=1&per_page=1&tab=1",config)
-      .then((response) => {
-        setPurchaseRequests(response.data.data);
-        console.log(purchaseRequests, "test")
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    fetchData();
   }, [authToken]);
 
   return (
-    <View>
+    <ScrollView style={{ marginBottom: 20 }}>
       <SearchFilter />
-      {purchaseRequests.map((purchaseRequest)=>{
-        <CardData
-          key={purchaseRequest.id}
-          prNo={'7467346746'}
-        />
-      })}
-      <CardData
-        key={'1'}
-        prNo={'7467346746'}
-      />
-    </View>
+      {Object.keys(data).map((key) => (
+        <View key={key}>
+          <CardData
+            prId={data[key].id}
+            transactionDate={data[key].pr_Transaction_Date}
+            requestingName={data[key].user.name}
+            itemGroup={data[key].item_group.name}
+            category={data[key].category.name}
+            justification={data[key].pr_Justication}
+          />
+        </View>
+      ))}
+    </ScrollView>
   );
 };
 

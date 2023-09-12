@@ -3,14 +3,12 @@ import { Card } from "react-native-elements";
 import React, { useState } from "react";
 
 const CardData = ({
-  prNo,
-  dateRequest,
-  requesting,
+  prId,
+  transactionDate,
+  requestingName,
   itemGroup,
   category,
-  prStatus,
-  dateApproved,
-  remarks,
+  justification,
 }) => {
   const handlePress = () => {
     console.log("Pressed");
@@ -19,16 +17,14 @@ const CardData = ({
   return (
     <TouchableOpacity>
       <Card>
-        <View>
-          <Text>PR No.: {prNo}</Text>
-          <Text>Date Request: {dateRequest}</Text>
-          <Text>Requesting: {requesting}</Text>
-          <Text>Item group: {itemGroup}</Text>
-          <Text>Category: {category}</Text>
-          <Text>PR Status: {prStatus}</Text>
-          <Text>Date approved: {dateApproved}</Text>
-          <Text>Remarks: {remarks}</Text>
-        </View>
+        <Text>PR No: {prId} </Text>
+        <Text>Date Request: {transactionDate} </Text>
+        <Text>Requesting: {requestingName} </Text>
+        <Text>Item group: {itemGroup} </Text>
+        <Text>Category: {category} </Text>
+        <Text>PR Status: For Approval </Text>
+        <Text>Date approved: Need to add condition</Text>
+        <Text>Remarks: {justification} </Text>
       </Card>
     </TouchableOpacity>
   );

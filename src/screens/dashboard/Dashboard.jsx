@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { userRoleState } from "../../atoms/userRoleState";
 import AdminDashboard from "./admin/adminDashboard";
 import DepartmentHead from "./departmentHead/DepartmentHead";
-import ComptrollerDashboard from "./comptroller/comptrollerDashboard";
+import ComptrollerDashboard from "./comptroller/ComptrollerDashboard";
 import PresidentDashboard from "./president/PresidentDashboard";
 
 const Dashboard = () => {
