@@ -31,12 +31,12 @@ const AdminDashboard = () => {
   }, [authToken]);
 
   return (
-    <ScrollView style={{ marginBottom: 20 }}>
+    <ScrollView>
       <SearchFilter />
       {Object.keys(data).map((key) => (
         <View key={key}>
           <CardData
-            prId={data[key].id}
+            prId={data[key].code}
             transactionDate={data[key].pr_Transaction_Date}
             requestingName={data[key].user.name}
             itemGroup={data[key].item_group.name}

@@ -4,8 +4,8 @@ import { useRecoilValue } from "recoil";
 import { userRoleState } from "../../atoms/userRoleState";
 import AdminDashboard from "./admin/adminDashboard";
 import DepartmentHead from "./departmentHead/DepartmentHead";
-import ComptrollerDashboard from "./comptroller/ComptrollerDashboard";
-import PresidentDashboard from "./president/PresidentDashboard";
+// import ComptrollerDashboard from "./comptroller/ComptrollerDashboard";
+// import PresidentDashboard from "./president/PresidentDashboard";
 
 const Dashboard = () => {
   const userRole = useRecoilValue(userRoleState);
@@ -15,8 +15,8 @@ const Dashboard = () => {
       {/* CONDITIONAL RENDERING BASED ON USER ROLE */}
       {userRole === "administrator" && <AdminDashboard />}
       {userRole === "department head" && <DepartmentHead />}
-      {userRole === "comptroller" && <ComptrollerDashboard />}
-      {userRole === "president" && <PresidentDashboard />}
+      {/* {userRole === "comptroller" && <ComptrollerDashboard />} */}
+      {/* {userRole === "president" && <PresidentDashboard />} */}
     </View>
   );
 };
