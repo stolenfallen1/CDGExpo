@@ -12,11 +12,12 @@ const CardData = forwardRef(
       requestingName,
       itemGroup,
       category,
+      quantity,
       justification,
     },
     ref
   ) => {
-    const snapoints = useMemo(() => ["65%"], []);
+    const snapoints = useMemo(() => ["70%"], []);
     const renderBackdrop = useCallback(
       (props) => (
         <BottomSheetBackdrop
@@ -41,6 +42,8 @@ const CardData = forwardRef(
             <Text style={styles.cardText}>Requesting: {requestingName} </Text>
             <Text style={styles.cardText}>Item group: {itemGroup} </Text>
             <Text style={styles.cardText}>Category: {category} </Text>
+            {/* Only the department head can change the quantity */}
+            <Text style={styles.cardText}>Quantity: {quantity} </Text>
             <Text style={styles.cardText}>PR Status: For Approval </Text>
             <Text style={styles.cardText}>
               Date approved: Need to add condition
@@ -67,6 +70,7 @@ const CardData = forwardRef(
               editable={false}
             />
             <Input label="Requester" value={requestingName} editable={false} />
+            <Input label="Quantity" value={quantity} editable={true} />
             <Input label="Item Group" value={itemGroup} editable={false} />
             <Input label="Category" value={category} editable={false} />
           </View>
@@ -97,9 +101,9 @@ const styles = StyleSheet.create({
   approveBtn: {
     position: "absolute",
     bottom: 20,
+    paddingVertical: 10,
     alignSelf: "center",
     backgroundColor: "#66B5D1",
-    padding: 10,
     paddingHorizontal: 30,
     borderRadius: 10,
   },

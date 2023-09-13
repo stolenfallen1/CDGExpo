@@ -46,6 +46,7 @@ const DepartmentHead = () => {
             requestingName={data[key].user.name}
             itemGroup={data[key].item_group.name}
             category={data[key].category.name}
+            quantity={data[key].purchase_request_details[key].item_Request_Qty}
             justification={data[key].pr_Justication}
             ref={bottomSheetRef}
           />
