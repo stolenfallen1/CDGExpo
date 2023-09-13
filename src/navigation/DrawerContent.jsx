@@ -11,7 +11,7 @@ const DrawerContent = ({ navigation }) => {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("")}
+            onPress={() => navigation.navigate("A_HISTORY")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Administrator</Text>
@@ -28,7 +28,7 @@ const DrawerContent = ({ navigation }) => {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("")}
+            onPress={() => navigation.navigate("DH_HISTORY")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Department Head</Text>
