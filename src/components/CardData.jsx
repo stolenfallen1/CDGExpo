@@ -1,4 +1,5 @@
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Input } from "react-native-elements";
 import { Card } from "react-native-elements";
 import React, { useMemo, forwardRef, useCallback } from "react";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -27,6 +28,10 @@ const CardData = forwardRef(
       []
     );
 
+    const handleApprove = () => {
+      // Approve logic here
+    };
+
     return (
       <>
         <TouchableOpacity onPress={() => ref.current?.present()}>
@@ -49,7 +54,25 @@ const CardData = forwardRef(
           backdropComponent={renderBackdrop}
           overDragResistanceFactor={0}
         >
-          <Text>Hello World</Text>
+          <View style={styles.modalContainer}>
+            <Input
+              inputStyle={{ fontWeight: "bold" }}
+              label="PR No"
+              value={prId}
+              editable={false}
+            />
+            <Input
+              label="Transaction Date"
+              value={transactionDate}
+              editable={false}
+            />
+            <Input label="Requester" value={requestingName} editable={false} />
+            <Input label="Item Group" value={itemGroup} editable={false} />
+            <Input label="Category" value={category} editable={false} />
+          </View>
+          <TouchableOpacity style={styles.approveBtn} onPress={handleApprove}>
+            <Text style={styles.approveTxt}>Approve</Text>
+          </TouchableOpacity>
         </BottomSheetModal>
       </>
     );
@@ -67,6 +90,22 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
+  },
+  modalContainer: {
+    paddingHorizontal: 15,
+  },
+  approveBtn: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+    backgroundColor: "#66B5D1",
+    padding: 10,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+  },
+  approveTxt: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
