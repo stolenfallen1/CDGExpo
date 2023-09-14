@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
@@ -12,7 +12,7 @@ const AdminHistory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=10&tab=2",
+          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=2",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

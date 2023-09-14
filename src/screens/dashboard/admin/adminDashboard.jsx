@@ -14,7 +14,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=10&tab=1",
+          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=1",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -30,16 +30,11 @@ const AdminDashboard = () => {
     fetchData();
   }, [authToken]);
 
-  const bottomSheetRef = useRef(null);
-  const openBottomSheet = () => {
-    bottomSheetRef.current?.present();
-  };
-
   return (
     <ScrollView>
       <SearchFilter />
       {Object.keys(data).map((key) => (
-        <TouchableOpacity key={key} onPress={openBottomSheet}>
+        <TouchableOpacity key={key}>
           <CardData
             prId={data[key].code}
             transactionDate={data[key].pr_Transaction_Date}
@@ -47,7 +42,6 @@ const AdminDashboard = () => {
             itemGroup={data[key].item_group.name}
             category={data[key].category.name}
             justification={data[key].pr_Justication}
-            ref={bottomSheetRef}
           />
         </TouchableOpacity>
       ))}

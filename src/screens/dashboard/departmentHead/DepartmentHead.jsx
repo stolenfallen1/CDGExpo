@@ -1,20 +1,40 @@
-import { ScrollView, TouchableOpacity } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import {
+  ScrollView,
+  TouchableOpacity,
+  View,
+  Text,
+  Button,
+  StyleSheet,
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
+import Modal from "react-native-modal";
+import { Card, Input } from "react-native-elements";
 
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
+  const [selectedCardData, setSelectedCardData] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleCardPress = (cardData, cardKey) => {
+    setSelectedCardData({ ...cardData, cardKey });
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=10&tab=1",
+          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=1",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -30,16 +50,14 @@ const DepartmentHead = () => {
     fetchData();
   }, [authToken]);
 
-  const bottomSheetRef = useRef(null);
-  const openBottomSheet = () => {
-    bottomSheetRef.current?.present();
-  };
-
   return (
     <ScrollView>
       <SearchFilter />
       {Object.keys(data).map((key) => (
-        <TouchableOpacity key={key} onPress={openBottomSheet}>
+        <TouchableOpacity
+          key={key}
+          onPress={() => handleCardPress(data[key], key)}
+        >
           <CardData
             prId={data[key].code}
             transactionDate={data[key].pr_Transaction_Date}
@@ -48,12 +66,40 @@ const DepartmentHead = () => {
             category={data[key].category.name}
             quantity={data[key].purchase_request_details[key].item_Request_Qty}
             justification={data[key].pr_Justication}
-            ref={bottomSheetRef}
+            cardKey={key}
           />
         </TouchableOpacity>
       ))}
+      <Modal isVisible={modalVisible} style={styles.modalContainer}>
+        <View style={styles.cardContainer}>
+          <Card>
+            <Text>Item Code: {selectedCardData?.id} </Text>
+            <Text>Item Code:</Text>
+            <Text>Preferred Supplier:</Text>
+            <Text>Quantity:</Text>
+            <Text>UOM:</Text>
+            <Text>Approved Quantity:</Text>
+            <Text>Approved UOM:</Text>
+            <Text>Action</Text>
+            <Button title="Approve" />
+          </Card>
+        </View>
+        <Button title="Back" onPress={toggleModal} />
+      </Modal>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: "#f7f7f7",
+    borderRadius: 10,
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  cardContainer: {
+    paddingHorizontal: 20,
+  },
+});
 
 export default DepartmentHead;

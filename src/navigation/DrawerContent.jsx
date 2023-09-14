@@ -17,6 +17,12 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Administrator</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate("DH_HISTORY")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Department Head</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => navigation.navigate("Login")}
             style={styles.menuItemButton}
           >
@@ -32,6 +38,12 @@ const DrawerContent = ({ navigation }) => {
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Department Head</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("A_HISTORY")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Administrator</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("Login")}
