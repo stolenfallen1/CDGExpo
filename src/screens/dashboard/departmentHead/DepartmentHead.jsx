@@ -18,6 +18,8 @@ import { Card, Input } from "react-native-elements";
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,6 +30,15 @@ const DepartmentHead = () => {
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const getVendor = (id) => {
+    const vendor = vendors.find(vendor => vendor.id == id)
+    return vendor.vendor_Name
+  };
+  const getUnit = (id) => {
+    const unit = units.find(unit => unit.id == id)
+    return unit.name
   };
 
   useEffect(() => {
@@ -46,7 +57,39 @@ const DepartmentHead = () => {
         console.error(error);
       }
     };
+    const fetchVendors = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.4.15.12:8004/api/vendors",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setVendors(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const fetchUnits = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.4.15.12:8004/api/units",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setUnits(response.data.units);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchVendors();
+    fetchUnits();
     fetchData();
   }, [authToken]);
 
@@ -76,9 +119,9 @@ const DepartmentHead = () => {
             <Card key={index} containerStyle={styles.cardContainer}>
               <Text>Item Code: {item.item_Id}</Text>
               <Text>Item Name: {item.item_master?.item_name}</Text>
-              <Text>Preferred Supplier: {item?.prepared_supplier_id}</Text>
+              <Text>Preferred Supplier: {item.prepared_supplier_id?getVendor(item.prepared_supplier_id):''}</Text>
               <Text>Quantity: {item?.item_Request_Qty}</Text>
-              <Text>UOM: {item?.item_Request_UnitofMeasurement_Id}</Text>
+              <Text>UOM: {getUnit(item.item_Request_UnitofMeasurement_Id)}</Text>
               <Text>
                 Approved Quantity: {item?.item_Request_Department_Approved_Qty}
               </Text>
