@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { userRoleState } from "../atoms/userRoleState";
 
 const CardData = ({
   cardKey,
@@ -12,24 +14,45 @@ const CardData = ({
   quantity,
   justification,
 }) => {
-  return (
-    <>
-      <Card containerStyle={styles.cardContainer}>
-        <Text style={styles.prId}>PR No: {prId} </Text>
-        <Text style={styles.cardText}>Date Request: {transactionDate}</Text>
-        <Text style={styles.cardText}>Requesting: {requestingName} </Text>
-        <Text style={styles.cardText}>Item group: {itemGroup} </Text>
-        <Text style={styles.cardText}>Category: {category} </Text>
-        {/* Only the department head can change the quantity */}
-        <Text style={styles.cardText}>Quantity: {quantity} </Text>
-        <Text style={styles.cardText}>PR Status: For Approval </Text>
-        <Text style={styles.cardText}>
-          Date approved: Need to add condition
-        </Text>
-        <Text style={styles.cardText}>Remarks: {justification} </Text>
-      </Card>
-    </>
-  );
+  const userRole = useRecoilValue(userRoleState);
+
+  const renderCard = () => {
+    if (userRole === "department head") {
+      return (
+        <Card containerStyle={styles.cardContainer}>
+          <Text style={styles.prId}>PR No: {prId} </Text>
+          <Text style={styles.cardText}>
+            Date Request: {new Date(transactionDate).toLocaleDateString()}
+          </Text>
+          <Text style={styles.cardText}>Requesting: {requestingName} </Text>
+          <Text style={styles.cardText}>Item group: {itemGroup} </Text>
+          <Text style={styles.cardText}>Category: {category} </Text>
+          <Text style={styles.cardText}>Quantity: {parseInt(quantity)} </Text>
+          <Text style={styles.cardText}>PR Status: .... </Text>
+          <Text style={styles.cardText}>Date approved: ....</Text>
+          <Text style={styles.cardText}>Remarks: {justification} </Text>
+        </Card>
+      );
+    } else if (userRole === "administrator") {
+      return (
+        <Card containerStyle={styles.cardContainer}>
+          <Text style={styles.prId}>PR No: {prId} </Text>
+          <Text style={styles.cardText}>
+            Date Request: {new Date(transactionDate).toLocaleDateString()}
+          </Text>
+          <Text style={styles.cardText}>Requesting: {requestingName} </Text>
+          <Text style={styles.cardText}>Item group: {itemGroup} </Text>
+          <Text style={styles.cardText}>Category: {category} </Text>
+          <Text style={styles.cardText}>Quantity: {parseInt(quantity)} </Text>
+          <Text style={styles.cardText}>PR Status: ... </Text>
+          <Text style={styles.cardText}>Date approved: ....</Text>
+          <Text style={styles.cardText}>Remarks: {justification} </Text>
+        </Card>
+      );
+    }
+  };
+
+  return <>{renderCard()}</>;
 };
 
 const styles = StyleSheet.create({

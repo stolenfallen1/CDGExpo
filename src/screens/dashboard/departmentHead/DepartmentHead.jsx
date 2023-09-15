@@ -71,20 +71,20 @@ const DepartmentHead = () => {
         </TouchableOpacity>
       ))}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <ScrollView style={styles.cardContainer}>
-          {selectedCardData?.purchase_request_details.map((item, index) => (
-            <Card key={index}>
+        <ScrollView>
+          {selectedCardData?.purchase_request_details?.map((item, index) => (
+            <Card key={index} containerStyle={styles.cardContainer}>
               <Text>Item Code: {item.item_Id}</Text>
               <Text>Item Name: {item.item_master?.item_name}</Text>
-              <Text>Preferred Supplier: {item.prepared_supplier_id}</Text>
-              <Text>Quantity: {item.item_Request_Qty}</Text>
-              <Text>UOM: {item.item_Request_UnitofMeasurement_Id}</Text>
+              <Text>Preferred Supplier: {item?.prepared_supplier_id}</Text>
+              <Text>Quantity: {item?.item_Request_Qty}</Text>
+              <Text>UOM: {item?.item_Request_UnitofMeasurement_Id}</Text>
               <Text>
-                Approved Quantity: {item.item_Request_Department_Approved_Qty}
+                Approved Quantity: {item?.item_Request_Department_Approved_Qty}
               </Text>
               <Text>
                 Approved UOM:{" "}
-                {item.item_Request_Department_Approved_UnitofMeasurement_Id}
+                {item?.item_Request_Department_Approved_UnitofMeasurement_Id}
               </Text>
               <Text>Action</Text>
               <Button title="Approve" />
@@ -102,10 +102,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
     marginTop: 50,
-    marginBottom: 50,
+    marginBottom: 35,
   },
   cardContainer: {
-    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderColor: "#66B5D1",
   },
 });
 
