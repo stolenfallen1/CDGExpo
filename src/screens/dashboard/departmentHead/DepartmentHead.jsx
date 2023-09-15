@@ -71,19 +71,26 @@ const DepartmentHead = () => {
         </TouchableOpacity>
       ))}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <View style={styles.cardContainer}>
-          <Card>
-            <Text>Item Code: {selectedCardData?.id} </Text>
-            <Text>Item Code:</Text>
-            <Text>Preferred Supplier:</Text>
-            <Text>Quantity:</Text>
-            <Text>UOM:</Text>
-            <Text>Approved Quantity:</Text>
-            <Text>Approved UOM:</Text>
-            <Text>Action</Text>
-            <Button title="Approve" />
-          </Card>
-        </View>
+        <ScrollView style={styles.cardContainer}>
+          {selectedCardData?.purchase_request_details.map((item, index) => (
+            <Card key={index}>
+              <Text>Item Code: {item.item_Id}</Text>
+              <Text>Item Name: {item.item_master?.item_name}</Text>
+              <Text>Preferred Supplier: {item.prepared_supplier_id}</Text>
+              <Text>Quantity: {item.item_Request_Qty}</Text>
+              <Text>UOM: {item.item_Request_UnitofMeasurement_Id}</Text>
+              <Text>
+                Approved Quantity: {item.item_Request_Department_Approved_Qty}
+              </Text>
+              <Text>
+                Approved UOM:{" "}
+                {item.item_Request_Department_Approved_UnitofMeasurement_Id}
+              </Text>
+              <Text>Action</Text>
+              <Button title="Approve" />
+            </Card>
+          ))}
+        </ScrollView>
         <Button title="Back" onPress={toggleModal} />
       </Modal>
     </ScrollView>
