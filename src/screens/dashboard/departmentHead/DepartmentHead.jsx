@@ -1,7 +1,6 @@
 import {
   ScrollView,
   TouchableOpacity,
-  Button,
   StyleSheet,
   TextInput,
   Text,
@@ -14,8 +13,9 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
 import Modal from "react-native-modal";
-import { Card } from "react-native-elements";
+import { Card, Button } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
+import { Ionicons } from "@expo/vector-icons";
 
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
@@ -110,7 +110,7 @@ const DepartmentHead = () => {
         </TouchableOpacity>
       ))}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <ScrollView>
+        <ScrollView horizontal={true}>
           {selectedCardData?.purchase_request_details?.map((item, index) => (
             <Card key={index} containerStyle={styles.cardContainer}>
               <View style={styles.inputContainer}>
@@ -197,11 +197,41 @@ const DepartmentHead = () => {
                   }}
                 />
               </View>
-              <Button title="Approve" />
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Attachments</Text>
+                <Ionicons name="eye" size={20} color="#000" />
+              </View>
+              <Button
+                title={"Approve"}
+                buttonStyle={{
+                  backgroundColor: "#50C878",
+                  paddingHorizontal: 25,
+                  borderRadius: 15,
+                }}
+              />
             </Card>
           ))}
         </ScrollView>
-        <Button title="Back" onPress={toggleModal} />
+        <Button
+          title={"Submit"}
+          buttonStyle={{
+            backgroundColor: "red",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={toggleModal}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={{
+            backgroundColor: "#2596BE",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={toggleModal}
+        />
       </Modal>
     </ScrollView>
   );
@@ -220,7 +250,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 13,
   },
   inputText: {
     fontWeight: "bold",
