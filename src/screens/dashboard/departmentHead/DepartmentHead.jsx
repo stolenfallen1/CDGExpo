@@ -24,6 +24,9 @@ const DepartmentHead = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [buttonText, setButtonText] = useState("Approve");
+  const [buttonColor, setButtonColor] = useState("#50C878");
 
   const handleCardPress = (cardData, cardKey) => {
     setSelectedCardData({ ...cardData, cardKey });
@@ -32,6 +35,15 @@ const DepartmentHead = () => {
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  // Use spread operator to copy the object and change the value of isApproved
+  const handleApprove = (item) => {
+    item.isApproved = !item.isApproved;
+    console.log(item.isApproved);
+    // setIsApproved(!isApproved);
+    // setButtonText(isApproved ? "Approve" : "Cancel");
+    // setButtonColor(isApproved ? "#50C878" : "red");
   };
 
   const getVendor = (id) => {
@@ -202,9 +214,11 @@ const DepartmentHead = () => {
                 <Ionicons name="eye" size={20} color="#000" />
               </View>
               <Button
-                title={"Approve"}
+                key={item.item_Id}
+                onPress={handleApprove}
+                title={item.isApproved ? "Cancel" : "Approve"}
                 buttonStyle={{
-                  backgroundColor: "#50C878",
+                  backgroundColor: buttonColor,
                   paddingHorizontal: 25,
                   borderRadius: 15,
                 }}
@@ -215,7 +229,7 @@ const DepartmentHead = () => {
         <Button
           title={"Submit"}
           buttonStyle={{
-            backgroundColor: "red",
+            backgroundColor: "orange",
             paddingHorizontal: 25,
             margin: 10,
             borderRadius: 15,
