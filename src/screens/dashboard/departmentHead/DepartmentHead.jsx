@@ -28,8 +28,7 @@ const DepartmentHead = () => {
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
-    setSelectedCardData({ ...cardData, ...{cardKey, isapproved:false} });
-    // setSelectedCardData({ ...cardData,  });
+    setSelectedCardData({ ...cardData, ...{ cardKey, isapproved: false } });
     toggleModal();
   };
 
@@ -51,9 +50,8 @@ const DepartmentHead = () => {
   // handle item approval checkbox state
   const handleItemApproval = (item) => {
     console.log("Previous state:", checkedItems);
-    item.isapproved = !item.isapproved
+    item.isapproved = !item.isapproved;
     setCheckedItems((prevState) => {
-      console.log("Callback function executed");
       const newState = {
         ...prevState,
         [item.item_Id]: !prevState[item.item_Id],
@@ -65,34 +63,25 @@ const DepartmentHead = () => {
 
   // Submit event handler
   const handleSubmit = () => {
-    // const requestData = selectedCardData.purchase_request_details
-    //   .filter((item) => checkedItems[item.item_Id])
-    //   .map((item) => ({
-    //     item_Id: item.item_Id,
-    //     item_name: item.item_master.item_name,
-    //     prepared_supplier_id: item.prepared_supplier_id,
-    //     item_Request_Qty: item.item_Request_Qty,
-    //     item_Request_UnitofMeasurement_Id:
-    //       item.item_Request_UnitofMeasurement_Id,
-    //     item_Request_Department_Approved_Qty:
-    //       item.item_Request_Department_Approved_Qty,
-    //     item_Request_Department_Approved_UnitofMeasurement_Id:
-    //       item.item_Request_Department_Approved_UnitofMeasurement_Id,
-    //   }));
-    console.log(selectedCardData);
-    // send the requestData array to the server using an HTTP request
-    axios
-      .post("http://10.4.15.12:8004/api/purchase-request-items", selectedCardData, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      axios
+        .post(
+          "http://10.4.15.12:8004/api/purchase-request-items",
+          selectedCardData,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          alert("PR Approved on Selected Items");
+          setModalVisible(!modalVisible);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // FETCH DATA FROM API AND STORE IN DATA STATE
