@@ -17,7 +17,7 @@ import SearchFilter from "../../../components/SearchFilter";
 import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
-// import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
@@ -43,7 +43,7 @@ const DepartmentHead = () => {
   // GET VENDOR NAME AND UNIT NAME
   const getVendor = (id) => {
     const vendor = vendors.find((vendor) => vendor.id == id);
-    return vendor?.vendor_Name;
+    return vendor?.vendor_Name ? vendor.vendor_Name : "Select a supplier";
   };
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
@@ -198,10 +198,25 @@ const DepartmentHead = () => {
                     key: vendor.id.toString(),
                   }))}
                   placeholder={{
-                    label: !item.prepared_supplier_id
-                      ? "Select a supplier"
-                      : getVendor(item.prepared_supplier_id),
+                    label: getVendor(item.prepared_supplier_id),
                     value: item.prepared_supplier_id,
+                  }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                  }}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
                   }}
                 />
               </View>
@@ -267,6 +282,23 @@ const DepartmentHead = () => {
                   placeholder={{
                     label: getUnit(item.item_Request_UnitofMeasurement_Id),
                     value: item.item_Request_UnitofMeasurement_Id,
+                  }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                  }}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
                   }}
                 />
               </View>
