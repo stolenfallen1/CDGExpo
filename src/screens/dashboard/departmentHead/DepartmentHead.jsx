@@ -5,11 +5,13 @@ import {
   TextInput,
   Text,
   View,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
+import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
 import Modal from "react-native-modal";
@@ -19,6 +21,7 @@ import RNPickerSelect from "react-native-picker-select";
 
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
+  const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [units, setUnits] = useState([]);
@@ -40,7 +43,7 @@ const DepartmentHead = () => {
   // GET VENDOR NAME AND UNIT NAME
   const getVendor = (id) => {
     const vendor = vendors.find((vendor) => vendor.id == id);
-    return vendor.vendor_Name;
+    return vendor?.vendor_Name;
   };
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
@@ -63,25 +66,32 @@ const DepartmentHead = () => {
 
   // Submit event handler
   const handleSubmit = () => {
-    try {
-      axios
-        .post(
-          "http://10.4.15.12:8004/api/purchase-request-items",
-          selectedCardData,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          alert("PR Approved on Selected Items");
-          setModalVisible(!modalVisible);
-        });
-    } catch (error) {
-      console.error(error);
-    }
+    Alert.prompt("Please enter your password:", "", (password) => {
+      if (password === userPasscode) {
+        try {
+          axios
+            .post(
+              "http://10.4.15.12:8004/api/purchase-request-items",
+              selectedCardData,
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response.data);
+              alert("PR Approved on Selected Items");
+              setModalVisible(!modalVisible);
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("Wrong password");
+        return;
+      }
+    });
   };
 
   // FETCH DATA FROM API AND STORE IN DATA STATE
@@ -176,14 +186,21 @@ const DepartmentHead = () => {
                 <RNPickerSelect
                   value={item.prepared_supplier_id}
                   onValueChange={(value) => {
-                    // Handle the event change here
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].prepared_supplier_id = value;
+                    setSelectedCardData(updatedData);
                   }}
                   items={vendors.map((vendor) => ({
                     label: vendor.vendor_Name,
                     value: vendor.id,
+                    key: vendor.id.toString(),
                   }))}
                   placeholder={{
-                    label: getVendor(item.prepared_supplier_id),
+                    label: !item.prepared_supplier_id
+                      ? "Select a supplier"
+                      : getVendor(item.prepared_supplier_id),
                     value: item.prepared_supplier_id,
                   }}
                 />

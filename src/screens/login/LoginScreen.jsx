@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSetRecoilState } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
+import { userPassword } from "../../atoms/userPassword";
 
 export default function LoginScreen() {
   const [idnumber, setIdnumber] = useState("it_department_head");
@@ -13,6 +14,7 @@ export default function LoginScreen() {
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
+  const setUserPassword = useSetRecoilState(userPassword);
 
   const navigation = useNavigation();
 
@@ -31,8 +33,10 @@ export default function LoginScreen() {
         // login successful, store token and user role in Recoil atom
         setAuthToken(data.access_token);
         setUserRole(data.user.role.name);
+        setUserPassword(data.user.passcode);
         console.log(data.access_token);
         console.log(data.user.role.name);
+        console.log(data.user.passcode);
         alert("Login successful!");
         navigation.navigate("Dashboard");
       } else {
