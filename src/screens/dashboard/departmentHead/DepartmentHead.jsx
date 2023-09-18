@@ -13,9 +13,9 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
 import Modal from "react-native-modal";
-import { Card, Button } from "react-native-elements";
+import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
-import { Ionicons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
 
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
@@ -24,28 +24,20 @@ const DepartmentHead = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
-  const [buttonText, setButtonText] = useState("Approve");
-  const [buttonColor, setButtonColor] = useState("#50C878");
+  const [checkedItems, setCheckedItems] = useState({});
 
+  // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
     setSelectedCardData({ ...cardData, cardKey });
     toggleModal();
   };
 
+  // TOGGLE MODAL
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
-  // Use spread operator to copy the object and change the value of isApproved
-  const handleApprove = (item) => {
-    item.isApproved = !item.isApproved;
-    console.log(item.isApproved);
-    // setIsApproved(!isApproved);
-    // setButtonText(isApproved ? "Approve" : "Cancel");
-    // setButtonColor(isApproved ? "#50C878" : "red");
-  };
-
+  // GET VENDOR NAME AND UNIT NAME
   const getVendor = (id) => {
     const vendor = vendors.find((vendor) => vendor.id == id);
     return vendor.vendor_Name;
@@ -55,6 +47,53 @@ const DepartmentHead = () => {
     return unit.name;
   };
 
+  // handle item approval checkbox state
+  const handleItemApproval = (id) => {
+    console.log("Previous state:", checkedItems);
+    setCheckedItems((prevState) => {
+      console.log("Callback function executed");
+      const newState = {
+        ...prevState,
+        [id]: !prevState[id],
+      };
+      console.log("New state:", newState);
+      return newState;
+    });
+  };
+
+  // Submit event handler
+  const handleSubmit = () => {
+    const requestData = selectedCardData.purchase_request_details
+      .filter((item) => checkedItems[item.item_Id])
+      .map((item) => ({
+        item_Id: item.item_Id,
+        item_name: item.item_master.item_name,
+        prepared_supplier_id: item.prepared_supplier_id,
+        item_Request_Qty: item.item_Request_Qty,
+        item_Request_UnitofMeasurement_Id:
+          item.item_Request_UnitofMeasurement_Id,
+        item_Request_Department_Approved_Qty:
+          item.item_Request_Department_Approved_Qty,
+        item_Request_Department_Approved_UnitofMeasurement_Id:
+          item.item_Request_Department_Approved_UnitofMeasurement_Id,
+      }));
+    console.log(requestData);
+    // send the requestData array to the server using an HTTP request
+    axios
+      .post("http://10.4.15.12:8004/api/purchase-request-items", requestData, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // FETCH DATA FROM API AND STORE IN DATA STATE
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -127,15 +166,19 @@ const DepartmentHead = () => {
             <Card key={index} containerStyle={styles.cardContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Code </Text>
-                <TextInput style={styles.dataInput} editable={false}>
-                  {item.item_Id}
-                </TextInput>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_Id}
+                ></TextInput>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Name </Text>
-                <TextInput style={styles.dataInput} editable={false}>
-                  {item.item_master?.item_name}
-                </TextInput>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_master?.item_name}
+                ></TextInput>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Preferred Supplier</Text>
@@ -156,48 +199,58 @@ const DepartmentHead = () => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Requested Quantity </Text>
-                <TextInput style={styles.dataInput} editable={false}>
-                  {parseInt(item?.item_Request_Qty)}
-                </TextInput>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item?.item_Request_Qty}
+                ></TextInput>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>
-                  Requested Unit of Measurement
+                  Requested Unit of Measurement{" "}
                 </Text>
-                <RNPickerSelect
-                  disabled={true}
-                  value={item.prepared_supplier_id}
-                  onValueChange={(value) => {
-                    // Handle the event change here
-                  }}
-                  items={units.map((unit) => ({
-                    label: unit.name,
-                    value: unit.id,
-                  }))}
-                  placeholder={{
-                    label: getUnit(item.item_Request_UnitofMeasurement_Id),
-                    value: item.item_Request_UnitofMeasurement_Id,
-                  }}
-                />
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={getUnit(item.item_Request_UnitofMeasurement_Id)}
+                ></TextInput>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Approved Quantity </Text>
                 <TextInput
+                  keyboardType="numeric"
+                  placeholder="......"
+                  placeholderTextColor={"gray"}
                   style={styles.dataInput}
-                  // {item?.item_Request_Department_Approved_Qty}
-                >
-                  {parseInt(item?.item_Request_Qty)}
-                </TextInput>
+                  value={
+                    item?.item_Request_Department_Approved_Qty !== null
+                      ? item.item_Request_Department_Approved_Qty.toString()
+                      : ""
+                  }
+                  onChangeText={(text) => {
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].item_Request_Department_Approved_Qty = text;
+                    setSelectedCardData(updatedData);
+                  }}
+                ></TextInput>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>
                   Approved Unit of Measurement
                 </Text>
                 <RNPickerSelect
-                  // {item?.item_Request_Department_Approved_UnitofMeasurement_Id}
-                  value={item.prepared_supplier_id}
+                  value={
+                    item?.item_Request_Department_Approved_UnitofMeasurement_Id
+                  }
                   onValueChange={(value) => {
-                    // Handle the event change here
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].item_Request_Department_Approved_UnitofMeasurement_Id =
+                      value;
+                    setSelectedCardData(updatedData);
                   }}
                   items={units.map((unit) => ({
                     label: unit.name,
@@ -209,19 +262,10 @@ const DepartmentHead = () => {
                   }}
                 />
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Attachments</Text>
-                <Ionicons name="eye" size={20} color="#000" />
-              </View>
-              <Button
-                key={item.item_Id}
-                onPress={handleApprove}
-                title={item.isApproved ? "Cancel" : "Approve"}
-                buttonStyle={{
-                  backgroundColor: buttonColor,
-                  paddingHorizontal: 25,
-                  borderRadius: 15,
-                }}
+              <CheckBox
+                title={"Approve Request"}
+                checked={checkedItems[item.item_Id]}
+                onPress={() => handleItemApproval(item.item_Id)}
               />
             </Card>
           ))}
@@ -234,7 +278,7 @@ const DepartmentHead = () => {
             margin: 10,
             borderRadius: 15,
           }}
-          onPress={toggleModal}
+          onPress={handleSubmit}
         />
         <Button
           title={"Back"}
