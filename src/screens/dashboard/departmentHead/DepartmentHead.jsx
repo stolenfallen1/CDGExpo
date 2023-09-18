@@ -28,7 +28,8 @@ const DepartmentHead = () => {
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
-    setSelectedCardData({ ...cardData, cardKey });
+    setSelectedCardData({ ...cardData, ...{cardKey, isapproved:false} });
+    // setSelectedCardData({ ...cardData,  });
     toggleModal();
   };
 
@@ -48,13 +49,14 @@ const DepartmentHead = () => {
   };
 
   // handle item approval checkbox state
-  const handleItemApproval = (id) => {
+  const handleItemApproval = (item) => {
     console.log("Previous state:", checkedItems);
+    item.isapproved = !item.isapproved
     setCheckedItems((prevState) => {
       console.log("Callback function executed");
       const newState = {
         ...prevState,
-        [id]: !prevState[id],
+        [item.item_Id]: !prevState[item.item_Id],
       };
       console.log("New state:", newState);
       return newState;
@@ -63,24 +65,24 @@ const DepartmentHead = () => {
 
   // Submit event handler
   const handleSubmit = () => {
-    const requestData = selectedCardData.purchase_request_details
-      .filter((item) => checkedItems[item.item_Id])
-      .map((item) => ({
-        item_Id: item.item_Id,
-        item_name: item.item_master.item_name,
-        prepared_supplier_id: item.prepared_supplier_id,
-        item_Request_Qty: item.item_Request_Qty,
-        item_Request_UnitofMeasurement_Id:
-          item.item_Request_UnitofMeasurement_Id,
-        item_Request_Department_Approved_Qty:
-          item.item_Request_Department_Approved_Qty,
-        item_Request_Department_Approved_UnitofMeasurement_Id:
-          item.item_Request_Department_Approved_UnitofMeasurement_Id,
-      }));
-    console.log(requestData);
+    // const requestData = selectedCardData.purchase_request_details
+    //   .filter((item) => checkedItems[item.item_Id])
+    //   .map((item) => ({
+    //     item_Id: item.item_Id,
+    //     item_name: item.item_master.item_name,
+    //     prepared_supplier_id: item.prepared_supplier_id,
+    //     item_Request_Qty: item.item_Request_Qty,
+    //     item_Request_UnitofMeasurement_Id:
+    //       item.item_Request_UnitofMeasurement_Id,
+    //     item_Request_Department_Approved_Qty:
+    //       item.item_Request_Department_Approved_Qty,
+    //     item_Request_Department_Approved_UnitofMeasurement_Id:
+    //       item.item_Request_Department_Approved_UnitofMeasurement_Id,
+    //   }));
+    console.log(selectedCardData);
     // send the requestData array to the server using an HTTP request
     axios
-      .post("http://10.4.15.12:8004/api/purchase-request-items", requestData, {
+      .post("http://10.4.15.12:8004/api/purchase-request-items", selectedCardData, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -265,7 +267,7 @@ const DepartmentHead = () => {
               <CheckBox
                 title={"Approve Request"}
                 checked={checkedItems[item.item_Id]}
-                onPress={() => handleItemApproval(item.item_Id)}
+                onPress={() => handleItemApproval(item)}
               />
             </Card>
           ))}
