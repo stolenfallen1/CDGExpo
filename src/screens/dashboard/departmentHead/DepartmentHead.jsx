@@ -65,7 +65,12 @@ const DepartmentHead = () => {
   };
 
   // Submit event handler
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    let isapproved = false;
+    await selectedCardData.purchase_request_details.map((item) => {
+      if(item.isapproved == true) isapproved = true;
+    })
+    selectedCardData.isapproved = isapproved
     Alert.prompt("Please enter your password:", "", (password) => {
       if (password === userPasscode) {
         try {
