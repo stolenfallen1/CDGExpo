@@ -40,6 +40,7 @@ const SearchFilter = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 30,
+    marginBottom: 13,
     paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",

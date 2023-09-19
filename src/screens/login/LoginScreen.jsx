@@ -9,8 +9,8 @@ import { userRoleState } from "../../atoms/userRoleState";
 import { userPassword } from "../../atoms/userPassword";
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("it_department_head");
-  const [password, setPassword] = useState("it_department_head");
+  const [idnumber, setIdnumber] = useState("administrator");
+  const [password, setPassword] = useState("administrator");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
@@ -34,9 +34,6 @@ export default function LoginScreen() {
         setAuthToken(data.access_token);
         setUserRole(data.user.role.name);
         setUserPassword(data.user.passcode);
-        console.log(data.access_token);
-        console.log(data.user.role.name);
-        console.log(data.user.passcode);
         alert("Login successful!");
         navigation.navigate("Dashboard");
       } else {

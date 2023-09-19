@@ -52,14 +52,12 @@ const DepartmentHead = () => {
 
   // handle item approval checkbox state
   const handleItemApproval = (item) => {
-    console.log("Previous state:", checkedItems);
     item.isapproved = !item.isapproved;
     setCheckedItems((prevState) => {
       const newState = {
         ...prevState,
         [item.item_Id]: !prevState[item.item_Id],
       };
-      console.log("New state:", newState);
       return newState;
     });
   };
@@ -68,9 +66,9 @@ const DepartmentHead = () => {
   const handleSubmit = async () => {
     let isapproved = false;
     await selectedCardData.purchase_request_details.map((item) => {
-      if(item.isapproved == true) isapproved = true;
-    })
-    selectedCardData.isapproved = isapproved
+      if (item.isapproved == true) isapproved = true;
+    });
+    selectedCardData.isapproved = isapproved;
     Alert.prompt("Please enter your password:", "", (password) => {
       if (password === userPasscode) {
         try {
@@ -147,196 +145,199 @@ const DepartmentHead = () => {
   }, [authToken]);
 
   return (
-    <ScrollView>
+    <View>
       <SearchFilter />
-      {Object.keys(data).map((key) => (
-        <TouchableOpacity
-          key={key}
-          onPress={() => handleCardPress(data[key], key)}
-        >
-          <CardData
-            prId={data[key].code}
-            transactionDate={data[key].pr_Transaction_Date}
-            requestingName={data[key].user.name}
-            itemGroup={data[key].item_group.name}
-            category={data[key].category.name}
-            quantity={data[key].purchase_request_details[key].item_Request_Qty}
-            justification={data[key].pr_Justication}
-            cardKey={key}
+      <ScrollView>
+        {Object.keys(data).map((key) => (
+          <TouchableOpacity
+            key={key}
+            onPress={() => handleCardPress(data[key], key)}
+          >
+            <CardData
+              prId={data[key].code}
+              transactionDate={data[key].pr_Transaction_Date}
+              requestingName={data[key].user.name}
+              itemGroup={data[key].item_group.name}
+              category={data[key].category.name}
+              quantity={
+                data[key].purchase_request_details[key].item_Request_Qty
+              }
+              justification={data[key].pr_Justication}
+              cardKey={key}
+            />
+          </TouchableOpacity>
+        ))}
+        <Modal isVisible={modalVisible} style={styles.modalContainer}>
+          <ScrollView horizontal={true}>
+            {selectedCardData?.purchase_request_details?.map((item, index) => (
+              <Card key={index} containerStyle={styles.cardContainer}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Item Code </Text>
+                  <TextInput
+                    style={styles.dataInput}
+                    editable={false}
+                    value={item.item_Id}
+                  ></TextInput>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Item Name </Text>
+                  <TextInput
+                    style={styles.dataInput}
+                    editable={false}
+                    value={item.item_master?.item_name}
+                  ></TextInput>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Preferred Supplier</Text>
+                  <RNPickerSelect
+                    value={item.prepared_supplier_id}
+                    onValueChange={(value) => {
+                      const updatedData = { ...selectedCardData };
+                      updatedData.purchase_request_details[
+                        index
+                      ].prepared_supplier_id = value;
+                      setSelectedCardData(updatedData);
+                    }}
+                    items={vendors.map((vendor) => ({
+                      label: vendor.vendor_Name,
+                      value: vendor.id,
+                    }))}
+                    placeholder={{
+                      label: getVendor(item.prepared_supplier_id),
+                      value: item.prepared_supplier_id,
+                    }}
+                    style={{
+                      inputIOS: {
+                        fontSize: 16,
+                        borderBottomWidth: 0.5,
+                        paddingBottom: 6,
+                      },
+                      inputAndroid: {
+                        fontSize: 16,
+                        borderBottomWidth: 0.5,
+                        paddingBottom: 6,
+                      },
+                    }}
+                    Icon={() => {
+                      return (
+                        <Ionicons name="chevron-down" size={18} color="gray" />
+                      );
+                    }}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Requested Quantity </Text>
+                  <TextInput
+                    style={styles.dataInput}
+                    editable={false}
+                    value={item?.item_Request_Qty}
+                  ></TextInput>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>
+                    Requested Unit of Measurement{" "}
+                  </Text>
+                  <TextInput
+                    style={styles.dataInput}
+                    editable={false}
+                    value={getUnit(item.item_Request_UnitofMeasurement_Id)}
+                  ></TextInput>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>Approved Quantity </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    placeholder="......"
+                    placeholderTextColor={"gray"}
+                    style={styles.dataInput}
+                    value={
+                      item?.item_Request_Department_Approved_Qty !== null
+                        ? item.item_Request_Department_Approved_Qty.toString()
+                        : ""
+                    }
+                    onChangeText={(text) => {
+                      const updatedData = { ...selectedCardData };
+                      updatedData.purchase_request_details[
+                        index
+                      ].item_Request_Department_Approved_Qty = text;
+                      setSelectedCardData(updatedData);
+                    }}
+                  ></TextInput>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>
+                    Approved Unit of Measurement
+                  </Text>
+                  <RNPickerSelect
+                    value={
+                      item?.item_Request_Department_Approved_UnitofMeasurement_Id
+                    }
+                    onValueChange={(value) => {
+                      const updatedData = { ...selectedCardData };
+                      updatedData.purchase_request_details[
+                        index
+                      ].item_Request_Department_Approved_UnitofMeasurement_Id =
+                        value;
+                      setSelectedCardData(updatedData);
+                    }}
+                    items={units.map((unit) => ({
+                      label: unit.name,
+                      value: unit.id,
+                    }))}
+                    placeholder={{
+                      label: getUnit(item.item_Request_UnitofMeasurement_Id),
+                      value: item.item_Request_UnitofMeasurement_Id,
+                    }}
+                    style={{
+                      inputIOS: {
+                        fontSize: 16,
+                        borderBottomWidth: 0.5,
+                        paddingBottom: 6,
+                      },
+                      inputAndroid: {
+                        fontSize: 16,
+                        borderBottomWidth: 0.5,
+                        paddingBottom: 6,
+                      },
+                    }}
+                    Icon={() => {
+                      return (
+                        <Ionicons name="chevron-down" size={18} color="gray" />
+                      );
+                    }}
+                  />
+                </View>
+                <CheckBox
+                  title={"Approve Request"}
+                  checked={checkedItems[item.item_Id]}
+                  onPress={() => handleItemApproval(item)}
+                />
+              </Card>
+            ))}
+          </ScrollView>
+          <Button
+            title={"Submit"}
+            buttonStyle={{
+              backgroundColor: "orange",
+              paddingHorizontal: 25,
+              margin: 10,
+              borderRadius: 15,
+            }}
+            onPress={handleSubmit}
           />
-        </TouchableOpacity>
-      ))}
-      <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <ScrollView horizontal={true}>
-          {selectedCardData?.purchase_request_details?.map((item, index) => (
-            <Card key={index} containerStyle={styles.cardContainer}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Code </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item.item_Id}
-                ></TextInput>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Name </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item.item_master?.item_name}
-                ></TextInput>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Preferred Supplier</Text>
-                <RNPickerSelect
-                  value={item.prepared_supplier_id}
-                  onValueChange={(value) => {
-                    const updatedData = { ...selectedCardData };
-                    updatedData.purchase_request_details[
-                      index
-                    ].prepared_supplier_id = value;
-                    setSelectedCardData(updatedData);
-                  }}
-                  items={vendors.map((vendor) => ({
-                    label: vendor.vendor_Name,
-                    value: vendor.id,
-                    key: vendor.id.toString(),
-                  }))}
-                  placeholder={{
-                    label: getVendor(item.prepared_supplier_id),
-                    value: item.prepared_supplier_id,
-                  }}
-                  style={{
-                    inputIOS: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                    inputAndroid: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                  }}
-                  Icon={() => {
-                    return (
-                      <Ionicons name="chevron-down" size={18} color="gray" />
-                    );
-                  }}
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Requested Quantity </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item?.item_Request_Qty}
-                ></TextInput>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>
-                  Requested Unit of Measurement{" "}
-                </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={getUnit(item.item_Request_UnitofMeasurement_Id)}
-                ></TextInput>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Approved Quantity </Text>
-                <TextInput
-                  keyboardType="numeric"
-                  placeholder="......"
-                  placeholderTextColor={"gray"}
-                  style={styles.dataInput}
-                  value={
-                    item?.item_Request_Department_Approved_Qty !== null
-                      ? item.item_Request_Department_Approved_Qty.toString()
-                      : ""
-                  }
-                  onChangeText={(text) => {
-                    const updatedData = { ...selectedCardData };
-                    updatedData.purchase_request_details[
-                      index
-                    ].item_Request_Department_Approved_Qty = text;
-                    setSelectedCardData(updatedData);
-                  }}
-                ></TextInput>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>
-                  Approved Unit of Measurement
-                </Text>
-                <RNPickerSelect
-                  value={
-                    item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                  }
-                  onValueChange={(value) => {
-                    const updatedData = { ...selectedCardData };
-                    updatedData.purchase_request_details[
-                      index
-                    ].item_Request_Department_Approved_UnitofMeasurement_Id =
-                      value;
-                    setSelectedCardData(updatedData);
-                  }}
-                  items={units.map((unit) => ({
-                    label: unit.name,
-                    value: unit.id,
-                  }))}
-                  placeholder={{
-                    label: getUnit(item.item_Request_UnitofMeasurement_Id),
-                    value: item.item_Request_UnitofMeasurement_Id,
-                  }}
-                  style={{
-                    inputIOS: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                    inputAndroid: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                  }}
-                  Icon={() => {
-                    return (
-                      <Ionicons name="chevron-down" size={18} color="gray" />
-                    );
-                  }}
-                />
-              </View>
-              <CheckBox
-                title={"Approve Request"}
-                checked={checkedItems[item.item_Id]}
-                onPress={() => handleItemApproval(item)}
-              />
-            </Card>
-          ))}
-        </ScrollView>
-        <Button
-          title={"Submit"}
-          buttonStyle={{
-            backgroundColor: "orange",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
-          }}
-          onPress={handleSubmit}
-        />
-        <Button
-          title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
-          }}
-          onPress={toggleModal}
-        />
-      </Modal>
-    </ScrollView>
+          <Button
+            title={"Back"}
+            buttonStyle={{
+              backgroundColor: "#2596BE",
+              paddingHorizontal: 25,
+              margin: 10,
+              borderRadius: 15,
+            }}
+            onPress={toggleModal}
+          />
+        </Modal>
+      </ScrollView>
+    </View>
   );
 };
 

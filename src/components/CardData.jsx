@@ -28,8 +28,8 @@ const CardData = ({
           <Text style={styles.cardText}>Item group: {itemGroup} </Text>
           <Text style={styles.cardText}>Category: {category} </Text>
           <Text style={styles.cardText}>Quantity: {parseInt(quantity)} </Text>
-          <Text style={styles.cardText}>PR Status: .... </Text>
-          <Text style={styles.cardText}>Date approved: ....</Text>
+          <Text style={styles.cardText}>PR Status: Pending </Text>
+          <Text style={styles.cardText}>Date approved: Pending</Text>
           <Text style={styles.cardText}>Remarks: {justification} </Text>
         </Card>
       );
@@ -43,9 +43,8 @@ const CardData = ({
           <Text style={styles.cardText}>Requesting: {requestingName} </Text>
           <Text style={styles.cardText}>Item group: {itemGroup} </Text>
           <Text style={styles.cardText}>Category: {category} </Text>
-          <Text style={styles.cardText}>Quantity: {parseInt(quantity)} </Text>
-          <Text style={styles.cardText}>PR Status: ... </Text>
-          <Text style={styles.cardText}>Date approved: ....</Text>
+          <Text style={styles.cardText}>PR Status: Pending </Text>
+          <Text style={styles.cardText}>Date approved: Pending</Text>
           <Text style={styles.cardText}>Remarks: {justification} </Text>
         </Card>
       );
