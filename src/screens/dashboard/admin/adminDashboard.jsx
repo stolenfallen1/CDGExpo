@@ -29,7 +29,7 @@ const AdminDashboard = () => {
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
     setSelectedCardData({ ...cardData, ...{ cardKey, isapproved: true } });
-    console.log(selectedCardData);
+    // console.log(selectedCardData);
     toggleModal();
   };
 
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   };
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
-    return unit.name;
+    return unit?.name;
   };
 
   // handle item approval checkbox state
@@ -63,7 +63,41 @@ const AdminDashboard = () => {
       ...selectedCardData,
       purchase_request_details: updatedDetails,
     });
-    console.log(updatedDetails);
+    // console.log(updatedDetails);
+  };
+
+  // handle submit event
+  const handleSubmit = async () => {
+    console.log(selectedCardData);
+    Alert.prompt("Please enter your password:", "", (password) => {
+      if (password === userPasscode) {
+        try {
+          axios
+            .post(
+              "http://10.4.15.12:8004/api/purchase-request-items",
+              selectedCardData,
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response.data.data);
+              alert("PR Approved on Selected Items");
+              setModalVisible(!modalVisible);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("Wrong Password");
+        return;
+      }
+    });
   };
 
   // FETCH DATA FROM API AND STORE IN DATA STATE
@@ -220,7 +254,7 @@ const AdminDashboard = () => {
               margin: 10,
               borderRadius: 15,
             }}
-            // onPress={handleSubmit}
+            onPress={handleSubmit}
           />
           <Button
             title={"Back"}
