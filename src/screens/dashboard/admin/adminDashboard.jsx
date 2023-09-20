@@ -25,11 +25,10 @@ const AdminDashboard = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [checkedItems, setCheckedItems] = useState({});
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
-    setSelectedCardData({ ...cardData, ...{ cardKey } });
+    setSelectedCardData({ ...cardData, ...{ cardKey, isapproved: true } });
     console.log(selectedCardData);
     toggleModal();
   };
@@ -50,51 +49,22 @@ const AdminDashboard = () => {
   };
 
   // handle item approval checkbox state
-  // const handleItemApproval = (item) => {
-  //   item.isapproved = !item.isapproved;
-  //   setCheckedItems((prevState) => {
-  //     const newState = {
-  //       ...prevState,
-  //       [item.item_Id]: !prevState[item.item_Id],
-  //     };
-  //     return newState;
-  //   });
-  // };
-
-  // Submit event handler
-  // const handleSubmit = async () => {
-  //   let isapproved = false;
-  //   await selectedCardData.purchase_request_details.map((item) => {
-  //     if (item.isapproved == true) isapproved = true;
-  //   });
-  //   selectedCardData.isapproved = isapproved;
-  //   Alert.prompt("Please enter your password:", "", (password) => {
-  //     if (password === userPasscode) {
-  //       try {
-  //         axios
-  //           .post(
-  //             "http://10.4.15.12:8004/api/purchase-request-items",
-  //             selectedCardData,
-  //             {
-  //               headers: {
-  //                 Authorization: `Bearer ${authToken}`,
-  //               },
-  //             }
-  //           )
-  //           .then((response) => {
-  //             console.log(response.data);
-  //             alert("PR Approved on Selected Items");
-  //             setModalVisible(!modalVisible);
-  //           });
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     } else {
-  //       alert("Wrong password");
-  //       return;
-  //     }
-  //   });
-  // };
+  const handleItemApproval = (itemId) => {
+    const updatedDetails = selectedCardData.purchase_request_details.map(
+      (item) => {
+        if (item.item_Id === itemId) {
+          return { ...item, isapproved: !item.isapproved };
+        } else {
+          return item;
+        }
+      }
+    );
+    setSelectedCardData({
+      ...selectedCardData,
+      purchase_request_details: updatedDetails,
+    });
+    console.log(updatedDetails);
+  };
 
   // FETCH DATA FROM API AND STORE IN DATA STATE
   useEffect(() => {
@@ -108,7 +78,13 @@ const AdminDashboard = () => {
             },
           }
         );
-        setData(response.data.data);
+        const updatedData = response.data.data.map((item) => {
+          const updatedDetails = item.purchase_request_details.map((detail) => {
+            return { ...detail, isapproved: true };
+          });
+          return { ...item, purchase_request_details: updatedDetails };
+        });
+        setData(updatedData);
       } catch (error) {
         console.error(error);
       }
@@ -137,7 +113,6 @@ const AdminDashboard = () => {
         console.error(error);
       }
     };
-
     fetchVendors();
     fetchUnits();
     fetchData();
@@ -231,8 +206,8 @@ const AdminDashboard = () => {
                 </View>
                 <CheckBox
                   title={"Approved by Department Head"}
-                  checked={true}
-                  // onPress={handleItemApproval}
+                  checked={item.isapproved}
+                  onPress={() => handleItemApproval(item.item_Id)}
                 />
               </Card>
             ))}
