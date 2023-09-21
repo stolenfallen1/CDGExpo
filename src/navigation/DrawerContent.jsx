@@ -1,12 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { userRoleState } from "../atoms/userRoleState";
+import { authTokenState } from "../atoms/authTokenState";
 
 const DrawerContent = ({ navigation }) => {
   const userRole = useRecoilValue(userRoleState);
+  const [token, setToken] = useRecoilState(authTokenState);
 
   const renderMenuItems = () => {
+    const handleLogout = () => {
+      setToken(null);
+    };
+
     if (userRole === "administrator") {
       return (
         <View>
@@ -23,7 +29,10 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Department Head</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => {
+              handleLogout();
+              navigation.navigate("Login");
+            }}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
@@ -46,7 +55,10 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Administrator</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => {
+              handleLogout();
+              navigation.navigate("Login");
+            }}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
