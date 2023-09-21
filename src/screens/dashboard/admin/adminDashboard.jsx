@@ -29,7 +29,6 @@ const AdminDashboard = () => {
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
     setSelectedCardData({ ...cardData, ...{ cardKey, isapproved: true } });
-    console.log(selectedCardData);
     toggleModal();
   };
 
@@ -63,12 +62,10 @@ const AdminDashboard = () => {
       ...selectedCardData,
       purchase_request_details: updatedDetails,
     });
-    console.log(updatedDetails);
   };
 
   // handle submit event
   const handleSubmit = async () => {
-    console.log(selectedCardData);
     Alert.prompt("Please enter your password:", "", (password) => {
       if (password === userPasscode) {
         try {
@@ -83,7 +80,7 @@ const AdminDashboard = () => {
               }
             )
             .then((response) => {
-              console.log(response.data.data);
+              console.log(response.data);
               alert("PR Approved on Selected Items");
               setModalVisible(!modalVisible);
             })
@@ -184,7 +181,7 @@ const AdminDashboard = () => {
                   <TextInput
                     style={styles.dataInput}
                     editable={false}
-                    value={item?.item_Id}
+                    value={item.item_Id}
                   ></TextInput>
                 </View>
                 <View style={styles.inputContainer}>
@@ -192,7 +189,7 @@ const AdminDashboard = () => {
                   <TextInput
                     style={styles.dataInput}
                     editable={false}
-                    value={item?.item_master?.item_name}
+                    value={item.item_master?.item_name}
                   ></TextInput>
                 </View>
                 <View style={styles.inputContainer}>

@@ -34,9 +34,6 @@ export default function LoginScreen() {
         setAuthToken(data.access_token);
         setUserRole(data.user.role.name);
         setUserPassword(data.user.passcode);
-        console.log(data.access_token);
-        console.log(data.user.role.name);
-        console.log(data.user.passcode);
         alert("Login successful!");
         navigation.navigate("Dashboard");
       } else {
