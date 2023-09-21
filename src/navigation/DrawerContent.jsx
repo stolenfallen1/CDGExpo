@@ -17,13 +17,13 @@ const DrawerContent = ({ navigation }) => {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("A_HISTORY")}
+            onPress={() => navigation.navigate("adminHistory")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Administrator</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("DH_HISTORY")}
+            onPress={() => navigation.navigate("dheadHistory")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Department Head</Text>
@@ -31,7 +31,7 @@ const DrawerContent = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => {
               handleLogout();
-              navigation.navigate("Login");
+              navigation.navigate("Home");
             }}
             style={styles.menuItemButton}
           >
@@ -43,13 +43,19 @@ const DrawerContent = ({ navigation }) => {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("DH_HISTORY")}
+            onPress={() => navigation.navigate("dheadHistory")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Department Head</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("A_HISTORY")}
+            onPress={() => navigation.navigate("consultantHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Consultant</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("adminHistory")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Administrator</Text>
@@ -57,7 +63,7 @@ const DrawerContent = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => {
               handleLogout();
-              navigation.navigate("Login");
+              navigation.navigate("Home");
             }}
             style={styles.menuItemButton}
           >
@@ -69,7 +75,7 @@ const DrawerContent = ({ navigation }) => {
       return (
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => navigation.navigate("Home")}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
