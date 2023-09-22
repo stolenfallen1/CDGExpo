@@ -74,7 +74,7 @@ const DepartmentHead = () => {
         try {
           axios
             .post(
-              "http://10.4.15.206:8004/api/purchase-request-items",
+              "http://10.4.15.12:8004/api/purchase-request-items",
               selectedCardData,
               {
                 headers: {
@@ -102,7 +102,7 @@ const DepartmentHead = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=10&tab=1",
+          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=1",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -116,14 +116,11 @@ const DepartmentHead = () => {
     };
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(
-          "http://10.4.15.206:8004/api/vendors",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
+        const response = await axios.get("http://10.4.15.12:8004/api/vendors", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         setVendors(response.data.data);
       } catch (error) {
         console.error(error);
@@ -131,7 +128,7 @@ const DepartmentHead = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get("http://10.4.15.206:8004/api/units", {
+        const response = await axios.get("http://10.4.15.12:8004/api/units", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

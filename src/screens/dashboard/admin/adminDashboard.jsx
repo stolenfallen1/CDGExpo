@@ -71,7 +71,7 @@ const AdminDashboard = () => {
         try {
           axios
             .post(
-              "http://10.4.15.206:8004/api/purchase-request-items",
+              "http://10.4.15.12:8004/api/purchase-request-items",
               selectedCardData,
               {
                 headers: {
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.206:8004/api/purchase-request?page=1&per_page=200&tab=1",
+          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=200&tab=1",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -122,14 +122,11 @@ const AdminDashboard = () => {
     };
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(
-          "http://10.4.15.206:8004/api/vendors",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
+        const response = await axios.get("http://10.4.15.12:8004/api/vendors", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         setVendors(response.data.data);
       } catch (error) {
         console.error(error);
@@ -137,7 +134,7 @@ const AdminDashboard = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get("http://10.4.15.206:8004/api/units", {
+        const response = await axios.get("http://10.4.15.12:8004/api/units", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -236,7 +233,9 @@ const AdminDashboard = () => {
                   <TextInput
                     style={styles.dataInput}
                     editable={false}
-                    value={getUnit(item?.item_Request_Department_Approved_Qty)}
+                    value={getUnit(
+                      item?.item_Request_Department_Approved_UnitofMeasurement_Id
+                    )}
                   ></TextInput>
                 </View>
                 <CheckBox

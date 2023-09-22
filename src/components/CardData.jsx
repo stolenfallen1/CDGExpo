@@ -19,7 +19,11 @@ const CardData = ({
   const userRole = useRecoilValue(userRoleState);
 
   const renderCard = () => {
-    if (userRole === "department head" || userRole === "administrator") {
+    if (
+      userRole === "department head" ||
+      userRole === "administrator" ||
+      userRole === "consultant"
+    ) {
       return (
         <Card containerStyle={styles.cardContainer}>
           <Text style={styles.prId}>PR No: {prId} </Text>
