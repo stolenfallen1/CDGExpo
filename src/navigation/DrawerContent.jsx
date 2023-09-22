@@ -71,6 +71,32 @@ const DrawerContent = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       );
+    } else if (userRole === "consultant") {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("consultantHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Consultant</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("dheadHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Department Head</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleLogout();
+              navigation.navigate("Home");
+            }}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      );
     } else {
       return (
         <View>

@@ -6,7 +6,7 @@ import { authTokenState } from "../../atoms/authTokenState";
 import axios from "axios";
 import SearchFilter from "../../components/SearchFilter";
 import { StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import CardData from "../../components/CardData";
 
 const AdminHistory = () => {
   const authToken = useRecoilValue(authTokenState);
@@ -40,22 +40,19 @@ const AdminHistory = () => {
         keyExtractor={(key) => key}
         renderItem={({ item }) => {
           return (
-            <>
-              <View style={styles.container}>
-                <Text>{data[item].code}</Text>
-                <Text>
-                  {data[item].warehouse?.warehouse_description.length > 20
-                    ? `${data[item].warehouse?.warehouse_description.substring(
-                        0,
-                        20
-                      )}...`
-                    : data[item].warehouse?.warehouse_description}
-                </Text>
-                <TouchableOpacity>
-                  <Ionicons name="eye" size={16} color="black" />
-                </TouchableOpacity>
-              </View>
-            </>
+            <TouchableOpacity>
+              <CardData
+                prId={data[item].pr_Document_Number}
+                transactionDate={data[item].pr_Transaction_Date}
+                requestingName={data[item].pr_RequestedBy}
+                warehouse={data[item].warehouse.warehouse_description}
+                itemGroup={data[item].item_group.name}
+                category={data[item].category.name}
+                pr_status={data[item].status.Status_description}
+                dateApproved={data[item].pr_Branch_Level1_ApprovedDate}
+                justification={data[item].pr_Justication}
+              />
+            </TouchableOpacity>
           );
         }}
       />

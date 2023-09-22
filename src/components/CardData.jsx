@@ -9,42 +9,29 @@ const CardData = ({
   prId,
   transactionDate,
   requestingName,
+  warehouse,
   itemGroup,
   category,
-  quantity,
+  pr_status = "Pending",
+  dateApproved = "Pending",
   justification,
 }) => {
   const userRole = useRecoilValue(userRoleState);
 
   const renderCard = () => {
-    if (userRole === "department head") {
+    if (userRole === "department head" || userRole === "administrator") {
       return (
         <Card containerStyle={styles.cardContainer}>
           <Text style={styles.prId}>PR No: {prId} </Text>
           <Text style={styles.cardText}>
             Date Request: {new Date(transactionDate).toLocaleDateString()}
           </Text>
-          <Text style={styles.cardText}>Requesting: {requestingName} </Text>
+          <Text style={styles.cardText}>Requestee: {requestingName} </Text>
+          <Text style={styles.cardText}>Department: {warehouse} </Text>
           <Text style={styles.cardText}>Item group: {itemGroup} </Text>
           <Text style={styles.cardText}>Category: {category} </Text>
-          <Text style={styles.cardText}>Quantity: {parseInt(quantity)} </Text>
-          <Text style={styles.cardText}>PR Status: Pending </Text>
-          <Text style={styles.cardText}>Date approved: Pending</Text>
-          <Text style={styles.cardText}>Remarks: {justification} </Text>
-        </Card>
-      );
-    } else if (userRole === "administrator") {
-      return (
-        <Card containerStyle={styles.cardContainer}>
-          <Text style={styles.prId}>PR No: {prId} </Text>
-          <Text style={styles.cardText}>
-            Date Request: {new Date(transactionDate).toLocaleDateString()}
-          </Text>
-          <Text style={styles.cardText}>Requesting: {requestingName} </Text>
-          <Text style={styles.cardText}>Item group: {itemGroup} </Text>
-          <Text style={styles.cardText}>Category: {category} </Text>
-          <Text style={styles.cardText}>PR Status: Pending </Text>
-          <Text style={styles.cardText}>Date approved: Pending</Text>
+          <Text style={styles.cardText}>PR Status: {pr_status} </Text>
+          <Text style={styles.cardText}>Date approved: {dateApproved}</Text>
           <Text style={styles.cardText}>Remarks: {justification} </Text>
         </Card>
       );

@@ -165,6 +165,7 @@ const AdminDashboard = () => {
               prId={data[key].code}
               transactionDate={data[key].pr_Transaction_Date}
               requestingName={data[key].user.name}
+              warehouse={data[key].warehouse.warehouse_description}
               itemGroup={data[key].item_group.name}
               category={data[key].category.name}
               justification={data[key].pr_Justication}
