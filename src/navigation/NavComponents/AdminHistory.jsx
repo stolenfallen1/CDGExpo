@@ -8,9 +8,13 @@ import SearchFilter from "../../components/SearchFilter";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
 
-const AdminHistory = () => {
+const AdminHistory = ({ navigation }) => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
+
+  const handlePress = (id) => {
+    navigation.navigate("AdminLogs", { id });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +44,7 @@ const AdminHistory = () => {
         keyExtractor={(key) => key}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handlePress(data[item].id)}>
               <CardData
                 prId={data[item].pr_Document_Number}
                 transactionDate={data[item].pr_Transaction_Date}

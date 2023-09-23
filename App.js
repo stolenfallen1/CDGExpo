@@ -12,6 +12,8 @@ import DrawerContent from "./src/navigation/DrawerContent";
 import AdminHistory from "./src/navigation/NavComponents/AdminHistory";
 import DepartmentHeadHistory from "./src/navigation/NavComponents/DepartmentHeadHistory";
 import ConsultantHistory from "./src/navigation/NavComponents/ConsultantHistory";
+// Admin Navigation imports
+import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -54,6 +56,12 @@ function App() {
               name="consultantHistory"
               component={ConsultantHistory}
               options={{ title: "Department Head Transactions" }}
+            />
+            {/* Admin logs routes */}
+            <Stack.Screen
+              name="AdminLogs"
+              component={AdminLogs}
+              options={{ title: "Logs" }}
             />
           </Stack.Navigator>
         </NavigationContainer>
