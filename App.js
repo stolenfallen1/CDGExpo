@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -21,6 +22,7 @@ const Drawer = createDrawerNavigator();
 function App() {
   return (
     <RecoilRoot>
+      <StatusBar style="dark" />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
           <Stack.Navigator

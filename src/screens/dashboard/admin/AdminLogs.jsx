@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
+import { Card } from "react-native-elements";
 
 const AdminLogs = () => {
   const authToken = useRecoilValue(authTokenState);
@@ -32,7 +33,38 @@ const AdminLogs = () => {
 
   return (
     <View>
-      <Text>{data.pr_Document_Number}</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Card>
+          <Text>TEST</Text>
+        </Card>
+      </ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Card>
+          <Text>TEST</Text>
+        </Card>
+      </ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Card>
+          <Text>TEST</Text>
+        </Card>
+      </ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Card>
+          <Text>TEST</Text>
+          {/* {data.purchase_request_details?.map((detail) => (
+            <View key={detail.id}>
+              <Text>Item ID: {detail.item_Id}</Text>
+              <Text>Item Description: {detail.item_Description}</Text>
+              <Text>Quantity: {detail.quantity}</Text>
+            </View>
+          ))} */}
+        </Card>
+      </ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Card>
+          <Text>TEST</Text>
+        </Card>
+      </ScrollView>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import React from "react";
 import { useRecoilValue } from "recoil";
@@ -49,6 +49,14 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
     borderColor: "#66B5D1",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5.5,
+    },
+    shadowOpacity: 0.7,
+    borderRadius: 12,
   },
   prId: {
     fontWeight: "bold",
