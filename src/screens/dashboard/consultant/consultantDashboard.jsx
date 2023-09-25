@@ -150,7 +150,7 @@ const ConsultantDashboard = () => {
   }, [authToken]);
 
   return (
-    <View>
+    <View style={{ paddingBottom: 185 }}>
       <SearchFilter />
       <ScrollView>
         {Object.keys(data).map((key) => (

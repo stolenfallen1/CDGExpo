@@ -7,8 +7,10 @@ import axios from "axios";
 import SearchFilter from "../../components/SearchFilter";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
+import { useNavigation } from "@react-navigation/native";
 
-const AdminHistory = ({ navigation }) => {
+const AdminHistory = () => {
+  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
 
@@ -37,7 +39,7 @@ const AdminHistory = ({ navigation }) => {
   }, [authToken]);
 
   return (
-    <View>
+    <View style={{ paddingBottom: 110 }}>
       <SearchFilter />
       <FlatList
         data={Object.keys(data)}

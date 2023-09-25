@@ -33,7 +33,7 @@ const ConsultantHistory = () => {
   }, [authToken]);
 
   return (
-    <View>
+    <View style={{ paddingBottom: 110 }}>
       <SearchFilter />
       <FlatList
         data={Object.keys(data)}

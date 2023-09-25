@@ -16,6 +16,7 @@ import ConsultantHistory from "./src/navigation/NavComponents/ConsultantHistory"
 import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
+import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,6 +71,12 @@ function App() {
               name="AdminLogs"
               component={AdminLogs}
               options={{ title: "Logs" }}
+            />
+            {/* Approve Items for Comptroller */}
+            <Stack.Screen
+              name="ComptrollerApproveItems"
+              component={ApproveCompItems}
+              options={{ title: "Canvas Approval" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

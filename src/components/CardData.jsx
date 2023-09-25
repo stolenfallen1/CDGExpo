@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.7,
     borderRadius: 12,
+    marginBottom: 10,
   },
   prId: {
     fontWeight: "bold",

@@ -6,11 +6,20 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
+import { useNavigation } from "@react-navigation/native";
 
 const ComptrollerDashboard = () => {
+  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [selectedCardData, setSelectedCardData] = useState({});
+
+  const handleCardPress = () => {
+    navigation.navigate("ComptrollerApproveItems");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,8 +44,8 @@ const ComptrollerDashboard = () => {
     <View>
       <SearchFilter />
       <ScrollView>
-        <TouchableOpacity>
-          <CardData />
+        <TouchableOpacity onPress={handleCardPress}>
+          <Text>TEST</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
