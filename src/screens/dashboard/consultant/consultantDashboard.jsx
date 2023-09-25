@@ -17,7 +17,7 @@ import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
 import axios from "axios";
 
-const consultantDashboard = () => {
+const ConsultantDashboard = () => {
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
@@ -297,4 +297,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default consultantDashboard;
+export default ConsultantDashboard;

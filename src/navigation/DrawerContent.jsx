@@ -97,6 +97,26 @@ const DrawerContent = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       );
+    } else if (userRole === "comptroller") {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("comptrollerHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Approved Canvas</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleLogout();
+              navigation.navigate("Home");
+            }}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      );
     } else {
       return (
         <View>

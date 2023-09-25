@@ -5,7 +5,7 @@ import { userRoleState } from "../../atoms/userRoleState";
 import AdminDashboard from "./admin/adminDashboard";
 import DepartmentHead from "./departmentHead/DepartmentHead";
 import ConsultantDashboard from "./consultant/consultantDashboard";
-// import ComptrollerDashboard from "./comptroller/ComptrollerDashboard";
+import ConptrollerDashboard from "./comptroller/comptrollerDashboard";
 // import PresidentDashboard from "./president/PresidentDashboard";
 
 const Dashboard = () => {
@@ -17,6 +17,7 @@ const Dashboard = () => {
       {userRole === "administrator" && <AdminDashboard />}
       {userRole === "department head" && <DepartmentHead />}
       {userRole === "consultant" && <ConsultantDashboard />}
+      {userRole === "comptroller" && <ConptrollerDashboard />}
       {/* {userRole === "comptroller" && <ComptrollerDashboard />} */}
       {/* {userRole === "president" && <PresidentDashboard />} */}
     </View>

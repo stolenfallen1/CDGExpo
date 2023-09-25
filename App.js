@@ -13,6 +13,7 @@ import DrawerContent from "./src/navigation/DrawerContent";
 import AdminHistory from "./src/navigation/NavComponents/AdminHistory";
 import DepartmentHeadHistory from "./src/navigation/NavComponents/DepartmentHeadHistory";
 import ConsultantHistory from "./src/navigation/NavComponents/ConsultantHistory";
+import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 
@@ -57,7 +58,12 @@ function App() {
             <Stack.Screen
               name="consultantHistory"
               component={ConsultantHistory}
-              options={{ title: "Department Head Transactions" }}
+              options={{ title: "Consultant Transactions" }}
+            />
+            <Stack.Screen
+              name="comptrollerHistory"
+              component={CanvasHistory}
+              options={{ title: "Comptroller Transactions" }}
             />
             {/* Admin logs routes */}
             <Stack.Screen
