@@ -118,7 +118,7 @@ const AdminDashboard = () => {
       });
       setData([...data, ...updatedData]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   // FETCH DATA ON PAGE CHANGE
@@ -157,16 +157,16 @@ const AdminDashboard = () => {
   }, [authToken]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleCardPress(item, item.code)}>
+    <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
       <CardData
         prId={item.code}
         transactionDate={item.pr_Transaction_Date}
-        requestingName={item.user.name}
+        requestingName={item.user?.name}
         warehouse={item.warehouse.warehouse_description}
-        itemGroup={item.item_group.name}
-        category={item.category.name}
-        justification={item.pr_Justication}
-        cardKey={item.code}
+        itemGroup={item.item_group?.name}
+        category={item.category?.name}
+        justification={item?.pr_Justication}
+        cardKey={item.id}
       />
     </TouchableOpacity>
   );
@@ -177,9 +177,9 @@ const AdminDashboard = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.code}
+        keyExtractor={(item) => item.id}
         onEndReached={() => setPage(page + 1)}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.5}
       />
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
         <ScrollView horizontal={true}>
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
                 <TextInput
                   style={styles.dataInput}
                   editable={false}
-                  value={parseInt(item?.item_Request_Qty).toString()}
+                  value={item?.item_Request_Qty}
                 ></TextInput>
               </View>
               <View style={styles.inputContainer}>
@@ -222,9 +222,7 @@ const AdminDashboard = () => {
                 <TextInput
                   style={styles.dataInput}
                   editable={false}
-                  value={parseInt(
-                    item?.item_Request_Department_Approved_Qty
-                  ).toString()}
+                  value={item?.item_Request_Department_Approved_Qty} // if null, use requested qty
                 ></TextInput>
               </View>
               <View style={styles.inputContainer}>
@@ -246,7 +244,7 @@ const AdminDashboard = () => {
                   editable={false}
                   value={getUnit(
                     item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                  )}
+                  )} // if null, use requested unit of measurement
                 ></TextInput>
               </View>
               <CheckBox

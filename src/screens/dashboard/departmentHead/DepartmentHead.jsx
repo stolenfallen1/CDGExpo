@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Alert,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -28,6 +29,7 @@ const DepartmentHead = () => {
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
+  const [page, setPage] = useState(1);
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -97,23 +99,28 @@ const DepartmentHead = () => {
     });
   };
 
-  // FETCH DATA FROM API AND STORE IN DATA STATE
+  // FETCH DATA
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setData(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=1",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        setData(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    fetchData();
+  }, [authToken, page]);
+
+  // FETCH VENDORS AND UNITS
+  useEffect(() => {
     const fetchVendors = async () => {
       try {
         const response = await axios.get("http://10.4.15.12:8004/api/vendors", {
@@ -141,200 +148,198 @@ const DepartmentHead = () => {
 
     fetchVendors();
     fetchUnits();
-    fetchData();
   }, [authToken]);
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
+      <CardData
+        prId={item.code}
+        transactionDate={item.pr_Transaction_Date}
+        requestingName={item.user?.name}
+        warehouse={item.warehouse.warehouse_description}
+        itemGroup={item.item_group?.name}
+        category={item.category?.name}
+        justification={item?.pr_Justication}
+        cardKey={item.id}
+      />
+    </TouchableOpacity>
+  );
 
   return (
     <View style={{ paddingBottom: 185 }}>
       <SearchFilter />
-      <ScrollView>
-        {Object.keys(data).map((key) => (
-          <TouchableOpacity
-            key={key}
-            onPress={() => handleCardPress(data[key], key)}
-          >
-            <CardData
-              prId={data[key].code}
-              transactionDate={data[key].pr_Transaction_Date}
-              requestingName={data[key].user.name}
-              warehouse={data[key].warehouse.warehouse_description}
-              itemGroup={data[key].item_group.name}
-              category={data[key].category.name}
-              justification={data[key].pr_Justication}
-              cardKey={key}
-            />
-          </TouchableOpacity>
-        ))}
-        <Modal isVisible={modalVisible} style={styles.modalContainer}>
-          <ScrollView horizontal={true}>
-            {selectedCardData?.purchase_request_details?.map((item, index) => (
-              <Card key={index} containerStyle={styles.cardContainer}>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Item Code </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={item.item_Id}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Item Name </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={item.item_master?.item_name}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Preferred Supplier</Text>
-                  <RNPickerSelect
-                    value={item.prepared_supplier_id}
-                    onValueChange={(value) => {
-                      const updatedData = { ...selectedCardData };
-                      updatedData.purchase_request_details[
-                        index
-                      ].prepared_supplier_id = value;
-                      setSelectedCardData(updatedData);
-                    }}
-                    items={vendors.map((vendor) => ({
-                      label: vendor.vendor_Name,
-                      value: vendor.id,
-                    }))}
-                    placeholder={{
-                      label: getVendor(item.prepared_supplier_id),
-                      value: item.prepared_supplier_id,
-                    }}
-                    style={{
-                      inputIOS: {
-                        fontSize: 16,
-                        borderBottomWidth: 0.5,
-                        paddingBottom: 6,
-                      },
-                      inputAndroid: {
-                        fontSize: 16,
-                        borderBottomWidth: 0.5,
-                        paddingBottom: 6,
-                      },
-                    }}
-                    Icon={() => {
-                      return (
-                        <Ionicons name="chevron-down" size={18} color="gray" />
-                      );
-                    }}
-                  />
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Requested Quantity </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={item?.item_Request_Qty}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>
-                    Requested Unit of Measurement{" "}
-                  </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={getUnit(item.item_Request_UnitofMeasurement_Id)}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Approved Quantity </Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    placeholder="......"
-                    placeholderTextColor={"gray"}
-                    style={styles.dataInput}
-                    value={
-                      item?.item_Request_Department_Approved_Qty !== null
-                        ? item.item_Request_Department_Approved_Qty.toString()
-                        : ""
-                    }
-                    onChangeText={(text) => {
-                      const updatedData = { ...selectedCardData };
-                      updatedData.purchase_request_details[
-                        index
-                      ].item_Request_Department_Approved_Qty = text;
-                      setSelectedCardData(updatedData);
-                    }}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>
-                    Approved Unit of Measurement
-                  </Text>
-                  <RNPickerSelect
-                    value={
-                      item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                    }
-                    onValueChange={(value) => {
-                      const updatedData = { ...selectedCardData };
-                      updatedData.purchase_request_details[
-                        index
-                      ].item_Request_Department_Approved_UnitofMeasurement_Id =
-                        value;
-                      setSelectedCardData(updatedData);
-                    }}
-                    items={units.map((unit) => ({
-                      label: unit.name,
-                      value: unit.id,
-                    }))}
-                    placeholder={{
-                      label: getUnit(item.item_Request_UnitofMeasurement_Id),
-                      value: item.item_Request_UnitofMeasurement_Id,
-                    }}
-                    style={{
-                      inputIOS: {
-                        fontSize: 16,
-                        borderBottomWidth: 0.5,
-                        paddingBottom: 6,
-                      },
-                      inputAndroid: {
-                        fontSize: 16,
-                        borderBottomWidth: 0.5,
-                        paddingBottom: 6,
-                      },
-                    }}
-                    Icon={() => {
-                      return (
-                        <Ionicons name="chevron-down" size={18} color="gray" />
-                      );
-                    }}
-                  />
-                </View>
-                <CheckBox
-                  title={"Approve Request"}
-                  checked={checkedItems[item.item_Id]}
-                  onPress={() => handleItemApproval(item)}
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        onEndReached={() => setPage(page + 1)}
+        onEndReachedThreshold={0.5}
+      />
+      <Modal isVisible={modalVisible} style={styles.modalContainer}>
+        <ScrollView horizontal={true}>
+          {selectedCardData?.purchase_request_details?.map((item, index) => (
+            <Card key={index} containerStyle={styles.cardContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Item Code </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_Id}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Item Name </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_master?.item_name}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Preferred Supplier</Text>
+                <RNPickerSelect
+                  value={item.prepared_supplier_id}
+                  onValueChange={(value) => {
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].prepared_supplier_id = value;
+                    setSelectedCardData(updatedData);
+                  }}
+                  items={vendors.map((vendor) => ({
+                    label: vendor.vendor_Name,
+                    value: vendor.id,
+                  }))}
+                  placeholder={{
+                    label: getVendor(item.prepared_supplier_id),
+                    value: item.prepared_supplier_id,
+                  }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                  }}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
+                  }}
                 />
-              </Card>
-            ))}
-          </ScrollView>
-          <Button
-            title={"Submit"}
-            buttonStyle={{
-              backgroundColor: "orange",
-              paddingHorizontal: 25,
-              margin: 10,
-              borderRadius: 15,
-            }}
-            onPress={handleSubmit}
-          />
-          <Button
-            title={"Back"}
-            buttonStyle={{
-              backgroundColor: "#2596BE",
-              paddingHorizontal: 25,
-              margin: 10,
-              borderRadius: 15,
-            }}
-            onPress={toggleModal}
-          />
-        </Modal>
-      </ScrollView>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Requested Quantity </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item?.item_Request_Qty}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>
+                  Requested Unit of Measurement{" "}
+                </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={getUnit(item.item_Request_UnitofMeasurement_Id)}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Approved Quantity </Text>
+                <TextInput
+                  keyboardType="numeric"
+                  placeholder="......"
+                  placeholderTextColor={"gray"}
+                  style={styles.dataInput}
+                  value={item?.item_Request_Department_Approved_Qty}
+                  onChangeText={(text) => {
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].item_Request_Department_Approved_Qty = text;
+                    setSelectedCardData(updatedData);
+                  }}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>
+                  Approved Unit of Measurement
+                </Text>
+                <RNPickerSelect
+                  value={
+                    item?.item_Request_Department_Approved_UnitofMeasurement_Id
+                  }
+                  onValueChange={(value) => {
+                    const updatedData = { ...selectedCardData };
+                    updatedData.purchase_request_details[
+                      index
+                    ].item_Request_Department_Approved_UnitofMeasurement_Id =
+                      value;
+                    setSelectedCardData(updatedData);
+                  }}
+                  items={units.map((unit) => ({
+                    label: unit.name,
+                    value: unit.id,
+                  }))}
+                  placeholder={{
+                    label: getUnit(item.item_Request_UnitofMeasurement_Id),
+                    value: item.item_Request_UnitofMeasurement_Id,
+                  }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      borderBottomWidth: 0.5,
+                      paddingBottom: 6,
+                    },
+                  }}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
+                  }}
+                />
+              </View>
+              <CheckBox
+                title={"Approve Request"}
+                checked={checkedItems[item.item_Id]}
+                onPress={() => handleItemApproval(item)}
+              />
+            </Card>
+          ))}
+        </ScrollView>
+        <Button
+          title={"Submit"}
+          buttonStyle={{
+            backgroundColor: "orange",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={handleSubmit}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={{
+            backgroundColor: "#2596BE",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={toggleModal}
+        />
+      </Modal>
     </View>
   );
 };
