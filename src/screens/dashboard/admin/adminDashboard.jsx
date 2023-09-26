@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Alert,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -25,6 +26,7 @@ const AdminDashboard = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [page, setPage] = useState(1);
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -97,29 +99,35 @@ const AdminDashboard = () => {
     });
   };
 
-  // FETCH DATA FROM API AND STORE IN DATA STATE
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=200&tab=1",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        const updatedData = response.data.data.map((item) => {
-          const updatedDetails = item.purchase_request_details.map((detail) => {
-            return { ...detail, isapproved: true };
-          });
-          return { ...item, purchase_request_details: updatedDetails };
+  // FETCH DATA
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      const updatedData = response.data.data.map((item) => {
+        const updatedDetails = item.purchase_request_details.map((detail) => {
+          return { ...detail, isapproved: true };
         });
-        setData(updatedData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+        return { ...item, purchase_request_details: updatedDetails };
+      });
+      setData([...data, ...updatedData]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // FETCH DATA ON PAGE CHANGE
+  useEffect(() => {
+    fetchData();
+  }, [authToken, page]);
+
+  // FETCH VENDORS AND UNITS
+  useEffect(() => {
     const fetchVendors = async () => {
       try {
         const response = await axios.get("http://10.4.15.12:8004/api/vendors", {
@@ -146,128 +154,130 @@ const AdminDashboard = () => {
     };
     fetchVendors();
     fetchUnits();
-    fetchData();
   }, [authToken]);
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleCardPress(item, item.code)}>
+      <CardData
+        prId={item.code}
+        transactionDate={item.pr_Transaction_Date}
+        requestingName={item.user.name}
+        warehouse={item.warehouse.warehouse_description}
+        itemGroup={item.item_group.name}
+        category={item.category.name}
+        justification={item.pr_Justication}
+        cardKey={item.code}
+      />
+    </TouchableOpacity>
+  );
 
   return (
     <View style={{ paddingBottom: 185 }}>
       <SearchFilter />
-      <ScrollView>
-        {Object.keys(data).map((key) => (
-          <TouchableOpacity
-            key={key}
-            onPress={() => handleCardPress(data[key], key)}
-          >
-            <CardData
-              prId={data[key].code}
-              transactionDate={data[key].pr_Transaction_Date}
-              requestingName={data[key].user.name}
-              warehouse={data[key].warehouse.warehouse_description}
-              itemGroup={data[key].item_group.name}
-              category={data[key].category.name}
-              justification={data[key].pr_Justication}
-              cardKey={key}
-            />
-          </TouchableOpacity>
-        ))}
-        <Modal isVisible={modalVisible} style={styles.modalContainer}>
-          <ScrollView horizontal={true}>
-            {selectedCardData?.purchase_request_details?.map((item, index) => (
-              <Card key={index} containerStyle={styles.cardContainer}>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Item Code: </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={item.item_Id}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Item Name: </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={item.item_master?.item_name}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Preferred Supplier: </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={getVendor(item?.prepared_supplier_id)}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Requested Quantity: </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={parseInt(item?.item_Request_Qty).toString()}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>Approved Quantity: </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={parseInt(
-                      item?.item_Request_Department_Approved_Qty
-                    ).toString()}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>
-                    Requested Unit of Measurement:{" "}
-                  </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={getUnit(item?.item_Request_UnitofMeasurement_Id)}
-                  ></TextInput>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>
-                    Approved Unit of Measurement:{" "}
-                  </Text>
-                  <TextInput
-                    style={styles.dataInput}
-                    editable={false}
-                    value={getUnit(
-                      item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                    )}
-                  ></TextInput>
-                </View>
-                <CheckBox
-                  title={"Approved by Department Head"}
-                  checked={item.isapproved}
-                  onPress={() => handleItemApproval(item.item_Id)}
-                />
-              </Card>
-            ))}
-          </ScrollView>
-          <Button
-            title={"Submit"}
-            buttonStyle={{
-              backgroundColor: "orange",
-              paddingHorizontal: 25,
-              margin: 10,
-              borderRadius: 15,
-            }}
-            onPress={handleSubmit}
-          />
-          <Button
-            title={"Back"}
-            buttonStyle={{
-              backgroundColor: "#2596BE",
-              paddingHorizontal: 25,
-              margin: 10,
-              borderRadius: 15,
-            }}
-            onPress={toggleModal}
-          />
-        </Modal>
-      </ScrollView>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.code}
+        onEndReached={() => setPage(page + 1)}
+        onEndReachedThreshold={0.1}
+      />
+      <Modal isVisible={modalVisible} style={styles.modalContainer}>
+        <ScrollView horizontal={true}>
+          {selectedCardData?.purchase_request_details?.map((item, index) => (
+            <Card key={index} containerStyle={styles.cardContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Item Code: </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_Id}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Item Name: </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={item.item_master?.item_name}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Preferred Supplier: </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={getVendor(item?.prepared_supplier_id)}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Requested Quantity: </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={parseInt(item?.item_Request_Qty).toString()}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Approved Quantity: </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={parseInt(
+                    item?.item_Request_Department_Approved_Qty
+                  ).toString()}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>
+                  Requested Unit of Measurement:{" "}
+                </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={getUnit(item?.item_Request_UnitofMeasurement_Id)}
+                ></TextInput>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>
+                  Approved Unit of Measurement:{" "}
+                </Text>
+                <TextInput
+                  style={styles.dataInput}
+                  editable={false}
+                  value={getUnit(
+                    item?.item_Request_Department_Approved_UnitofMeasurement_Id
+                  )}
+                ></TextInput>
+              </View>
+              <CheckBox
+                title={"Approved by Department Head"}
+                checked={item.isapproved}
+                onPress={() => handleItemApproval(item.item_Id)}
+              />
+            </Card>
+          ))}
+        </ScrollView>
+        <Button
+          title={"Submit"}
+          buttonStyle={{
+            backgroundColor: "orange",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={handleSubmit}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={{
+            backgroundColor: "#2596BE",
+            paddingHorizontal: 25,
+            margin: 10,
+            borderRadius: 15,
+          }}
+          onPress={toggleModal}
+        />
+      </Modal>
     </View>
   );
 };
