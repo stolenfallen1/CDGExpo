@@ -49,7 +49,7 @@ const DepartmentHead = () => {
   };
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
-    return unit.name;
+    return unit?.name;
   };
 
   // handle item approval checkbox state
@@ -153,7 +153,7 @@ const DepartmentHead = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
       <CardData
-        prId={item.code}
+        prId={item.pr_Document_Number}
         transactionDate={item.pr_Transaction_Date}
         requestingName={item.user?.name}
         warehouse={item.warehouse.warehouse_description}
@@ -165,6 +165,12 @@ const DepartmentHead = () => {
     </TouchableOpacity>
   );
 
+  const handleEndReached = () => {
+    if (data.length >= 10) {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <View style={{ paddingBottom: 185 }}>
       <SearchFilter />
@@ -172,7 +178,7 @@ const DepartmentHead = () => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        onEndReached={() => setPage(page + 1)}
+        onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
       />
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
