@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import axios from "axios";
 import SearchFilter from "../../components/SearchFilter";
-import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
 import { useNavigation } from "@react-navigation/native";
 
@@ -38,48 +37,34 @@ const AdminHistory = () => {
     fetchData();
   }, [authToken]);
 
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => handlePress(data[item].id)}>
+        <CardData
+          prId={data[item].pr_Document_Number}
+          transactionDate={data[item].pr_Transaction_Date}
+          requestingName={data[item].pr_RequestedBy}
+          warehouse={data[item].warehouse.warehouse_description}
+          itemGroup={data[item].item_group.name}
+          category={data[item].category.name}
+          pr_status={data[item].status.Status_description}
+          dateApproved={data[item].pr_Branch_Level1_ApprovedDate}
+          justification={data[item].pr_Justication}
+        />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={{ paddingBottom: 110 }}>
       <SearchFilter />
       <FlatList
         data={Object.keys(data)}
         keyExtractor={(key) => key}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity onPress={() => handlePress(data[item].id)}>
-              <CardData
-                prId={data[item].pr_Document_Number}
-                transactionDate={data[item].pr_Transaction_Date}
-                requestingName={data[item].pr_RequestedBy}
-                warehouse={data[item].warehouse.warehouse_description}
-                itemGroup={data[item].item_group.name}
-                category={data[item].category.name}
-                pr_status={data[item].status.Status_description}
-                dateApproved={data[item].pr_Branch_Level1_ApprovedDate}
-                justification={data[item].pr_Justication}
-              />
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={renderItem}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 15,
-    borderWidth: 0.5,
-    borderColor: "#66B5D1",
-    borderRadius: 5,
-    paddingVertical: 15,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 8,
-    marginHorizontal: 15,
-  },
-});
 
 export default AdminHistory;

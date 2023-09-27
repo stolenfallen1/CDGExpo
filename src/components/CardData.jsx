@@ -22,7 +22,8 @@ const CardData = ({
     if (
       userRole === "department head" ||
       userRole === "administrator" ||
-      userRole === "consultant"
+      userRole === "consultant" ||
+      userRole === "comptroller"
     ) {
       return (
         <Card containerStyle={styles.cardContainer}>
