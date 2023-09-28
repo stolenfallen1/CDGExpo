@@ -14,7 +14,7 @@ const ComptrollerDashboard = () => {
   const [page, setPage] = useState(1);
 
   const handleCardPress = (id) => {
-    navigation.navigate("ComptrollerApproveItems", { id });
+    navigation.navigate("ComptrollerApproveItems", { id, isStatus: true });
   };
 
   const fetchData = async () => {
