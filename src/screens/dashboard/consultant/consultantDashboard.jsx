@@ -159,14 +159,14 @@ const ConsultantDashboard = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
       <CardData
-        prId={item.pr_Document_Number}
-        transactionDate={item.pr_Transaction_Date}
-        requestingName={item.user?.name}
-        warehouse={item.warehouse.warehouse_description}
-        itemGroup={item.item_group?.name}
-        category={item.category?.name}
+        prId={item?.pr_Document_Number}
+        transactionDate={item?.pr_Transaction_Date}
+        requestingName={item?.user?.name}
+        warehouse={item?.warehouse.warehouse_description}
+        itemGroup={item?.item_group?.name}
+        category={item?.category?.name}
         justification={item?.pr_Justication}
-        cardKey={item.id}
+        cardKey={item?.id}
       />
     </TouchableOpacity>
   );
@@ -193,65 +193,47 @@ const ConsultantDashboard = () => {
             <Card key={index} containerStyle={styles.cardContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Code: </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item.item_Id}
-                ></TextInput>
+                <Text style={styles.dataInput}>{item.item_Id}</Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Name: </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item.item_master?.item_name}
-                ></TextInput>
+                <Text style={styles.dataInput}>
+                  {item?.item_master?.item_name}
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Preferred Supplier: </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={getVendor(item?.prepared_supplier_id)}
-                ></TextInput>
+                <Text style={styles.dataInput}>
+                  {getVendor(item?.prepared_supplier_id)}
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Requested Quantity: </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item?.item_Request_Qty}
-                ></TextInput>
+                <Text style={styles.dataInput}>{item?.item_Request_Qty}</Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Approved Quantity: </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={item?.item_Request_Department_Approved_Qty} // if null use requested qty
-                ></TextInput>
+                <Text style={styles.dataInput}>
+                  {item?.item_Request_Department_Approved_Qty}
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>
-                  Requested Unit of Measurement:{" "}
+                  Requested Unit of Measurement:
                 </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={getUnit(item?.item_Request_UnitofMeasurement_Id)}
-                ></TextInput>
+                <Text style={styles.dataInput}>
+                  {getUnit(item?.item_Request_UnitofMeasurement_Id)}
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>
-                  Approved Unit of Measurement:{" "}
+                  Approved Unit of Measurement:
                 </Text>
-                <TextInput
-                  style={styles.dataInput}
-                  editable={false}
-                  value={getUnit(
+                <Text style={styles.dataInput}>
+                  {getUnit(
                     item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                  )} // if null use requested unit of measurement
-                ></TextInput>
+                  )}
+                </Text>
               </View>
               <CheckBox
                 title={"Approved by Department Head"}

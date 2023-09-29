@@ -41,15 +41,15 @@ const ComptrollerDashboard = () => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <CardData
-          prId={item.pr_Document_Number}
-          transactionDate={item.pr_Transaction_Date}
-          requestingName={item.user.name}
-          warehouse={item.warehouse.warehouse_description}
-          itemGroup={item.item_group.name}
-          category={item.category.name}
-          pr_status={item.status.Status_description}
-          dateApproved={item.pr_Branch_Level1_ApprovedDate}
-          justification={item.pr_Justication}
+          prId={item?.pr_Document_Number}
+          transactionDate={item?.pr_Transaction_Date}
+          requestingName={item?.user?.name}
+          warehouse={item?.warehouse?.warehouse_description}
+          itemGroup={item?.item_group?.name}
+          category={item?.category?.name}
+          pr_status={item?.status?.Status_description}
+          dateApproved={item?.pr_Branch_Level1_ApprovedDate}
+          justification={item?.pr_Justication}
         />
       </TouchableOpacity>
     );
@@ -62,7 +62,7 @@ const ComptrollerDashboard = () => {
   };
 
   return (
-    <View>
+    <View style={{ paddingBottom: 185 }}>
       <SearchFilter />
       <FlatList
         data={data}
