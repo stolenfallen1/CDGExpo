@@ -44,15 +44,15 @@ const ConsultantHistory = () => {
           return (
             <TouchableOpacity>
               <CardData
-                prId={data[item].pr_Document_Number}
-                transactionDate={data[item].pr_Transaction_Date}
-                requestingName={data[item].pr_RequestedBy}
-                warehouse={data[item].warehouse.warehouse_description}
-                itemGroup={data[item].item_group.name}
-                category={data[item].category.name}
-                pr_status={data[item].status.Status_description}
-                dateApproved={data[item].pr_Branch_Level2_ApprovedDate}
-                justification={data[item].pr_Justication}
+                prId={data[item]?.pr_Document_Number}
+                transactionDate={data[item]?.pr_Transaction_Date}
+                requestingName={data[item]?.pr_RequestedBy}
+                warehouse={data[item]?.warehouse?.warehouse_description}
+                itemGroup={data[item]?.item_group?.name}
+                category={data[item]?.category?.name}
+                pr_status={data[item]?.status?.Status_description}
+                dateApproved={data[item]?.pr_Branch_Level2_ApprovedDate}
+                justification={data[item]?.pr_Justication}
               />
             </TouchableOpacity>
           );

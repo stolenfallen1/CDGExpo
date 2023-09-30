@@ -180,21 +180,67 @@ const DepartmentHead = () => {
         onEndReachedThreshold={0.5}
       />
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <ScrollView horizontal={true}>
+        <View style={{ marginLeft: 16, marginTop: 15 }}>
+          <Text style={styles.modalTextInfo}>
+            PR No:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.pr_Document_Number}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Name:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.user?.branch?.name}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Department:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.warehouse?.warehouse_description}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Requested By:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.user?.name}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Date Requested:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.pr_Transaction_Date}
+            </Text>
+          </Text>
+          <CheckBox
+            title={"Approve All Request"}
+            containerStyle={{
+              marginRight: 30,
+              backgroundColor: "lightgreen",
+              borderRadius: 10,
+            }}
+          />
+        </View>
+        <ScrollView
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: "lightgrey",
+          }}
+        >
           {selectedCardData?.purchase_request_details?.map((item, index) => (
             <Card key={index} containerStyle={styles.cardContainer}>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Code </Text>
-                <Text style={styles.dataInput}>{item.item_Id}</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Name </Text>
+                <Text style={styles.inputText}>Item Name: </Text>
                 <Text style={styles.dataInput}>
                   {item?.item_master?.item_name}
                 </Text>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Preferred Supplier</Text>
+                <Text style={styles.inputText}>Preferred Supplier:</Text>
                 <RNPickerSelect
                   value={item?.prepared_supplier_id}
                   onValueChange={(value) => {
@@ -232,22 +278,10 @@ const DepartmentHead = () => {
                 />
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Requested Quantity </Text>
-                <Text style={styles.dataInput}>{item?.item_Request_Qty}</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>
-                  Requested Unit of Measurement
-                </Text>
-                <Text style={styles.dataInput}>
-                  {getUnit(item?.item_Request_UnitofMeasurement_Id)}
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Approved Quantity </Text>
+                <Text style={styles.inputText}>Approved Quantity: </Text>
                 <TextInput
                   keyboardType="numeric"
-                  placeholder="......"
+                  placeholder={item?.item_Request_Qty}
                   placeholderTextColor={"gray"}
                   style={styles.dataInput}
                   value={item?.item_Request_Department_Approved_Qty}
@@ -262,7 +296,7 @@ const DepartmentHead = () => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>
-                  Approved Unit of Measurement
+                  Approved Unit of Measurement:
                 </Text>
                 <RNPickerSelect
                   value={
@@ -305,32 +339,41 @@ const DepartmentHead = () => {
               </View>
               <CheckBox
                 title={"Approve Request"}
+                containerStyle={{ borderRadius: 10 }}
                 checked={checkedItems[item.item_Id]}
                 onPress={() => handleItemApproval(item)}
               />
             </Card>
           ))}
         </ScrollView>
-        <Button
-          title={"Submit"}
-          buttonStyle={{
-            backgroundColor: "orange",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "transparent",
           }}
-          onPress={handleSubmit}
-        />
-        <Button
-          title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
-          }}
-          onPress={toggleModal}
-        />
+        >
+          <Button
+            title={"Submit"}
+            buttonStyle={{
+              backgroundColor: "orange",
+              paddingHorizontal: 20,
+              margin: 7,
+              borderRadius: 10,
+            }}
+            onPress={handleSubmit}
+          />
+          <Button
+            title={"Back"}
+            buttonStyle={{
+              backgroundColor: "#2596BE",
+              paddingHorizontal: 20,
+              margin: 7,
+              borderRadius: 10,
+            }}
+            onPress={toggleModal}
+          />
+        </View>
       </Modal>
     </View>
   );
@@ -343,21 +386,27 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 35,
   },
+  modalTextInfo: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 8,
+  },
   cardContainer: {
     borderRadius: 10,
     borderColor: "#66B5D1",
+    marginBottom: 5,
   },
   inputContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 13,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
   },
   inputText: {
     fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 3,
+    fontSize: 14,
+    marginBottom: 2,
   },
   dataInput: {
-    fontSize: 18,
+    fontSize: 16,
   },
 });
 

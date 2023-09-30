@@ -44,16 +44,18 @@ const DepartmentHeadHistory = () => {
           return (
             <TouchableOpacity>
               <CardData
-                prId={data[item].pr_Document_Number}
-                transactionDate={data[item].pr_Transaction_Date}
-                requestingName={data[item].pr_RequestedBy}
-                warehouse={data[item].warehouse.warehouse_description}
-                itemGroup={data[item].item_group.name}
-                category={data[item].category.name}
-                quantity={data[item].purchase_request_details.item_Request_Qty}
-                pr_status={data[item].status.Status_description}
-                dateApproved={data[item].pr_DepartmentHead_ApprovedDate}
-                justification={data[item].pr_Justication}
+                prId={data[item]?.pr_Document_Number}
+                transactionDate={data[item]?.pr_Transaction_Date}
+                requestingName={data[item]?.pr_RequestedBy}
+                warehouse={data[item]?.warehouse?.warehouse_description}
+                itemGroup={data[item]?.item_group?.name}
+                category={data[item]?.category?.name}
+                quantity={
+                  data[item]?.purchase_request_details?.item_Request_Qty
+                }
+                pr_status={data[item]?.status?.Status_description}
+                dateApproved={data[item]?.pr_DepartmentHead_ApprovedDate}
+                justification={data[item]?.pr_Justication}
               />
             </TouchableOpacity>
           );
