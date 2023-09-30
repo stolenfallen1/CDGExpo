@@ -15,6 +15,8 @@ import { userPassword } from "../../../atoms/userPassword";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 // http://10.4.15.12:8004/api/purchase-request/{id}?tab=6 (pr id)
 
 // Display data
@@ -32,7 +34,7 @@ const ApproveItems = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.4.15.12:8004/api/purchase-request/${id}?tab=6`,
+          `${apiKey}/purchase-request/${id}?tab=6`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

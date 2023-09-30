@@ -8,6 +8,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const ConsultantHistory = () => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
@@ -16,7 +18,7 @@ const ConsultantHistory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=3",
+          `${apiKey}/purchase-request?page=1&per_page=10&tab=3`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

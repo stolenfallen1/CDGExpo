@@ -8,6 +8,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const DepartmentHeadHistory = () => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
@@ -16,7 +18,7 @@ const DepartmentHeadHistory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=2",
+          `${apiKey}/purchase-request?page=1&per_page=10&tab=2`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

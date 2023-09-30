@@ -7,6 +7,8 @@ import CardData from "../../../components/CardData";
 import SearchFilter from "../../../components/SearchFilter";
 import { useNavigation } from "@react-navigation/native";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const ComptrollerDashboard = () => {
   const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
@@ -20,7 +22,7 @@ const ComptrollerDashboard = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=6`,
+        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=6`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

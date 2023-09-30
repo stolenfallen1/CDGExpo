@@ -6,6 +6,8 @@ import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { Card } from "react-native-elements";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const AdminLogs = () => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
@@ -16,7 +18,7 @@ const AdminLogs = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.4.15.12:8004/api/purchase-request/${id}/?tab=10`,
+          `${apiKey}/purchase-request/${id}/?tab=10`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

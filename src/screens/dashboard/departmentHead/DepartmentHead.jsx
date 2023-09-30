@@ -20,6 +20,8 @@ import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const DepartmentHead = () => {
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
@@ -75,15 +77,11 @@ const DepartmentHead = () => {
       if (password === userPasscode) {
         try {
           axios
-            .post(
-              "http://10.4.15.12:8004/api/purchase-request-items",
-              selectedCardData,
-              {
-                headers: {
-                  Authorization: `Bearer ${authToken}`,
-                },
-              }
-            )
+            .post(`${apiKey}/purchase-request-items`, selectedCardData, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            })
             .then((response) => {
               console.log(response.data);
               alert("PR Approved on Selected Items");
@@ -103,7 +101,7 @@ const DepartmentHead = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
+        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -123,7 +121,7 @@ const DepartmentHead = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get("http://10.4.15.12:8004/api/vendors", {
+        const response = await axios.get(`${apiKey}/vendors`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -135,7 +133,7 @@ const DepartmentHead = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get("http://10.4.15.12:8004/api/units", {
+        const response = await axios.get(`${apiKey}/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

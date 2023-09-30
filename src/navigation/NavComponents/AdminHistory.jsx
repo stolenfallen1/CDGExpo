@@ -8,6 +8,8 @@ import SearchFilter from "../../components/SearchFilter";
 import CardData from "../../components/CardData";
 import { useNavigation } from "@react-navigation/native";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const AdminHistory = () => {
   const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
@@ -21,7 +23,7 @@ const AdminHistory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://10.4.15.12:8004/api/purchase-request?page=1&per_page=10&tab=4",
+          `${apiKey}/purchase-request?page=1&per_page=10&tab=4`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

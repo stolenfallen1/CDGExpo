@@ -8,6 +8,8 @@ import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
 import { userPassword } from "../../atoms/userPassword";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 export default function LoginScreen() {
   const [idnumber, setIdnumber] = useState("test_comptroller");
   const [password, setPassword] = useState("test_comptroller");
@@ -20,7 +22,7 @@ export default function LoginScreen() {
 
   const handleLoginPress = async () => {
     try {
-      const response = await fetch("http://10.4.15.12:8004/api/login", {
+      const response = await fetch(`${apiKey}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
