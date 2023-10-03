@@ -238,6 +238,15 @@ const AdminDashboard = () => {
               ).toLocaleDateString()}
             </Text>
           </Text>
+          <Text style={styles.modalTextInfo}>
+            Approved by Department Head on:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {new Date(
+                selectedCardData?.pr_DepartmentHead_ApprovedDate
+              ).toLocaleDateString()}
+            </Text>
+          </Text>
           <CheckBox
             title={"Approve All Request"}
             containerStyle={{

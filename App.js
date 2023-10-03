@@ -17,6 +17,7 @@ import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
+import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -77,6 +78,12 @@ function App() {
               name="ComptrollerApproveItems"
               component={ApproveCompItems}
               options={{ title: "Canvas Approval" }}
+            />
+            {/* Canvas - Supplier List routes */}
+            <Stack.Screen
+              name="SupplierCanvasList"
+              component={SupplierList}
+              options={{ title: "List of Suppliers", presentation: "modal" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

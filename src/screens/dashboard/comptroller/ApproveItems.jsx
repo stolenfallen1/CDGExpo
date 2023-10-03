@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
@@ -22,6 +22,7 @@ const apiKey = process.env.EXPO_PUBLIC_API_URL;
 // Approve data
 
 const ApproveItems = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const { pr_id } = route.params;
   const { isStatus } = route.params;
@@ -30,10 +31,24 @@ const ApproveItems = () => {
   const [data, setData] = useState([]);
   const [units, setUnits] = useState([]);
 
+  const handlePress = (item_id) => {
+    navigation.navigate("SupplierCanvasList", { item_id });
+  };
+
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
     return unit?.name;
   };
+
+  // handle all item approval checkbox state
+  const handleAllItemApproval = () => {};
+
+  // handle single item approval checkbox state
+  const handleItemApproval = (itemId) => {};
+
+  // handle submit button event
+  // approve-canvas
+  const handleSubmit = async () => {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,7 +109,7 @@ const ApproveItems = () => {
           Date Requested:
           <Text style={{ fontWeight: "400" }}>
             {" "}
-            {data?.pr_Transaction_Date}
+            {new Date(data?.pr_Transaction_Date).toLocaleDateString()}
           </Text>
         </Text>
         <CheckBox
@@ -148,7 +163,10 @@ const ApproveItems = () => {
                   {item?.recommended_canvas?.vendor?.vendor_Name}
                 </Text>
               </View>
-              <TouchableOpacity style={styles.inputContainer}>
+              <TouchableOpacity
+                style={styles.inputContainer}
+                onPress={() => handlePress(item.id)}
+              >
                 <Ionicons
                   name="eye"
                   color={"green"}
@@ -157,7 +175,7 @@ const ApproveItems = () => {
                 />
               </TouchableOpacity>
               <CheckBox
-                title={"Canvased by Purchaser"}
+                title={"Approved by Purchaser"}
                 checked={true}
                 containerStyle={{ borderRadius: 10 }}
               />
