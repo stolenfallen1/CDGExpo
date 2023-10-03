@@ -4,7 +4,6 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   Alert,
 } from "react-native";
@@ -28,6 +27,7 @@ const ConsultantDashboard = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [isUnchecked, setIsUnchecked] = useState(true);
   const [page, setPage] = useState(1);
 
   // METHODS ARE DEFINED HERE
@@ -49,6 +49,20 @@ const ConsultantDashboard = () => {
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
     return unit?.name;
+  };
+
+  // handle all item approval checkbox state
+  const handleAllItemApproval = () => {
+    setIsUnchecked(!isUnchecked);
+    const updatedDetails = selectedCardData.purchase_request_details.map(
+      (item) => {
+        return { ...item, isapproved: !isUnchecked };
+      }
+    );
+    setSelectedCardData({
+      ...selectedCardData,
+      purchase_request_details: updatedDetails,
+    });
   };
 
   // handle item approval checkbox state
@@ -186,13 +200,58 @@ const ConsultantDashboard = () => {
         onEndReachedThreshold={0.5}
       />
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
-        <ScrollView horizontal={true}>
+        <View style={{ marginLeft: 16, marginTop: 15 }}>
+          <Text style={styles.modalTextInfo}>
+            PR No:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.pr_Document_Number}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Name:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.user?.branch?.name}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Department:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.warehouse?.warehouse_description}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Requested By:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {selectedCardData?.user?.name}
+            </Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Date Requested:
+            <Text style={{ fontWeight: "400" }}>
+              {" "}
+              {new Date(
+                selectedCardData?.pr_Transaction_Date
+              ).toLocaleDateString()}
+            </Text>
+          </Text>
+          <CheckBox
+            title={"Approve All Request"}
+            containerStyle={{
+              marginRight: 30,
+              backgroundColor: "lightgreen",
+              borderRadius: 10,
+            }}
+            checked={isUnchecked}
+            onPress={() => handleAllItemApproval()}
+          />
+        </View>
+        <ScrollView>
           {selectedCardData?.purchase_request_details?.map((item, index) => (
             <Card key={index} containerStyle={styles.cardContainer}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Code: </Text>
-                <Text style={styles.dataInput}>{item.item_Id}</Text>
-              </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Name: </Text>
                 <Text style={styles.dataInput}>
@@ -206,21 +265,9 @@ const ConsultantDashboard = () => {
                 </Text>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Requested Quantity: </Text>
-                <Text style={styles.dataInput}>{item?.item_Request_Qty}</Text>
-              </View>
-              <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Approved Quantity: </Text>
                 <Text style={styles.dataInput}>
                   {item?.item_Request_Department_Approved_Qty}
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>
-                  Requested Unit of Measurement:
-                </Text>
-                <Text style={styles.dataInput}>
-                  {getUnit(item?.item_Request_UnitofMeasurement_Id)}
                 </Text>
               </View>
               <View style={styles.inputContainer}>
@@ -241,26 +288,34 @@ const ConsultantDashboard = () => {
             </Card>
           ))}
         </ScrollView>
-        <Button
-          title={"Submit"}
-          buttonStyle={{
-            backgroundColor: "orange",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "transparent",
           }}
-          onPress={handleSubmit}
-        />
-        <Button
-          title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 25,
-            margin: 10,
-            borderRadius: 15,
-          }}
-          onPress={toggleModal}
-        />
+        >
+          <Button
+            title={"Submit"}
+            buttonStyle={{
+              backgroundColor: "orange",
+              paddingHorizontal: 20,
+              margin: 7,
+              borderRadius: 10,
+            }}
+            onPress={handleSubmit}
+          />
+          <Button
+            title={"Back"}
+            buttonStyle={{
+              backgroundColor: "#2596BE",
+              paddingHorizontal: 20,
+              margin: 7,
+              borderRadius: 10,
+            }}
+            onPress={toggleModal}
+          />
+        </View>
       </Modal>
     </View>
   );
@@ -276,6 +331,15 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
     borderColor: "#66B5D1",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5.5,
+    },
+    shadowOpacity: 0.7,
+    borderRadius: 12,
+    marginBottom: 10,
   },
   inputContainer: {
     paddingHorizontal: 10,

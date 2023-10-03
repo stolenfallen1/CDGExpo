@@ -30,6 +30,7 @@ const DepartmentHead = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [isCheckAll, setIsCheckAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [page, setPage] = useState(1);
 
@@ -52,6 +53,23 @@ const DepartmentHead = () => {
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
     return unit?.name;
+  };
+
+  // handle check all checkbox state
+  const handleCheckAll = () => {
+    setIsCheckAll(!isCheckAll);
+    const updatedData = { ...selectedCardData };
+    updatedData.purchase_request_details.map((item) => {
+      item.isapproved = !isCheckAll;
+    });
+    setSelectedCardData(updatedData);
+    setCheckedItems((prevState) => {
+      const newState = {};
+      updatedData.purchase_request_details.map((item) => {
+        newState[item.item_Id] = !isCheckAll;
+      });
+      return newState;
+    });
   };
 
   // handle item approval checkbox state
@@ -213,7 +231,9 @@ const DepartmentHead = () => {
             Date Requested:
             <Text style={{ fontWeight: "400" }}>
               {" "}
-              {selectedCardData?.pr_Transaction_Date}
+              {new Date(
+                selectedCardData?.pr_Transaction_Date
+              ).toLocaleDateString()}
             </Text>
           </Text>
           <CheckBox
@@ -223,6 +243,8 @@ const DepartmentHead = () => {
               backgroundColor: "lightgreen",
               borderRadius: 10,
             }}
+            checked={isCheckAll}
+            onPress={handleCheckAll}
           />
         </View>
         <ScrollView
@@ -395,6 +417,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "#66B5D1",
     marginBottom: 5,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5.5,
+    },
+    shadowOpacity: 0.7,
+    borderRadius: 12,
+    marginBottom: 10,
   },
   inputContainer: {
     paddingHorizontal: 8,

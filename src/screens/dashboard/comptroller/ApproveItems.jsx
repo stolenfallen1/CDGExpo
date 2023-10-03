@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -24,17 +23,23 @@ const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const ApproveItems = () => {
   const route = useRoute();
-  const { id } = route.params;
+  const { pr_id } = route.params;
   const { isStatus } = route.params;
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
+  const [units, setUnits] = useState([]);
+
+  const getUnit = (id) => {
+    const unit = units.find((unit) => unit.id == id);
+    return unit?.name;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${apiKey}/purchase-request/${id}?tab=6`,
+          `${apiKey}/purchase-request/${pr_id}?tab=6`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -47,54 +52,83 @@ const ApproveItems = () => {
         console.error(error);
       }
     };
+    const fetchUnits = async () => {
+      try {
+        const response = await axios.get(`${apiKey}/units`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        setUnits(response.data.units);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUnits();
     fetchData();
-  }, [id, authToken]);
+  }, [pr_id, authToken]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: 20,
-        paddingBottom: 40,
-      }}
-    >
-      <ScrollView horizontal={true}>
+    <View style={{ paddingBottom: 245 }}>
+      <View style={{ marginLeft: 16, marginTop: 15 }}>
+        <Text style={styles.modalTextInfo}>
+          PR No:
+          <Text style={{ fontWeight: "400" }}> {data?.pr_Document_Number}</Text>
+        </Text>
+        <Text style={styles.modalTextInfo}>
+          Name:
+          <Text style={{ fontWeight: "400" }}> {data?.user?.branch?.name}</Text>
+        </Text>
+        <Text style={styles.modalTextInfo}>
+          Department:
+          <Text style={{ fontWeight: "400" }}>
+            {" "}
+            {data?.warehouse?.warehouse_description}
+          </Text>
+        </Text>
+        <Text style={styles.modalTextInfo}>
+          Requested By:
+          <Text style={{ fontWeight: "400" }}> {data?.user?.name}</Text>
+        </Text>
+        <Text style={styles.modalTextInfo}>
+          Date Requested:
+          <Text style={{ fontWeight: "400" }}>
+            {" "}
+            {data?.pr_Transaction_Date}
+          </Text>
+        </Text>
+        <CheckBox
+          title={"Approve All Request"}
+          containerStyle={{
+            marginRight: 30,
+            backgroundColor: "lightgreen",
+            borderRadius: 10,
+          }}
+        />
+      </View>
+      <ScrollView>
         {data?.purchase_request_details?.map((item, index) => (
           <Card key={index} containerStyle={styles.cardContainer}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Code: {item?.id}</Text>
-              </View>
+            <View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputTextBold}>Item Name: </Text>
                 <Text style={styles.inputText}>
                   {item?.item_master?.item_name}
                 </Text>
               </View>
-              <View style={{ marginTop: 10, justifyContent: "space-between" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 17,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Approved
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextBold}>Quantity: </Text>
+                <Text style={styles.inputText}>
+                  {item?.item_Branch_Level1_Approved_Qty}
                 </Text>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputTextBold}>Quantity: </Text>
-                  <Text style={styles.inputText}>
-                    {item?.item_Branch_Level1_Approved_Qty}
-                  </Text>
-                  {/* Spacer */}
-                  <View style={{ paddingHorizontal: 5 }} />
-                  <Text style={styles.inputTextBold}>Units: </Text>
-                  <Text style={styles.inputText}>
-                    {item?.item_Branch_Level1_Approved_UnitofMeasurement_Id}
-                  </Text>
-                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextBold}>Unit of Measurement: </Text>
+                <Text style={styles.inputText}>
+                  {getUnit(
+                    item?.item_Branch_Level1_Approved_UnitofMeasurement_Id
+                  )}
+                </Text>
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputTextBold}>Price: </Text>
@@ -109,55 +143,45 @@ const ApproveItems = () => {
                 </Text>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Discount: </Text>
-                <Text style={styles.inputText}>
-                  {item?.recommended_canvas?.canvas_item_discount_percent}
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Vat: </Text>
-                <Text style={styles.inputText}>
-                  {item?.recommended_canvas?.canvas_item_vat_rate}
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Date Approved: </Text>
-                <Text style={styles.inputText}>
-                  {item?.pr_Branch_Level1_ApprovedDate}
-                </Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Recommended: </Text>
+                <Text style={styles.inputTextBold}>Recommended Supplier: </Text>
                 <Text style={styles.inputText}>
                   {item?.recommended_canvas?.vendor?.vendor_Name}
                 </Text>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity style={styles.inputContainer}>
                 <Ionicons
                   name="eye"
                   color={"green"}
                   size={18}
-                  style={{ marginTop: 10 }}
+                  style={{ marginTop: 8 }}
                 />
               </TouchableOpacity>
               <CheckBox
-                title={"Approved"}
+                title={"Canvased by Purchaser"}
                 checked={true}
-                containerStyle={{ marginTop: 20 }}
+                containerStyle={{ borderRadius: 10 }}
               />
             </View>
           </Card>
         ))}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "transparent",
+          }}
+        >
+          <Button
+            title={"Submit"}
+            buttonStyle={{
+              backgroundColor: "orange",
+              paddingHorizontal: 20,
+              margin: 7,
+              borderRadius: 10,
+            }}
+          />
+        </View>
       </ScrollView>
-      <Button
-        title={"Submit"}
-        buttonStyle={{
-          backgroundColor: "orange",
-          paddingHorizontal: 25,
-          margin: 10,
-          borderRadius: 15,
-        }}
-      />
     </View>
   );
 };
@@ -174,20 +198,23 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.7,
     borderRadius: 12,
-    marginBottom: 10,
+    marginBottom: 5,
+  },
+  modalTextInfo: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 8,
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 15,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
   },
   inputTextBold: {
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: "bold",
   },
   inputText: {
-    fontSize: 17,
+    fontSize: 16,
     textDecorationLine: "underline",
     textDecorationColor: "lightgrey",
   },
