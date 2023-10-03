@@ -44,10 +44,20 @@ const ApproveItems = () => {
   const handleAllItemApproval = () => {};
 
   // handle single item approval checkbox state
-  const handleItemApproval = (itemId) => {};
+  const handleItemApproval = (itemId) => {
+    const newData = data?.purchase_request_details?.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, status: !item.status };
+      }
+      return item;
+    });
+    setData({
+      ...data,
+      purchase_request_details: newData,
+    });
+  };
 
-  // handle submit button event
-  // approve-canvas
+  // handle submit button event /api/approve-canvas
   const handleSubmit = async () => {};
 
   useEffect(() => {
@@ -61,7 +71,10 @@ const ApproveItems = () => {
             },
           }
         );
-        const newData = { ...response.data, isStatus };
+        const newData = { ...response.data, status: isStatus };
+        newData.purchase_request_details = newData.purchase_request_details.map(
+          (item) => ({ ...item, status: true })
+        );
         setData(newData);
       } catch (error) {
         console.error(error);
@@ -81,7 +94,7 @@ const ApproveItems = () => {
     };
     fetchUnits();
     fetchData();
-  }, [pr_id, authToken]);
+  }, [pr_id, authToken, isStatus]);
 
   return (
     <View style={{ paddingBottom: 245 }}>
@@ -176,8 +189,9 @@ const ApproveItems = () => {
               </TouchableOpacity>
               <CheckBox
                 title={"Approved by Purchaser"}
-                checked={true}
                 containerStyle={{ borderRadius: 10 }}
+                checked={item.status}
+                onPress={() => handleItemApproval(item.id)}
               />
             </View>
           </Card>
