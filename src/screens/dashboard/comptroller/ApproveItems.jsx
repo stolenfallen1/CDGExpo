@@ -3,6 +3,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  Alert,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -30,6 +31,7 @@ const ApproveItems = () => {
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
   const [units, setUnits] = useState([]);
+  const [isUnChecked, setIsUnchecked] = useState(true);
 
   const handlePress = (item_id) => {
     navigation.navigate("SupplierCanvasList", { item_id });
@@ -41,7 +43,16 @@ const ApproveItems = () => {
   };
 
   // handle all item approval checkbox state
-  const handleAllItemApproval = () => {};
+  const handleAllItemApproval = () => {
+    setIsUnchecked(!isUnChecked);
+    const newData = data.purchase_request_details.map((item) => {
+      return { ...item, status: !isUnChecked };
+    });
+    setData({
+      ...data,
+      purchase_request_details: newData,
+    });
+  };
 
   // handle single item approval checkbox state
   const handleItemApproval = (itemId) => {
@@ -58,13 +69,41 @@ const ApproveItems = () => {
   };
 
   // handle submit button event /api/approve-canvas
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    Alert.prompt("Please enter your password:", "", (password) => {
+      if (password === userPasscode) {
+        try {
+          console.log(data);
+          axios
+            .post(`http://10.4.15.12:8004/api/approve-canvas`, data, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            })
+            .then((response) => {
+              console.log(response.data);
+              alert("Canvas Approved Successfully");
+              navigation.goBack();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("Wrong Password");
+        return;
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
+      // For now change back to static url instead of using .env file
       try {
         const response = await axios.get(
-          `${apiKey}/purchase-request/${pr_id}?tab=6`,
+          `http://10.4.15.12:8004/api/purchase-request/${pr_id}?tab=6`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -81,8 +120,9 @@ const ApproveItems = () => {
       }
     };
     const fetchUnits = async () => {
+      // For now change back to static url instead of using .env file
       try {
-        const response = await axios.get(`${apiKey}/units`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -132,6 +172,8 @@ const ApproveItems = () => {
             backgroundColor: "lightgreen",
             borderRadius: 10,
           }}
+          checked={isUnChecked}
+          onPress={() => handleAllItemApproval()}
         />
       </View>
       <ScrollView>
@@ -211,6 +253,7 @@ const ApproveItems = () => {
               margin: 7,
               borderRadius: 10,
             }}
+            onPress={() => handleSubmit()}
           />
         </View>
       </ScrollView>

@@ -20,9 +20,10 @@ const ComptrollerDashboard = () => {
   };
 
   const fetchData = async () => {
+    // For now change back to static url instead of using .env file
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=6`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=6`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

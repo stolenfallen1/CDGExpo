@@ -17,9 +17,10 @@ const SupplierList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // For now change back to static url instead of using .env file
       try {
         const response = await axios.get(
-          `${apiKey}/canvas?details_id=${item_id}`,
+          `http://10.4.15.12:8004/api/canvas?details_id=${item_id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
