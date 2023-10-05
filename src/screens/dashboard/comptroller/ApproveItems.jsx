@@ -3,6 +3,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  Alert,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -30,6 +31,7 @@ const ApproveItems = () => {
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
   const [units, setUnits] = useState([]);
+  const [isUnChecked, setIsUnchecked] = useState(true);
 
   const handlePress = (item_id) => {
     navigation.navigate("SupplierCanvasList", { item_id });
@@ -41,35 +43,131 @@ const ApproveItems = () => {
   };
 
   // handle all item approval checkbox state
-  const handleAllItemApproval = () => {};
+  const handleAllItemApproval = () => {
+    setIsUnchecked(!isUnChecked);
+    const newData = data.purchase_request_details.map((item) => {
+      return { ...item, status: !isUnChecked };
+    });
+    setData({
+      ...data,
+      purchase_request_details: newData,
+    });
+  };
 
   // handle single item approval checkbox state
-  const handleItemApproval = (itemId) => {};
+  const handleItemApproval = (itemId) => {
+    const newData = data?.purchase_request_details?.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, status: !item.status };
+      }
+      return item;
+    });
+    setData({
+      ...data,
+      purchase_request_details: newData,
+    });
+  };
 
-  // handle submit button event
-  // approve-canvas
-  const handleSubmit = async () => {};
+  // handle submit button event /api/approve-canvas
+  const handleSubmit = async () => {
+    Alert.prompt("Please enter your password:", "", (password) => {
+      if (password === userPasscode) {
+        try {
+          const selectedItems = data.purchase_request_details.filter(
+            (item) => item.status
+          );
+          if (selectedItems.length === 0) {
+            Alert.prompt(
+              "Please provide remarks for declining the items:",
+              "",
+              (remarks) => {
+                if (remarks) {
+                  const payload = {
+                    items: data.purchase_request_details.map((item) => ({
+                      item_id: item.item_Id,
+                      status: item.status,
+                      remarks: remarks,
+                    })),
+                  };
+                  axios
+                    .post(
+                      `http://10.4.15.12:8004/api/approve-canvas`,
+                      payload,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${authToken}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response.data);
+                      alert("Remarks Submitted Successfully");
+                      navigation.goBack();
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }
+              }
+            );
+          } else {
+            const payload = {
+              items: data.purchase_request_details.map((item) => ({
+                item_id: item.item_Id,
+                status: item.status,
+                remarks: null,
+              })),
+            };
+            axios
+              .post(`http://10.4.15.12:8004/api/approve-canvas`, payload, {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              })
+              .then((response) => {
+                console.log(response.data);
+                alert("Canvas Approved Successfully");
+                navigation.goBack();
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("Wrong Password");
+        return;
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
+      // For now change back to static url instead of using .env file
       try {
         const response = await axios.get(
-          `${apiKey}/purchase-request/${pr_id}?tab=6`,
+          `http://10.4.15.12:8004/api/purchase-request/${pr_id}?tab=6`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
           }
         );
-        const newData = { ...response.data, isStatus };
+        const newData = { ...response.data, status: isStatus };
+        newData.purchase_request_details = newData.purchase_request_details.map(
+          (item) => ({ ...item, status: true })
+        );
         setData(newData);
       } catch (error) {
         console.error(error);
       }
     };
     const fetchUnits = async () => {
+      // For now change back to static url instead of using .env file
       try {
-        const response = await axios.get(`${apiKey}/units`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -81,7 +179,7 @@ const ApproveItems = () => {
     };
     fetchUnits();
     fetchData();
-  }, [pr_id, authToken]);
+  }, [pr_id, authToken, isStatus]);
 
   return (
     <View style={{ paddingBottom: 245 }}>
@@ -119,6 +217,8 @@ const ApproveItems = () => {
             backgroundColor: "lightgreen",
             borderRadius: 10,
           }}
+          checked={isUnChecked}
+          onPress={() => handleAllItemApproval()}
         />
       </View>
       <ScrollView>
@@ -175,9 +275,10 @@ const ApproveItems = () => {
                 />
               </TouchableOpacity>
               <CheckBox
-                title={"Approved by Purchaser"}
-                checked={true}
+                title={"Approved Canvas"}
                 containerStyle={{ borderRadius: 10 }}
+                checked={item.status}
+                onPress={() => handleItemApproval(item.id)}
               />
             </View>
           </Card>
@@ -197,6 +298,7 @@ const ApproveItems = () => {
               margin: 7,
               borderRadius: 10,
             }}
+            onPress={() => handleSubmit()}
           />
         </View>
       </ScrollView>
