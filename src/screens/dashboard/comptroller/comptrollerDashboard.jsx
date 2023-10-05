@@ -1,11 +1,18 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import CardData from "../../../components/CardData";
-import SearchFilter from "../../../components/SearchFilter";
+import Search from "../../../components/Search";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
@@ -17,6 +24,10 @@ const ComptrollerDashboard = () => {
 
   const handleCardPress = (pr_id) => {
     navigation.navigate("ComptrollerApproveItems", { pr_id, isStatus: true });
+  };
+
+  const handlePress = () => {
+    navigation.navigate("FilterModal");
   };
 
   const fetchData = async () => {
@@ -66,7 +77,13 @@ const ComptrollerDashboard = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <SearchFilter />
+      <View style={styles.utilsContainer}>
+        <Search />
+        <TouchableOpacity style={styles.filterButton} onPress={handlePress}>
+          <Ionicons name="md-filter" size={16} color="#000" />
+          <Text style={styles.filterText}>&nbsp;Filter</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -77,5 +94,27 @@ const ComptrollerDashboard = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  utilsContainer: {
+    flexDirection: "row",
+    marginTop: 30,
+    marginBottom: 13,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  filterButton: {
+    width: "20%",
+    flexDirection: "row",
+    backgroundColor: "#50C878",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  filterText: {
+    fontSize: 17,
+  },
+});
 
 export default ComptrollerDashboard;

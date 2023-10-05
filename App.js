@@ -18,6 +18,8 @@ import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
 import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
+// Filter Modal imports
+import ModalFilter from "./src/components/ModalFilter";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -84,6 +86,19 @@ function App() {
               name="SupplierCanvasList"
               component={SupplierList}
               options={{ title: "List of Suppliers", presentation: "modal" }}
+            />
+            {/* Filter Modal */}
+            <Stack.Screen
+              name="FilterModal"
+              component={ModalFilter}
+              options={{
+                title: "Filter Options",
+                presentation: "modal",
+                cardStyle: {
+                  height: 100, // Set the height of the modal to 75% of the screen height
+                  overflow: "hidden", // Hide the overflowing content from Modal
+                },
+              }}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -4,15 +4,22 @@ import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import axios from "axios";
-import SearchFilter from "../../components/SearchFilter";
+import Search from "../../components/Search";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DepartmentHeadHistory = () => {
+  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
+
+  const handleFitlerPress = () => {
+    navigation.navigate("FilterModal");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +43,16 @@ const DepartmentHeadHistory = () => {
 
   return (
     <View style={{ paddingBottom: 110 }}>
-      <SearchFilter />
+      <View style={styles.utilsContainer}>
+        <Search />
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={handleFitlerPress}
+        >
+          <Ionicons name="md-filter" size={16} color="#000" />
+          <Text style={styles.filterText}>&nbsp;Filter</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={Object.keys(data)}
         keyExtractor={(key) => key}
@@ -78,6 +94,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 8,
     marginHorizontal: 15,
+  },
+  utilsContainer: {
+    flexDirection: "row",
+    marginTop: 30,
+    marginBottom: 13,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  filterButton: {
+    width: "20%",
+    flexDirection: "row",
+    backgroundColor: "#50C878",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  filterText: {
+    fontSize: 17,
   },
 });
 

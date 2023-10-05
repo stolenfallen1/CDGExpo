@@ -14,15 +14,17 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
-import SearchFilter from "../../../components/SearchFilter";
+import Search from "../../../components/Search";
 import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DepartmentHead = () => {
+  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
@@ -43,6 +45,10 @@ const DepartmentHead = () => {
   // TOGGLE MODAL
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const handlePress = () => {
+    navigation.navigate("FilterModal");
   };
 
   // GET VENDOR NAME AND UNIT NAME
@@ -95,11 +101,15 @@ const DepartmentHead = () => {
       if (password === userPasscode) {
         try {
           axios
-            .post(`${apiKey}/purchase-request-items`, selectedCardData, {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-              },
-            })
+            .post(
+              `http://10.4.15.12:8004/api/purchase-request-items`,
+              selectedCardData,
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            )
             .then((response) => {
               console.log(response.data);
               alert("PR Approved on Selected Items");
@@ -119,7 +129,7 @@ const DepartmentHead = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -139,7 +149,7 @@ const DepartmentHead = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(`${apiKey}/vendors`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/vendors`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -151,7 +161,7 @@ const DepartmentHead = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get(`${apiKey}/units`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -189,7 +199,13 @@ const DepartmentHead = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <SearchFilter />
+      <View style={styles.utilsContainer}>
+        <Search />
+        <TouchableOpacity style={styles.filterButton} onPress={handlePress}>
+          <Ionicons name="md-filter" size={16} color="#000" />
+          <Text style={styles.filterText}>&nbsp;Filter</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -402,6 +418,25 @@ const DepartmentHead = () => {
 };
 
 const styles = StyleSheet.create({
+  utilsContainer: {
+    flexDirection: "row",
+    marginTop: 30,
+    marginBottom: 13,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  filterButton: {
+    width: "20%",
+    flexDirection: "row",
+    backgroundColor: "#50C878",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  filterText: {
+    fontSize: 17,
+  },
   modalContainer: {
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
