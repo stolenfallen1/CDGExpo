@@ -73,9 +73,15 @@ const ApproveItems = () => {
     Alert.prompt("Please enter your password:", "", (password) => {
       if (password === userPasscode) {
         try {
-          console.log(data);
+          const payload = {
+            items: data.purchase_request_details.map((item) => ({
+              item_id: item.item_Id,
+              status: item.status,
+              remarks: null,
+            })),
+          };
           axios
-            .post(`http://10.4.15.12:8004/api/approve-canvas`, data, {
+            .post(`http://10.4.15.12:8004/api/approve-canvas`, payload, {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },
