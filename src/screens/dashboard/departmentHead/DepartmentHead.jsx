@@ -16,15 +16,14 @@ import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
 import Search from "../../../components/Search";
 import Modal from "react-native-modal";
+import ModalFilter from "../../../components/ModalFilter";
 import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DepartmentHead = () => {
-  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
@@ -32,6 +31,7 @@ const DepartmentHead = () => {
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterModal, setFilterModal] = useState(false);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [page, setPage] = useState(1);
@@ -47,8 +47,9 @@ const DepartmentHead = () => {
     setModalVisible(!modalVisible);
   };
 
-  const handlePress = () => {
-    navigation.navigate("FilterModal");
+  // FILTER MODAL
+  const toggleFilter = () => {
+    setFilterModal(true);
   };
 
   // GET VENDOR NAME AND UNIT NAME
@@ -201,11 +202,35 @@ const DepartmentHead = () => {
     <View style={{ paddingBottom: 185 }}>
       <View style={styles.utilsContainer}>
         <Search />
-        <TouchableOpacity style={styles.filterButton} onPress={handlePress}>
+        <TouchableOpacity style={styles.filterButton} onPress={toggleFilter}>
           <Ionicons name="md-filter" size={16} color="#000" />
           <Text style={styles.filterText}>&nbsp;Filter</Text>
         </TouchableOpacity>
       </View>
+      {/* FILTER MODAL */}
+      <Modal isVisible={filterModal} style={styles.filterModalContainer}>
+        <ModalFilter />
+        <Button
+          title={"Filter"}
+          buttonStyle={{
+            backgroundColor: "orange",
+            paddingHorizontal: 20,
+            margin: 7,
+            borderRadius: 10,
+          }}
+          onPress={() => setFilterModal(false)}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={{
+            backgroundColor: "#2596BE",
+            paddingHorizontal: 20,
+            margin: 7,
+            borderRadius: 10,
+          }}
+          onPress={() => setFilterModal(false)}
+        />
+      </Modal>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -213,6 +238,7 @@ const DepartmentHead = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
       />
+      {/* ITEM CARD DISPLAY MODAL */}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
           <Text style={styles.modalTextInfo}>
@@ -436,6 +462,12 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 17,
+  },
+  filterModalContainer: {
+    backgroundColor: "#f7f7f7",
+    borderRadius: 10,
+    marginTop: 160,
+    marginBottom: 160,
   },
   modalContainer: {
     backgroundColor: "#f7f7f7",
