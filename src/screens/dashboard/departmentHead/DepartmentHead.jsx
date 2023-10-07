@@ -24,17 +24,27 @@ import { Ionicons } from "@expo/vector-icons";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DepartmentHead = () => {
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
+  // Data states
   const [data, setData] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
+  // Modal states
   const [modalVisible, setModalVisible] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
+  // Checkbox states
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
+  // Pagination states
   const [page, setPage] = useState(1);
+  // Filter states
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selecedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -126,11 +136,20 @@ const DepartmentHead = () => {
     });
   };
 
+  // FILTER DATA
+  const handleFilterApply = ({ branch, department, category, item_group }) => {
+    setSelectedBranch(branch);
+    setSelectedDepartment(department);
+    setSelectedCategory(category);
+    setSelectedItemGroup(item_group);
+    setFilterModal(false);
+  };
+
   // FETCH DATA
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1&branch=${selectedBranch}&department=${selecedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -144,7 +163,14 @@ const DepartmentHead = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [authToken, page]);
+  }, [
+    authToken,
+    page,
+    selectedBranch,
+    selecedDepartment,
+    selectedCategory,
+    selectedItemGroup,
+  ]);
 
   // FETCH VENDORS AND UNITS
   useEffect(() => {
@@ -209,26 +235,9 @@ const DepartmentHead = () => {
       </View>
       {/* FILTER MODAL */}
       <Modal isVisible={filterModal} style={styles.filterModalContainer}>
-        <ModalFilter />
-        <Button
-          title={"Filter"}
-          buttonStyle={{
-            backgroundColor: "orange",
-            paddingHorizontal: 20,
-            margin: 7,
-            borderRadius: 10,
-          }}
-          onPress={() => setFilterModal(false)}
-        />
-        <Button
-          title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 20,
-            margin: 7,
-            borderRadius: 10,
-          }}
-          onPress={() => setFilterModal(false)}
+        <ModalFilter
+          onSubmit={handleFilterApply}
+          handleClose={() => setFilterModal(false)}
         />
       </Modal>
       <FlatList

@@ -3,15 +3,29 @@ import React, { useState, useEffect } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { Button } from "react-native-elements";
 import { authTokenState } from "../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 
-const ModalFilter = () => {
+const ModalFilter = ({ onSubmit, handleClose }) => {
   const authToken = useRecoilValue(authTokenState);
   const [branches, setBranches] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [categories, setCategories] = useState([]);
   const [itemGroups, setItemGroups] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
+
+  const handleApplyButtonPress = () => {
+    onSubmit({
+      branch: selectedBranch,
+      department: selectedDepartment,
+      category: selectedCategory,
+      item_group: selectedItemGroup,
+    });
+  };
 
   const fetchFilterOptions = async () => {
     try {
@@ -54,7 +68,7 @@ const ModalFilter = () => {
               label: branch?.abbreviation,
               value: branch?.id,
             }))}
-            onValueChange={(value) => console.log(value)}
+            onValueChange={setSelectedBranch}
             placeholder={{
               label: "Select Branch",
               value: "",
@@ -88,7 +102,7 @@ const ModalFilter = () => {
               label: dept?.warehouse_description,
               value: dept?.id,
             }))}
-            onValueChange={(value) => console.log(value)}
+            onValueChange={setSelectedDepartment}
             placeholder={{
               label: "Select Department",
               value: "",
@@ -122,7 +136,7 @@ const ModalFilter = () => {
               label: category?.name,
               value: category?.id,
             }))}
-            onValueChange={(value) => console.log(value)}
+            onValueChange={setSelectedCategory}
             placeholder={{
               label: "Select Category",
               value: "",
@@ -145,18 +159,18 @@ const ModalFilter = () => {
           />
         </View>
       ))}
-      {/* Item Group Dropdown */}
+      {/* Category Dropdown */}
       {Object.keys(itemGroups).map((option, index) => (
         <View key={index} style={{ paddingVertical: 15 }}>
-          <Text style={styles.inputText}>Item Group:</Text>
+          <Text style={styles.inputText}>Categories:</Text>
           <RNPickerSelect
             key={option?.id}
             value={option?.id}
-            items={itemGroups?.item_groups.map((itemGroup) => ({
-              label: itemGroup?.name,
-              value: itemGroup?.id,
+            items={itemGroups?.item_groups.map((item_group) => ({
+              label: item_group?.name,
+              value: item_group?.id,
             }))}
-            onValueChange={(value) => console.log(value)}
+            onValueChange={setSelectedItemGroup}
             placeholder={{
               label: "Select Item Group",
               value: "",
@@ -179,6 +193,27 @@ const ModalFilter = () => {
           />
         </View>
       ))}
+      <Button
+        title={"Filter"}
+        buttonStyle={{
+          marginTop: 30,
+          backgroundColor: "orange",
+          paddingHorizontal: 20,
+          margin: 7,
+          borderRadius: 10,
+        }}
+        onPress={handleApplyButtonPress}
+      />
+      <Button
+        title={"Back"}
+        buttonStyle={{
+          backgroundColor: "#2596BE",
+          paddingHorizontal: 20,
+          margin: 7,
+          borderRadius: 10,
+        }}
+        onPress={handleClose}
+      />
     </View>
   );
 };
