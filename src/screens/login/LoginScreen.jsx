@@ -11,8 +11,8 @@ import { userPassword } from "../../atoms/userPassword";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("engr_department_head");
-  const [password, setPassword] = useState("engr_department_head");
+  const [idnumber, setIdnumber] = useState("administrator");
+  const [password, setPassword] = useState("administrator");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);

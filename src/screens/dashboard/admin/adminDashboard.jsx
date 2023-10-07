@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
+import ItemHeader from "../../../components/ItemHeader";
 import Search from "../../../components/Search";
 import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
@@ -95,11 +96,15 @@ const AdminDashboard = () => {
       if (password === userPasscode) {
         try {
           axios
-            .post(`${apiKey}/purchase-request-items`, selectedCardData, {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-              },
-            })
+            .post(
+              `http://10.4.15.12:8004/api/purchase-request-items`,
+              selectedCardData,
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            )
             .then((response) => {
               console.log(response.data);
               alert("PR Approved on Selected Items");
@@ -122,7 +127,7 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -149,7 +154,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(`${apiKey}/vendors`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/vendors`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -161,7 +166,7 @@ const AdminDashboard = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get(`${apiKey}/units`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -214,52 +219,18 @@ const AdminDashboard = () => {
       />
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <Text style={styles.modalTextInfo}>
-            PR No:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.pr_Document_Number}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Name:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.user?.branch?.name}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Department:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.warehouse?.warehouse_description}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Requested By:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.user?.name}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Date Requested:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {new Date(
-                selectedCardData?.pr_Transaction_Date
-              ).toLocaleDateString()}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Approved by Department Head on:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {new Date(
-                selectedCardData?.pr_DepartmentHead_ApprovedDate
-              ).toLocaleDateString()}
-            </Text>
-          </Text>
+          <ItemHeader
+            prNum={selectedCardData?.pr_Document_Number}
+            name={selectedCardData?.user?.name}
+            warehouse={selectedCardData?.warehouse?.warehouse_description}
+            requestedBy={selectedCardData?.user?.name}
+            dateRequested={new Date(
+              selectedCardData?.pr_Transaction_Date
+            ).toLocaleDateString()}
+            approvedByDate={new Date(
+              selectedCardData?.pr_DepartmentHead_ApprovedDate
+            ).toLocaleDateString()}
+          />
           <CheckBox
             title={"Approve All Request"}
             containerStyle={{

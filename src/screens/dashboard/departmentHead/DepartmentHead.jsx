@@ -14,6 +14,7 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
+import ItemHeader from "../../../components/ItemHeader";
 import Search from "../../../components/Search";
 import Modal from "react-native-modal";
 import ModalFilter from "../../../components/ModalFilter";
@@ -250,43 +251,15 @@ const DepartmentHead = () => {
       {/* ITEM CARD DISPLAY MODAL */}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <Text style={styles.modalTextInfo}>
-            PR No:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.pr_Document_Number}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Name:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.user?.branch?.name}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Department:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.warehouse?.warehouse_description}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Requested By:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {selectedCardData?.user?.name}
-            </Text>
-          </Text>
-          <Text style={styles.modalTextInfo}>
-            Date Requested:
-            <Text style={{ fontWeight: "400" }}>
-              {" "}
-              {new Date(
-                selectedCardData?.pr_Transaction_Date
-              ).toLocaleDateString()}
-            </Text>
-          </Text>
+          <ItemHeader
+            prNum={selectedCardData?.pr_Document_Number}
+            name={selectedCardData?.user?.branch?.name}
+            warehouse={selectedCardData?.warehouse?.warehouse_description}
+            requestedBy={selectedCardData?.user?.name}
+            dateRequested={new Date(
+              selectedCardData?.pr_Transaction_Date
+            ).toLocaleDateString()}
+          />
           <CheckBox
             title={"Approve All Request"}
             containerStyle={{
@@ -483,11 +456,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 50,
     marginBottom: 35,
-  },
-  modalTextInfo: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 8,
   },
   cardContainer: {
     borderRadius: 10,
