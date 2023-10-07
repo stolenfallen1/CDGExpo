@@ -9,17 +9,20 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import CardData from "../../../components/CardData";
-import SearchFilter from "../../../components/SearchFilter";
+import Search from "../../../components/Search";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const ConsultantDashboard = () => {
+  const navigation = useNavigation();
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
   const [data, setData] = useState([]);
@@ -39,6 +42,10 @@ const ConsultantDashboard = () => {
   // TOGGLE MODAL
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const handlePress = () => {
+    navigation.navigate("FilterModal");
   };
 
   // GET VENDOR NAME AND UNIT NAME
@@ -191,7 +198,13 @@ const ConsultantDashboard = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <SearchFilter />
+      <View style={styles.utilsContainer}>
+        <Search />
+        <TouchableOpacity style={styles.filterButton} onPress={handlePress}>
+          <Ionicons name="md-filter" size={16} color="#000" />
+          <Text style={styles.filterText}>&nbsp;Filter</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -331,6 +344,25 @@ const ConsultantDashboard = () => {
 };
 
 const styles = StyleSheet.create({
+  utilsContainer: {
+    flexDirection: "row",
+    marginTop: 30,
+    marginBottom: 13,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  filterButton: {
+    width: "20%",
+    flexDirection: "row",
+    backgroundColor: "#50C878",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  filterText: {
+    fontSize: 17,
+  },
   modalContainer: {
     backgroundColor: "#f7f7f7",
     borderRadius: 10,

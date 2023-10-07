@@ -14,8 +14,9 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
-import SearchFilter from "../../../components/SearchFilter";
+import Search from "../../../components/Search";
 import Modal from "react-native-modal";
+import ModalFilter from "../../../components/ModalFilter";
 import { Card, Button, CheckBox } from "react-native-elements";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,16 +24,27 @@ import { Ionicons } from "@expo/vector-icons";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DepartmentHead = () => {
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
+  // Data states
   const [data, setData] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [units, setUnits] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
+  // Modal states
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterModal, setFilterModal] = useState(false);
+  // Checkbox states
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
+  // Pagination states
   const [page, setPage] = useState(1);
+  // Filter states
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selecedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -43,6 +55,11 @@ const DepartmentHead = () => {
   // TOGGLE MODAL
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  // FILTER MODAL
+  const toggleFilter = () => {
+    setFilterModal(true);
   };
 
   // GET VENDOR NAME AND UNIT NAME
@@ -95,11 +112,15 @@ const DepartmentHead = () => {
       if (password === userPasscode) {
         try {
           axios
-            .post(`${apiKey}/purchase-request-items`, selectedCardData, {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-              },
-            })
+            .post(
+              `http://10.4.15.12:8004/api/purchase-request-items`,
+              selectedCardData,
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            )
             .then((response) => {
               console.log(response.data);
               alert("PR Approved on Selected Items");
@@ -115,11 +136,20 @@ const DepartmentHead = () => {
     });
   };
 
+  // FILTER DATA
+  const handleFilterApply = ({ branch, department, category, item_group }) => {
+    setSelectedBranch(branch);
+    setSelectedDepartment(department);
+    setSelectedCategory(category);
+    setSelectedItemGroup(item_group);
+    setFilterModal(false);
+  };
+
   // FETCH DATA
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1&branch=${selectedBranch}&department=${selecedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -133,13 +163,20 @@ const DepartmentHead = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [authToken, page]);
+  }, [
+    authToken,
+    page,
+    selectedBranch,
+    selecedDepartment,
+    selectedCategory,
+    selectedItemGroup,
+  ]);
 
   // FETCH VENDORS AND UNITS
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(`${apiKey}/vendors`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/vendors`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -151,7 +188,7 @@ const DepartmentHead = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get(`${apiKey}/units`, {
+        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -189,7 +226,20 @@ const DepartmentHead = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <SearchFilter />
+      <View style={styles.utilsContainer}>
+        <Search />
+        <TouchableOpacity style={styles.filterButton} onPress={toggleFilter}>
+          <Ionicons name="md-filter" size={16} color="#000" />
+          <Text style={styles.filterText}>&nbsp;Filter</Text>
+        </TouchableOpacity>
+      </View>
+      {/* FILTER MODAL */}
+      <Modal isVisible={filterModal} style={styles.filterModalContainer}>
+        <ModalFilter
+          onSubmit={handleFilterApply}
+          handleClose={() => setFilterModal(false)}
+        />
+      </Modal>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -197,6 +247,7 @@ const DepartmentHead = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
       />
+      {/* ITEM CARD DISPLAY MODAL */}
       <Modal isVisible={modalVisible} style={styles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
           <Text style={styles.modalTextInfo}>
@@ -402,6 +453,31 @@ const DepartmentHead = () => {
 };
 
 const styles = StyleSheet.create({
+  utilsContainer: {
+    flexDirection: "row",
+    marginTop: 30,
+    marginBottom: 13,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  filterButton: {
+    width: "20%",
+    flexDirection: "row",
+    backgroundColor: "#50C878",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  filterText: {
+    fontSize: 17,
+  },
+  filterModalContainer: {
+    backgroundColor: "#f7f7f7",
+    borderRadius: 10,
+    marginTop: 160,
+    marginBottom: 160,
+  },
   modalContainer: {
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
