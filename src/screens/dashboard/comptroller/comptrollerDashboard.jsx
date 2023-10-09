@@ -11,6 +11,8 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import CardData from "../../../components/CardData";
 import Search from "../../../components/Search";
+import Modal from "react-native-modal";
+import ModalFilter from "../../../components/ModalFilter";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -18,23 +20,43 @@ const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const ComptrollerDashboard = () => {
   const navigation = useNavigation();
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
+  // Data states
   const [data, setData] = useState([]);
+  // Pagination states
   const [page, setPage] = useState(1);
+  // Modal states
+  const [filterModal, setFilterModal] = useState(false);
+  // Filter states
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
   const handleCardPress = (pr_id) => {
     navigation.navigate("ComptrollerApproveItems", { pr_id, isStatus: true });
   };
 
-  const handlePress = () => {
-    navigation.navigate("FilterModal");
+  // FILTER MODAL
+  const toggleFilter = () => {
+    setFilterModal(true);
+  };
+
+  // FILTER DATA
+  const handleFilterApply = ({ branch, department, category, item_group }) => {
+    setSelectedBranch(branch);
+    setSelectedDepartment(department);
+    setSelectedCategory(category);
+    setSelectedItemGroup(item_group);
+    setFilterModal(false);
   };
 
   const fetchData = async () => {
     // For now change back to static url instead of using .env file
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=6`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -46,10 +68,16 @@ const ComptrollerDashboard = () => {
       console.error(error);
     }
   };
-
   useEffect(() => {
     fetchData();
-  }, [authToken, page]);
+  }, [
+    authToken,
+    page,
+    selectedBranch,
+    selectedDepartment,
+    selectedCategory,
+    selectedItemGroup,
+  ]);
 
   const renderItem = ({ item }) => {
     return (
@@ -79,11 +107,18 @@ const ComptrollerDashboard = () => {
     <View style={{ paddingBottom: 185 }}>
       <View style={styles.utilsContainer}>
         <Search />
-        <TouchableOpacity style={styles.filterButton} onPress={handlePress}>
+        <TouchableOpacity style={styles.filterButton} onPress={toggleFilter}>
           <Ionicons name="md-filter" size={16} color="#000" />
           <Text style={styles.filterText}>&nbsp;Filter</Text>
         </TouchableOpacity>
       </View>
+      {/* FILTER MODAL */}
+      <Modal isVisible={filterModal} style={styles.filterModalContainer}>
+        <ModalFilter
+          onSubmit={handleFilterApply}
+          handleClose={() => setFilterModal(false)}
+        />
+      </Modal>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -114,6 +149,12 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 17,
+  },
+  filterModalContainer: {
+    backgroundColor: "#f7f7f7",
+    borderRadius: 10,
+    marginTop: 160,
+    marginBottom: 160,
   },
 });
 
