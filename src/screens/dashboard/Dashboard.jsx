@@ -6,7 +6,7 @@ import AdminDashboard from "./admin/adminDashboard";
 import DepartmentHead from "./departmentHead/DepartmentHead";
 import ConsultantDashboard from "./consultant/consultantDashboard";
 import ConptrollerDashboard from "./comptroller/comptrollerDashboard";
-// import PresidentDashboard from "./president/PresidentDashboard";
+import CorporateAdminDash from "./corporateAdmin/CorporateAdminDash";
 
 const Dashboard = () => {
   const userRole = useRecoilValue(userRoleState);
@@ -18,8 +18,7 @@ const Dashboard = () => {
       {userRole === "department head" && <DepartmentHead />}
       {userRole === "consultant" && <ConsultantDashboard />}
       {userRole === "comptroller" && <ConptrollerDashboard />}
-      {/* {userRole === "comptroller" && <ComptrollerDashboard />} */}
-      {/* {userRole === "president" && <PresidentDashboard />} */}
+      {userRole === "corporate admin" && <CorporateAdminDash />}
     </View>
   );
 };

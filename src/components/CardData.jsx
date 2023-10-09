@@ -15,6 +15,8 @@ const CardData = ({
   pr_status = "Pending",
   dateApproved = "Pending",
   justification,
+  poId,
+  supplier,
 }) => {
   const userRole = useRecoilValue(userRoleState);
 
@@ -29,14 +31,29 @@ const CardData = ({
         <Card containerStyle={styles.cardContainer}>
           <Text style={styles.prId}>PR No: {prId} </Text>
           <Text style={styles.cardText}>
-            Date Request: {new Date(transactionDate).toLocaleDateString()}
+            Req. Date: {new Date(transactionDate).toLocaleDateString()}
           </Text>
           <Text style={styles.cardText}>Requestee: {requestingName} </Text>
           <Text style={styles.cardText}>Department: {warehouse} </Text>
           <Text style={styles.cardText}>Item group: {itemGroup} </Text>
           <Text style={styles.cardText}>Category: {category} </Text>
-          <Text style={styles.cardText}>PR Status: {pr_status} </Text>
+          <Text style={styles.cardText}>Status: {pr_status} </Text>
           <Text style={styles.cardText}>Date approved: {dateApproved}</Text>
+          <Text style={styles.cardText}>Remarks: {justification} </Text>
+        </Card>
+      );
+    } else if (userRole === "corporate admin") {
+      return (
+        <Card containerStyle={styles.cardContainer}>
+          <Text style={styles.prId}>PO No: {poId} </Text>
+          <Text style={styles.prId}>PR No: {prId} </Text>
+          <Text style={styles.cardText}>Supplier: {supplier} </Text>
+          <Text style={styles.cardText}>Department: {warehouse} </Text>
+          <Text style={styles.cardText}>
+            Trans. Date: {new Date(transactionDate).toLocaleDateString()}
+          </Text>
+          <Text style={styles.cardText}>Requestee: {requestingName} </Text>
+          <Text style={styles.cardText}>Status: {pr_status} </Text>
           <Text style={styles.cardText}>Remarks: {justification} </Text>
         </Card>
       );
@@ -63,6 +80,8 @@ const styles = StyleSheet.create({
   prId: {
     fontWeight: "bold",
     fontSize: 20,
+    paddingBottom: 6,
+    textDecorationLine: "underline",
   },
   cardText: {
     fontSize: 18,
