@@ -14,6 +14,8 @@ import AdminHistory from "./src/navigation/NavComponents/AdminHistory";
 import DepartmentHeadHistory from "./src/navigation/NavComponents/DepartmentHeadHistory";
 import ConsultantHistory from "./src/navigation/NavComponents/ConsultantHistory";
 import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
+import CorporateAdminHistory from "./src/navigation/NavComponents/CorporateAdminHistory";
+import PresidentHistory from "./src/navigation/NavComponents/PresidentHistory";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
@@ -68,6 +70,16 @@ function App() {
               name="comptrollerHistory"
               component={CanvasHistory}
               options={{ title: "Comptroller Transactions" }}
+            />
+            <Stack.Screen
+              name="corporateAdminHistory"
+              component={CorporateAdminHistory}
+              options={{ title: "Corporate Admin Transactions" }}
+            />
+            <Stack.Screen
+              name="presidentHistory"
+              component={PresidentHistory}
+              options={{ title: "President Transactions" }}
             />
             {/* Admin logs routes */}
             <Stack.Screen

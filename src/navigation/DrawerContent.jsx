@@ -117,6 +117,44 @@ const DrawerContent = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       );
+    } else if (userRole === "corporate admin") {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("comptrollerHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Comptroller</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("adminHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Administrator</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("corporateAdminHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Corporate Admin</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("presidentHistory")}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>President</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleLogout();
+              navigation.navigate("Home");
+            }}
+            style={styles.menuItemButton}
+          >
+            <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      );
     } else {
       return (
         <View>
