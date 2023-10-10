@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import CardData from "../../../components/CardData";
@@ -24,35 +24,76 @@ const DROPDOWN_STYLES = {
 };
 
 const CorporateAdminDash = () => {
-  // FETCH BRANCHES FROM API AND DISPLAY IN A DROPDOWN FIRST
-  // THEN FETCH DATA FROM API AND DISPLAY IN A CARD MANNER
-  // http://10.4.15.12:8004/api/purchase-orders?page=1&per_page=10&branch=1
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
+  // Data states
+  const [data, setData] = useState([]);
   const [branch, setBranch] = useState([]);
   const [selectedBranchId, setSelectedBranchId] = useState(1);
-  const [data, setData] = useState([]);
+  // Pagination states
+  const [page, setPage] = useState(1);
 
+  const handleCardPress = () => {
+    console.log("TEST");
+  };
+
+  const fetchBranches = async () => {
+    try {
+      const response = await axios.get(`http://10.4.15.12:8004/api/branches`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      setBranch(response.data.branches);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://10.4.15.12:8004/api/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setData(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchBranches = async () => {
-      try {
-        const response = await axios.get(
-          `http://10.4.15.12:8004/api/branches`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        setBranch(response.data.branches);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchBranches();
-  }, [authToken]);
+    fetchData();
+  }, [authToken, page, selectedBranchId]);
+
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => handleCardPress()}>
+        <CardData
+          poId={item?.po_Document_number}
+          prId={item?.pr_Request_id}
+          supplier={item?.vendor?.vendor_Name}
+          warehouse={item?.warehouse?.warehouse_description}
+          transactionDate={item?.po_Document_transaction_date}
+          requestingName={item?.user?.name}
+          justification={item?.purchase_request?.pr_Justication}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const handleEndReached = () => {
+    if (data.length >= 10) {
+      setPage(page + 1);
+    }
+  };
 
   return (
-    <View>
+    <View style={{ paddingBottom: 185 }}>
       <FilterOptions />
       <View style={styles.utilsContainer}>
         <Search />
@@ -64,7 +105,7 @@ const CorporateAdminDash = () => {
               value: branches?.id,
             }))}
             onValueChange={(value) => setSelectedBranchId(value)}
-            onDonePress={() => console.log(selectedBranchId)} // FOR TESTING
+            // onDonePress={() => console.log(selectedBranchId)} // FOR TESTING
             style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
@@ -72,7 +113,13 @@ const CorporateAdminDash = () => {
           />
         )}
       </View>
-      <CardData />
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+      />
     </View>
   );
 };
