@@ -24,6 +24,19 @@ import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
+const INPUT_ANDROID_STYLES = {
+  fontSize: 16,
+  borderBottomWidth: 0.5,
+  paddingBottom: 6,
+};
+
+const DROPDOWN_STYLES = {
+  inputAndroid: INPUT_ANDROID_STYLES,
+  inputIOS: {
+    ...INPUT_ANDROID_STYLES,
+  },
+};
+
 const DepartmentHead = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
@@ -304,18 +317,7 @@ const DepartmentHead = () => {
                     label: getVendor(item.prepared_supplier_id),
                     value: item.prepared_supplier_id,
                   }}
-                  style={{
-                    inputIOS: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                    inputAndroid: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                  }}
+                  style={DROPDOWN_STYLES}
                   Icon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />
@@ -364,18 +366,7 @@ const DepartmentHead = () => {
                     label: getUnit(item.item_Request_UnitofMeasurement_Id),
                     value: item.item_Request_UnitofMeasurement_Id,
                   }}
-                  style={{
-                    inputIOS: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                    inputAndroid: {
-                      fontSize: 16,
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 6,
-                    },
-                  }}
+                  style={DROPDOWN_STYLES}
                   Icon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />

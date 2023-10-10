@@ -7,6 +7,19 @@ import { Button } from "react-native-elements";
 import { authTokenState } from "../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 
+const INPUT_ANDROID_STYLES = {
+  fontSize: 16,
+  borderBottomWidth: 0.5,
+  paddingBottom: 6,
+};
+
+const DROPDOWN_STYLES = {
+  inputAndroid: INPUT_ANDROID_STYLES,
+  inputIOS: {
+    ...INPUT_ANDROID_STYLES,
+  },
+};
+
 const ModalFilter = ({ onSubmit, handleClose }) => {
   const authToken = useRecoilValue(authTokenState);
   const [branches, setBranches] = useState([]);
@@ -73,18 +86,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               label: "Select Branch",
               value: "",
             }}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-              inputAndroid: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-            }}
+            style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
@@ -107,18 +109,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               label: "Select Department",
               value: "",
             }}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-              inputAndroid: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-            }}
+            style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
@@ -141,18 +132,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               label: "Select Category",
               value: "",
             }}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-              inputAndroid: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-            }}
+            style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
@@ -175,18 +155,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               label: "Select Item Group",
               value: "",
             }}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-              inputAndroid: {
-                fontSize: 16,
-                borderBottomWidth: 0.5,
-                paddingBottom: 6,
-              },
-            }}
+            style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
