@@ -1,6 +1,7 @@
 import { Text, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import React from "react";
+import { customStyles } from "../styles/customStyles";
 import { useRecoilValue } from "recoil";
 import { userRoleState } from "../atoms/userRoleState";
 
@@ -28,7 +29,7 @@ const CardData = ({
       userRole === "comptroller"
     ) {
       return (
-        <Card containerStyle={styles.cardContainer}>
+        <Card containerStyle={customStyles.cardContainer}>
           <Text style={styles.prId}>PR No: {prId} </Text>
           <Text style={styles.cardText}>
             Req. Date: {new Date(transactionDate).toLocaleDateString()}
@@ -44,7 +45,7 @@ const CardData = ({
       );
     } else if (userRole === "corporate admin") {
       return (
-        <Card containerStyle={styles.cardContainer}>
+        <Card containerStyle={customStyles.cardContainer}>
           <Text style={styles.prId}>PO No: {poId} </Text>
           <Text style={styles.prId}>PR No: {prId} </Text>
           <Text style={styles.cardText}>Supplier: {supplier} </Text>
@@ -64,19 +65,6 @@ const CardData = ({
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    borderRadius: 10,
-    borderColor: "#66B5D1",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5.5,
-    },
-    shadowOpacity: 0.7,
-    borderRadius: 12,
-    marginBottom: 10,
-  },
   prId: {
     fontWeight: "bold",
     fontSize: 20,
@@ -85,22 +73,6 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
-  },
-  modalContainer: {
-    paddingHorizontal: 15,
-  },
-  approveBtn: {
-    position: "absolute",
-    bottom: 20,
-    paddingVertical: 10,
-    alignSelf: "center",
-    backgroundColor: "#66B5D1",
-    paddingHorizontal: 30,
-    borderRadius: 10,
-  },
-  approveTxt: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 

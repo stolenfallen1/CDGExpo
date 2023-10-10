@@ -4,6 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 import { Card } from "react-native-elements";
+import { customStyles } from "../../../styles/customStyles";
 import axios from "axios";
 import { ScrollView } from "react-native";
 
@@ -39,7 +40,7 @@ const SupplierList = () => {
     <View style={{ paddingBottom: 40 }}>
       <ScrollView>
         {data.map((item) => (
-          <Card key={item.id} containerStyle={styles.cardContainer}>
+          <Card key={item.id} containerStyle={customStyles.cardContainer}>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTextBold}>Supplier Name: </Text>
               <Text style={styles.inputText}>{item?.vendor?.vendor_Name}</Text>
@@ -83,20 +84,6 @@ const SupplierList = () => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    borderRadius: 10,
-    borderColor: "#66B5D1",
-    marginBottom: 5,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5.5,
-    },
-    shadowOpacity: 0.7,
-    borderRadius: 12,
-    marginBottom: 10,
-  },
   inputContainer: {
     paddingHorizontal: 8,
     paddingVertical: 6,

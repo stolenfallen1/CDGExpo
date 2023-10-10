@@ -7,6 +7,7 @@ import axios from "axios";
 import Search from "../../components/Search";
 import { StyleSheet } from "react-native";
 import CardData from "../../components/CardData";
+import { customStyles } from "../../styles/customStyles";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -43,14 +44,14 @@ const DepartmentHeadHistory = () => {
 
   return (
     <View style={{ paddingBottom: 110 }}>
-      <View style={styles.utilsContainer}>
+      <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
-          style={styles.filterButton}
+          style={customStyles.filterButton}
           onPress={handleFitlerPress}
         >
           <Ionicons name="md-filter" size={16} color="#000" />
-          <Text style={styles.filterText}>&nbsp;Filter</Text>
+          <Text style={customStyles.filterText}>&nbsp;Filter</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -81,39 +82,6 @@ const DepartmentHeadHistory = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 15,
-    borderWidth: 0.5,
-    borderColor: "#66B5D1",
-    borderRadius: 5,
-    paddingVertical: 15,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 8,
-    marginHorizontal: 15,
-  },
-  utilsContainer: {
-    flexDirection: "row",
-    marginTop: 30,
-    marginBottom: 13,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  filterButton: {
-    width: "20%",
-    flexDirection: "row",
-    backgroundColor: "#50C878",
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  filterText: {
-    fontSize: 17,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default DepartmentHeadHistory;

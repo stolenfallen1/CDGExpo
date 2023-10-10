@@ -13,6 +13,8 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import { Card, Button, CheckBox } from "react-native-elements";
+import { customStyles } from "../../../styles/customStyles";
+import ItemHeader from "../../../components/ItemHeader";
 import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -184,32 +186,15 @@ const ApproveItems = () => {
   return (
     <View style={{ paddingBottom: 245 }}>
       <View style={{ marginLeft: 16, marginTop: 15 }}>
-        <Text style={styles.modalTextInfo}>
-          PR No:
-          <Text style={{ fontWeight: "400" }}> {data?.pr_Document_Number}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Name:
-          <Text style={{ fontWeight: "400" }}> {data?.user?.branch?.name}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Department:
-          <Text style={{ fontWeight: "400" }}>
-            {" "}
-            {data?.warehouse?.warehouse_description}
-          </Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Requested By:
-          <Text style={{ fontWeight: "400" }}> {data?.user?.name}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Date Requested:
-          <Text style={{ fontWeight: "400" }}>
-            {" "}
-            {new Date(data?.pr_Transaction_Date).toLocaleDateString()}
-          </Text>
-        </Text>
+        <ItemHeader
+          prNum={data?.pr_Document_Number}
+          name={data?.user?.branch?.name}
+          warehouse={data?.warehouse?.warehouse_description}
+          requestedBy={data?.user?.name}
+          dateRequested={new Date(
+            data?.pr_Transaction_Date
+          ).toLocaleDateString()}
+        />
         <CheckBox
           title={"Approve All Request"}
           containerStyle={{
@@ -223,7 +208,7 @@ const ApproveItems = () => {
       </View>
       <ScrollView>
         {data?.purchase_request_details?.map((item, index) => (
-          <Card key={index} containerStyle={styles.cardContainer}>
+          <Card key={index} containerStyle={customStyles.cardContainer}>
             <View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputTextBold}>Item Name: </Text>
@@ -307,19 +292,6 @@ const ApproveItems = () => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    borderRadius: 10,
-    borderColor: "#66B5D1",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5.5,
-    },
-    shadowOpacity: 0.7,
-    borderRadius: 12,
-    marginBottom: 5,
-  },
   modalTextInfo: {
     fontWeight: "bold",
     fontSize: 16,
