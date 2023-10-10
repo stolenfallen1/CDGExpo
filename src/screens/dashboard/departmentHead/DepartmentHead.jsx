@@ -241,15 +241,18 @@ const DepartmentHead = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <View style={styles.utilsContainer}>
+      <View style={customStyles.utilsContainer}>
         <Search />
-        <TouchableOpacity style={styles.filterButton} onPress={toggleFilter}>
+        <TouchableOpacity
+          style={customStyles.filterButton}
+          onPress={toggleFilter}
+        >
           <Ionicons name="md-filter" size={16} color="#000" />
-          <Text style={styles.filterText}>&nbsp;Filter</Text>
+          <Text style={customStyles.filterText}>&nbsp;Filter</Text>
         </TouchableOpacity>
       </View>
       {/* FILTER MODAL */}
-      <Modal isVisible={filterModal} style={styles.filterModalContainer}>
+      <Modal isVisible={filterModal} style={customStyles.filterModalContainer}>
         <ModalFilter
           onSubmit={handleFilterApply}
           handleClose={() => setFilterModal(false)}
@@ -418,31 +421,6 @@ const DepartmentHead = () => {
 };
 
 const styles = StyleSheet.create({
-  utilsContainer: {
-    flexDirection: "row",
-    marginTop: 30,
-    marginBottom: 13,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  filterButton: {
-    width: "20%",
-    flexDirection: "row",
-    backgroundColor: "#50C878",
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  filterText: {
-    fontSize: 17,
-  },
-  filterModalContainer: {
-    backgroundColor: "#f7f7f7",
-    borderRadius: 10,
-    marginTop: 160,
-    marginBottom: 160,
-  },
   modalContainer: {
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
