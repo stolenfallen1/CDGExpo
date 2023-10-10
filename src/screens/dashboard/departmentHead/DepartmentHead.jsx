@@ -19,6 +19,7 @@ import Search from "../../../components/Search";
 import Modal from "react-native-modal";
 import ModalFilter from "../../../components/ModalFilter";
 import { Card, Button, CheckBox } from "react-native-elements";
+import { customStyles } from "../../../styles/customStyles";
 import RNPickerSelect from "react-native-picker-select";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -291,7 +292,7 @@ const DepartmentHead = () => {
           }}
         >
           {selectedCardData?.purchase_request_details?.map((item, index) => (
-            <Card key={index} containerStyle={styles.cardContainer}>
+            <Card key={index} containerStyle={customStyles.cardContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>Item Name: </Text>
                 <Text style={styles.dataInput}>
@@ -447,20 +448,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 50,
     marginBottom: 35,
-  },
-  cardContainer: {
-    borderRadius: 10,
-    borderColor: "#66B5D1",
-    marginBottom: 5,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5.5,
-    },
-    shadowOpacity: 0.7,
-    borderRadius: 12,
-    marginBottom: 10,
   },
   inputContainer: {
     paddingHorizontal: 8,
