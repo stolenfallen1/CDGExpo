@@ -277,12 +277,7 @@ const ApproveItems = () => {
         >
           <Button
             title={"Submit"}
-            buttonStyle={{
-              backgroundColor: "orange",
-              paddingHorizontal: 20,
-              margin: 7,
-              borderRadius: 10,
-            }}
+            buttonStyle={customStyles.submitButton}
             onPress={() => handleSubmit()}
           />
         </View>

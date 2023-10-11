@@ -4,6 +4,7 @@ import RNPickerSelect from "react-native-picker-select";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
 import axios from "axios";
+import { customStyles } from "../styles/customStyles";
 import { Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { authTokenState } from "../atoms/authTokenState";
@@ -203,34 +204,18 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         />
         <Button
           title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 20,
-            margin: 7,
-            borderRadius: 10,
-          }}
+          buttonStyle={customStyles.cancelButton}
           onPress={() => setModalVisible(false)}
         />
       </Modal>
       <Button
         title={"Filter"}
-        buttonStyle={{
-          marginTop: 30,
-          backgroundColor: "orange",
-          paddingHorizontal: 20,
-          margin: 7,
-          borderRadius: 10,
-        }}
+        buttonStyle={customStyles.submitButton}
         onPress={handleApplyButtonPress}
       />
       <Button
         title={"Back"}
-        buttonStyle={{
-          backgroundColor: "#2596BE",
-          paddingHorizontal: 20,
-          margin: 7,
-          borderRadius: 10,
-        }}
+        buttonStyle={customStyles.cancelButton}
         onPress={handleClose}
       />
     </View>

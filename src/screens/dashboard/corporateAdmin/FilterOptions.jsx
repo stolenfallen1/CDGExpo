@@ -10,6 +10,7 @@ import { Calendar } from "react-native-calendars";
 import React, { useState } from "react";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
+import { customStyles } from "../../../styles/customStyles";
 
 const INPUT_ANDROID_STYLES = {
   fontSize: 17,
@@ -82,12 +83,7 @@ const FilterOptions = () => {
         />
         <Button
           title={"Back"}
-          buttonStyle={{
-            backgroundColor: "#2596BE",
-            paddingHorizontal: 20,
-            margin: 7,
-            borderRadius: 10,
-          }}
+          buttonStyle={customStyles.cancelButton}
           onPress={() => setModalVisible(false)}
         />
       </Modal>

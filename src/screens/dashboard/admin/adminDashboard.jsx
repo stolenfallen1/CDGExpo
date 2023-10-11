@@ -327,22 +327,12 @@ const AdminDashboard = () => {
         >
           <Button
             title={"Submit"}
-            buttonStyle={{
-              backgroundColor: "orange",
-              paddingHorizontal: 20,
-              margin: 7,
-              borderRadius: 10,
-            }}
+            buttonStyle={customStyles.submitButton}
             onPress={handleSubmit}
           />
           <Button
             title={"Back"}
-            buttonStyle={{
-              backgroundColor: "#2596BE",
-              paddingHorizontal: 20,
-              margin: 7,
-              borderRadius: 10,
-            }}
+            buttonStyle={customStyles.cancelButton}
             onPress={toggleModal}
           />
         </View>

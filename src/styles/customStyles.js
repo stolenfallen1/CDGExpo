@@ -63,4 +63,16 @@ export const customStyles = {
   dataInput: {
     fontSize: 16,
   },
+  submitButton: {
+    backgroundColor: "orange",
+    paddingHorizontal: 20,
+    margin: 7,
+    borderRadius: 10,
+  },
+  cancelButton: {
+    backgroundColor: "#2596BE",
+    paddingHorizontal: 20,
+    margin: 7,
+    borderRadius: 10,
+  },
 };
