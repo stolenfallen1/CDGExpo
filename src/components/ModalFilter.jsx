@@ -8,6 +8,8 @@ import { customStyles } from "../styles/customStyles";
 import { Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { authTokenState } from "../atoms/authTokenState";
+import { userBranchID } from "../atoms/userBranchId";
+import { userRoleState } from "../atoms/userRoleState";
 import { useRecoilValue } from "recoil";
 
 const INPUT_ANDROID_STYLES = {
@@ -26,6 +28,8 @@ const DROPDOWN_STYLES = {
 const ModalFilter = ({ onSubmit, handleClose }) => {
   // Auth Token
   const authToken = useRecoilValue(authTokenState);
+  const branchID = useRecoilValue(userBranchID);
+  const userRole = useRecoilValue(userRoleState);
   // Filter Options state
   const [branches, setBranches] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -64,7 +68,10 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
       const [branches, departments, categories, itemGroups] = await Promise.all(
         [
           axios.get(`http://10.4.15.12:8004/api/branches`, config),
-          axios.get(`http://10.4.15.12:8004/api/departments`, config),
+          axios.get(
+            `http://10.4.15.12:8004/api/departments?branch_id=${branchID}`,
+            config
+          ),
           axios.get(`http://10.4.15.12:8004/api/categories`, config),
           axios.get(`http://10.4.15.12:8004/api/items-group`, config),
         ]
@@ -80,145 +87,161 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
 
   useEffect(() => {
     fetchFilterOptions();
-  }, [authToken]);
+  }, [authToken, branchID]);
 
   return (
-    <View style={styles.modalContainer}>
-      {/* Branch Dropdown */}
-      {Object.keys(branches).map((option, index) => (
-        <View key={index} style={{ paddingVertical: 15 }}>
-          <Text style={styles.inputText}>Branch:</Text>
-          <RNPickerSelect
-            key={option?.id}
-            value={option?.id}
-            items={branches?.branches.map((branch) => ({
-              label: branch?.abbreviation,
-              value: branch?.id,
-            }))}
-            onValueChange={setSelectedBranch}
-            placeholder={{
-              label: "Select Branch",
-              value: "",
+    <>
+      <View style={styles.modalContainer}>
+        {/* Branch Dropdown */}
+        {userRole === "administrator" || userRole === "comptroller"
+          ? Object.keys(branches).map((option, index) => (
+              <View key={index} style={{ paddingVertical: 15 }}>
+                <Text style={styles.inputText}>Branch:</Text>
+                <RNPickerSelect
+                  key={option?.id}
+                  value={option?.id}
+                  items={branches?.branches.map((branch) => ({
+                    label: branch?.abbreviation,
+                    value: branch?.id,
+                  }))}
+                  onValueChange={setSelectedBranch}
+                  placeholder={{
+                    label: "Select Branch",
+                    value: "",
+                  }}
+                  style={DROPDOWN_STYLES}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
+                  }}
+                />
+              </View>
+            ))
+          : null}
+        {/* Department Dropdown */}
+        {userRole === "administrator" || userRole === "comptroller"
+          ? Object.keys(departments).map((option, index) => (
+              <View key={index} style={{ paddingVertical: 15 }}>
+                <Text style={styles.inputText}>Department:</Text>
+                <RNPickerSelect
+                  key={option?.id}
+                  value={option?.id}
+                  items={departments?.departments.map((dept) => ({
+                    label: dept?.warehouse_description,
+                    value: dept?.id,
+                  }))}
+                  onValueChange={setSelectedDepartment}
+                  placeholder={{
+                    label: "Select Department",
+                    value: "",
+                  }}
+                  style={DROPDOWN_STYLES}
+                  Icon={() => {
+                    return (
+                      <Ionicons name="chevron-down" size={18} color="gray" />
+                    );
+                  }}
+                />
+              </View>
+            ))
+          : null}
+        {/* Item Group Dropdown */}
+        {Object.keys(itemGroups).map((option, index) => (
+          <View key={index} style={{ paddingVertical: 15 }}>
+            <Text style={styles.inputText}>Item Group:</Text>
+            <RNPickerSelect
+              key={option?.id}
+              value={option?.id}
+              items={itemGroups?.item_groups.map((item_group) => ({
+                label: item_group?.name,
+                value: item_group?.id,
+              }))}
+              onValueChange={setSelectedItemGroup}
+              placeholder={{
+                label: "Select Item Group",
+                value: "",
+              }}
+              style={DROPDOWN_STYLES}
+              Icon={() => {
+                return <Ionicons name="chevron-down" size={18} color="gray" />;
+              }}
+            />
+          </View>
+        ))}
+        {/* Category Dropdown */}
+        {Object.keys(categories).map((option, index) => (
+          <View key={index} style={{ paddingVertical: 15 }}>
+            <Text style={styles.inputText}>Categories:</Text>
+            <RNPickerSelect
+              key={option?.id}
+              value={option?.id}
+              items={categories?.categories.map((category) => ({
+                label: category?.name,
+                value: category?.id,
+              }))}
+              onValueChange={setSelectedCategory}
+              placeholder={{
+                label: "Select Category",
+                value: "",
+              }}
+              style={DROPDOWN_STYLES}
+              Icon={() => {
+                return <Ionicons name="chevron-down" size={18} color="gray" />;
+              }}
+            />
+          </View>
+        ))}
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <TouchableOpacity
+            onPress={calendarModal}
+            style={styles.calendarButton}
+          >
+            <Text>
+              Start Date <Ionicons name="calendar-outline" size={15} />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={calendarModal}
+            style={styles.calendarButton}
+          >
+            <Text>
+              End Date <Ionicons name="calendar-outline" size={15} />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Modal isVisible={modalVisible}>
+          <Calendar
+            style={{ borderRadius: 10 }}
+            onDayPress={(day) => {
+              setSelected(day.dateString);
             }}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
-              return <Ionicons name="chevron-down" size={18} color="gray" />;
+            markedDates={{
+              [selected]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: "orange",
+              },
             }}
           />
-        </View>
-      ))}
-      {/* Department Dropdown */}
-      {Object.keys(departments).map((option, index) => (
-        <View key={index} style={{ paddingVertical: 15 }}>
-          <Text style={styles.inputText}>Department:</Text>
-          <RNPickerSelect
-            key={option?.id}
-            value={option?.id}
-            items={departments?.departments.map((dept) => ({
-              label: dept?.warehouse_description,
-              value: dept?.id,
-            }))}
-            onValueChange={setSelectedDepartment}
-            placeholder={{
-              label: "Select Department",
-              value: "",
-            }}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
-              return <Ionicons name="chevron-down" size={18} color="gray" />;
-            }}
+          <Button
+            title={"Back"}
+            buttonStyle={customStyles.cancelButton}
+            onPress={() => setModalVisible(false)}
           />
-        </View>
-      ))}
-      {/* Category Dropdown */}
-      {Object.keys(categories).map((option, index) => (
-        <View key={index} style={{ paddingVertical: 15 }}>
-          <Text style={styles.inputText}>Categories:</Text>
-          <RNPickerSelect
-            key={option?.id}
-            value={option?.id}
-            items={categories?.categories.map((category) => ({
-              label: category?.name,
-              value: category?.id,
-            }))}
-            onValueChange={setSelectedCategory}
-            placeholder={{
-              label: "Select Category",
-              value: "",
-            }}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
-              return <Ionicons name="chevron-down" size={18} color="gray" />;
-            }}
-          />
-        </View>
-      ))}
-      {/* Category Dropdown */}
-      {Object.keys(itemGroups).map((option, index) => (
-        <View key={index} style={{ paddingVertical: 15 }}>
-          <Text style={styles.inputText}>Categories:</Text>
-          <RNPickerSelect
-            key={option?.id}
-            value={option?.id}
-            items={itemGroups?.item_groups.map((item_group) => ({
-              label: item_group?.name,
-              value: item_group?.id,
-            }))}
-            onValueChange={setSelectedItemGroup}
-            placeholder={{
-              label: "Select Item Group",
-              value: "",
-            }}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
-              return <Ionicons name="chevron-down" size={18} color="gray" />;
-            }}
-          />
-        </View>
-      ))}
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
-          <Text>
-            Start Date <Ionicons name="calendar-outline" size={15} />
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
-          <Text>
-            End Date <Ionicons name="calendar-outline" size={15} />
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Modal isVisible={modalVisible}>
-        <Calendar
-          style={{ borderRadius: 10 }}
-          onDayPress={(day) => {
-            setSelected(day.dateString);
-          }}
-          markedDates={{
-            [selected]: {
-              selected: true,
-              disableTouchEvent: true,
-              selectedDotColor: "orange",
-            },
-          }}
+        </Modal>
+        <Button
+          title={"Filter"}
+          buttonStyle={customStyles.submitButton}
+          onPress={handleApplyButtonPress}
         />
         <Button
           title={"Back"}
           buttonStyle={customStyles.cancelButton}
-          onPress={() => setModalVisible(false)}
+          onPress={handleClose}
         />
-      </Modal>
-      <Button
-        title={"Filter"}
-        buttonStyle={customStyles.submitButton}
-        onPress={handleApplyButtonPress}
-      />
-      <Button
-        title={"Back"}
-        buttonStyle={customStyles.cancelButton}
-        onPress={handleClose}
-      />
-    </View>
+      </View>
+    </>
   );
 };
 

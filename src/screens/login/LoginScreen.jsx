@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSetRecoilState } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
+import { userBranchID } from "../../atoms/userBranchId";
 import { userPassword } from "../../atoms/userPassword";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -16,6 +17,7 @@ export default function LoginScreen() {
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
+  const setUserBranchID = useSetRecoilState(userBranchID);
   const setUserPassword = useSetRecoilState(userPassword);
 
   const navigation = useNavigation();
@@ -36,6 +38,7 @@ export default function LoginScreen() {
         // login successful, store token and user role in Recoil atom
         setAuthToken(data.access_token);
         setUserRole(data.user.role.name);
+        setUserBranchID(data.user.branch_id);
         setUserPassword(data.user.passcode);
         alert("Login successful!");
         navigation.navigate("Dashboard");

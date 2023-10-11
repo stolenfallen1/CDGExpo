@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
+import { userBranchID } from "../../../atoms/userBranchId";
 import { userPassword } from "../../../atoms/userPassword";
 import CardData from "../../../components/CardData";
 import ItemHeader from "../../../components/ItemHeader";
@@ -41,6 +42,7 @@ const DROPDOWN_STYLES = {
 const DepartmentHead = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
+  const branchID = useRecoilValue(userBranchID);
   const userPasscode = useRecoilValue(userPassword);
   // Data states
   const [data, setData] = useState([]);
@@ -56,8 +58,6 @@ const DepartmentHead = () => {
   // Pagination states
   const [page, setPage] = useState(1);
   // Filter states
-  const [selectedBranch, setSelectedBranch] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
@@ -152,9 +152,7 @@ const DepartmentHead = () => {
   };
 
   // FILTER DATA
-  const handleFilterApply = ({ branch, department, category, item_group }) => {
-    setSelectedBranch(branch);
-    setSelectedDepartment(department);
+  const handleFilterApply = ({ category, item_group }) => {
     setSelectedCategory(category);
     setSelectedItemGroup(item_group);
     setFilterModal(false);
@@ -164,7 +162,7 @@ const DepartmentHead = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
+        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -178,14 +176,7 @@ const DepartmentHead = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [
-    authToken,
-    page,
-    selectedBranch,
-    selectedDepartment,
-    selectedCategory,
-    selectedItemGroup,
-  ]);
+  }, [authToken, page, branchID, selectedCategory, selectedItemGroup]);
 
   // FETCH VENDORS AND UNITS
   useEffect(() => {
@@ -409,7 +400,5 @@ const DepartmentHead = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default DepartmentHead;
