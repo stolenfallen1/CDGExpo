@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import RNPickerSelect from "react-native-picker-select";
-import { Ionicons } from "@expo/vector-icons";
+import Modal from "react-native-modal";
+import { Calendar } from "react-native-calendars";
 import axios from "axios";
 import { Button } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
 import { authTokenState } from "../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 
@@ -21,15 +23,26 @@ const DROPDOWN_STYLES = {
 };
 
 const ModalFilter = ({ onSubmit, handleClose }) => {
+  // Auth Token
   const authToken = useRecoilValue(authTokenState);
+  // Filter Options state
   const [branches, setBranches] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [categories, setCategories] = useState([]);
   const [itemGroups, setItemGroups] = useState([]);
+  // Selected Filter Options state
   const [selectedBranch, setSelectedBranch] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Calendar modal state
+  const [modalVisible, setModalVisible] = useState(false);
+  // Selected date state
+  const [selected, setSelected] = useState("");
+
+  const calendarModal = () => {
+    setModalVisible(true);
+  };
 
   const handleApplyButtonPress = () => {
     onSubmit({
@@ -162,6 +175,43 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           />
         </View>
       ))}
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
+          <Text>
+            Start Date <Ionicons name="calendar-outline" size={15} />
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
+          <Text>
+            End Date <Ionicons name="calendar-outline" size={15} />
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <Modal isVisible={modalVisible}>
+        <Calendar
+          style={{ borderRadius: 10 }}
+          onDayPress={(day) => {
+            setSelected(day.dateString);
+          }}
+          markedDates={{
+            [selected]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedDotColor: "orange",
+            },
+          }}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={{
+            backgroundColor: "#2596BE",
+            paddingHorizontal: 20,
+            margin: 7,
+            borderRadius: 10,
+          }}
+          onPress={() => setModalVisible(false)}
+        />
+      </Modal>
       <Button
         title={"Filter"}
         buttonStyle={{
@@ -196,6 +246,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     marginBottom: 2,
+  },
+  calendarButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 4,
+    marginRight: 22,
+    borderColor: "#2596BE",
+    borderWidth: 1,
   },
 });
 
