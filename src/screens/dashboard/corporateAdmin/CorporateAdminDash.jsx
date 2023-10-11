@@ -6,6 +6,7 @@ import RNPickerSelect from "react-native-picker-select";
 import Search from "../../../components/Search";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
+import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
@@ -95,7 +96,7 @@ const CorporateAdminDash = () => {
   return (
     <View style={{ paddingBottom: 185 }}>
       <FilterOptions />
-      <View style={styles.utilsContainer}>
+      <View style={customStyles.utilsContainer}>
         <Search />
         {branch?.length > 0 && (
           <RNPickerSelect
@@ -124,15 +125,6 @@ const CorporateAdminDash = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  utilsContainer: {
-    flexDirection: "row",
-    marginTop: 30,
-    marginBottom: 13,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default CorporateAdminDash;

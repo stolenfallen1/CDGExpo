@@ -254,7 +254,7 @@ const AdminDashboard = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
       />
-      <Modal isVisible={modalVisible} style={styles.modalContainer}>
+      <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
           <ItemHeader
             prNum={selectedCardData?.pr_Document_Number}
@@ -282,29 +282,29 @@ const AdminDashboard = () => {
         <ScrollView>
           {selectedCardData?.purchase_request_details?.map((item, index) => (
             <Card key={index} containerStyle={customStyles.cardContainer}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Item Name: </Text>
-                <Text style={styles.dataInput}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Item Name: </Text>
+                <Text style={customStyles.dataInput}>
                   {item?.item_master?.item_name}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Preferred Supplier: </Text>
-                <Text style={styles.dataInput}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Preferred Supplier: </Text>
+                <Text style={customStyles.dataInput}>
                   {getVendor(item?.prepared_supplier_id)}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>Approved Quantity: </Text>
-                <Text style={styles.dataInput}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Approved Quantity: </Text>
+                <Text style={customStyles.dataInput}>
                   {item?.item_Request_Department_Approved_Qty}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>
                   Approved Unit of Measurement:
                 </Text>
-                <Text style={styles.dataInput}>
+                <Text style={customStyles.dataInput}>
                   {getUnit(
                     item?.item_Request_Department_Approved_UnitofMeasurement_Id
                   )}
@@ -351,25 +351,6 @@ const AdminDashboard = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  modalContainer: {
-    backgroundColor: "#f7f7f7",
-    borderRadius: 10,
-    marginTop: 50,
-    marginBottom: 35,
-  },
-  inputContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-  },
-  inputText: {
-    fontWeight: "bold",
-    fontSize: 14,
-    marginBottom: 2,
-  },
-  dataInput: {
-    fontSize: 16,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default AdminDashboard;
