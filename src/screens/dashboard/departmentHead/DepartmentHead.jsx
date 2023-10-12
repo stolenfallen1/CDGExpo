@@ -127,15 +127,11 @@ const DepartmentHead = () => {
       if (password === userPasscode) {
         try {
           axios
-            .post(
-              `http://10.4.15.12:8004/api/purchase-request-items`,
-              selectedCardData,
-              {
-                headers: {
-                  Authorization: `Bearer ${authToken}`,
-                },
-              }
-            )
+            .post(`${apiKey}/purchase-request-items`, selectedCardData, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            })
             .then((response) => {
               console.log(response.data);
               alert("PR Approved on Selected Items");
@@ -162,7 +158,7 @@ const DepartmentHead = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-request?page=${page}&per_page=10&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -182,7 +178,7 @@ const DepartmentHead = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get(`http://10.4.15.12:8004/api/vendors`, {
+        const response = await axios.get(`${apiKey}/vendors`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -194,7 +190,7 @@ const DepartmentHead = () => {
     };
     const fetchUnits = async () => {
       try {
-        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
+        const response = await axios.get(`${apiKey}/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

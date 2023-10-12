@@ -12,6 +12,8 @@ import { userBranchID } from "../atoms/userBranchId";
 import { userRoleState } from "../atoms/userRoleState";
 import { useRecoilValue } from "recoil";
 
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
+
 const INPUT_ANDROID_STYLES = {
   fontSize: 16,
   borderBottomWidth: 0.5,
@@ -67,13 +69,10 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
       };
       const [branches, departments, categories, itemGroups] = await Promise.all(
         [
-          axios.get(`http://10.4.15.12:8004/api/branches`, config),
-          axios.get(
-            `http://10.4.15.12:8004/api/departments?branch_id=${branchID}`,
-            config
-          ),
-          axios.get(`http://10.4.15.12:8004/api/categories`, config),
-          axios.get(`http://10.4.15.12:8004/api/items-group`, config),
+          axios.get(`${apiKey}/branches`, config),
+          axios.get(`${apiKey}/departments?branch_id=${branchID}`, config),
+          axios.get(`${apiKey}/categories`, config),
+          axios.get(`${apiKey}/items-group`, config),
         ]
       );
       setBranches(branches.data);

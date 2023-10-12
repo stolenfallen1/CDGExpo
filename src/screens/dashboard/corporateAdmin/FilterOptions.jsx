@@ -12,9 +12,10 @@ import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
 import { authTokenState } from "../../../atoms/authTokenState";
-import { userBranchID } from "../../../atoms/userBranchId";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
+
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const INPUT_ANDROID_STYLES = {
   fontSize: 17,
@@ -33,10 +34,9 @@ const DROPDOWN_STYLES = {
   },
 };
 
-const FilterOptions = () => {
+const FilterOptions = ({ selectedBranchID, onClose }) => {
   // Auth token
   const authToken = useRecoilValue(authTokenState);
-  const branchID = useRecoilValue(userBranchID);
   // Filter options state
   const [departments, setDepartments] = useState([]);
   const [itemGroups, setItemGroups] = useState([]);
@@ -61,10 +61,10 @@ const FilterOptions = () => {
       };
       const [departments, itemGroups] = await Promise.all([
         axios.get(
-          `http://10.4.15.12:8004/api/departments?branch_id=${branchID}`,
+          `${apiKey}/departments?branch_id=${selectedBranchID}`,
           config
         ),
-        axios.get(`http://10.4.15.12:8004/api/items-group`, config),
+        axios.get(`${apiKey}/items-group`, config),
       ]);
       setDepartments(departments.data);
       setItemGroups(itemGroups.data);
@@ -75,7 +75,14 @@ const FilterOptions = () => {
 
   useEffect(() => {
     fetchFilterOptions();
-  }, [authToken, branchID]);
+  }, [authToken, selectedBranchID]);
+
+  const applyFilter = () => {
+    onClose({
+      department: selectedDepartment,
+      item_group: selectedItemGroup,
+    });
+  };
 
   return (
     <View style={styles.filterContainer}>
@@ -90,6 +97,7 @@ const FilterOptions = () => {
               value: dept?.id,
             }))}
             onValueChange={setSelectedDepartment}
+            onClose={applyFilter}
             style={DROPDOWN_STYLES}
           />
         ))}
@@ -99,6 +107,7 @@ const FilterOptions = () => {
             value={option?.id}
             placeholder={{ label: "Inventory Group", value: "" }}
             onValueChange={setSelectedItemGroup}
+            onClose={applyFilter}
             items={itemGroups?.item_groups.map((item_group) => ({
               label: item_group?.name,
               value: item_group?.id,

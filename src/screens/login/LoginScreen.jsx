@@ -25,7 +25,7 @@ export default function LoginScreen() {
   const handleLoginPress = async () => {
     // For now change back to static url instead of using .env file
     try {
-      const response = await fetch(`http://10.4.15.12:8004/api/login`, {
+      const response = await fetch(`${apiKey}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
