@@ -1,4 +1,10 @@
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import CardData from "../../../components/CardData";
@@ -9,6 +15,8 @@ import { useRecoilValue } from "recoil";
 import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const INPUT_ANDROID_STYLES = {
   width: 76,
@@ -33,6 +41,9 @@ const CorporateAdminDash = () => {
   const [selectedBranchId, setSelectedBranchId] = useState(1);
   // Pagination states
   const [page, setPage] = useState(1);
+  // Filter states
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
   const handleCardPress = () => {
     console.log("TEST");
@@ -40,7 +51,7 @@ const CorporateAdminDash = () => {
 
   const fetchBranches = async () => {
     try {
-      const response = await axios.get(`http://10.4.15.12:8004/api/branches`, {
+      const response = await axios.get(`${apiKey}/branches`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -51,10 +62,16 @@ const CorporateAdminDash = () => {
     }
   };
 
+  const handleFilterApply = ({ department, item_group }) => {
+    console.log(department, item_group);
+    setSelectedDepartment(department);
+    setSelectedItemGroup(item_group);
+  };
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.4.15.12:8004/api/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -69,7 +86,13 @@ const CorporateAdminDash = () => {
   useEffect(() => {
     fetchBranches();
     fetchData();
-  }, [authToken, page, selectedBranchId]);
+  }, [
+    authToken,
+    page,
+    selectedBranchId,
+    selectedDepartment,
+    selectedItemGroup,
+  ]);
 
   const renderItem = ({ item }) => {
     return (
@@ -95,7 +118,10 @@ const CorporateAdminDash = () => {
 
   return (
     <View style={{ paddingBottom: 185 }}>
-      <FilterOptions />
+      <FilterOptions
+        selectedBranchID={selectedBranchId}
+        onClose={handleFilterApply}
+      />
       <View style={customStyles.utilsContainer}>
         <Search />
         {branch?.length > 0 && (
@@ -106,7 +132,6 @@ const CorporateAdminDash = () => {
               value: branches?.id,
             }))}
             onValueChange={(value) => setSelectedBranchId(value)}
-            // onDonePress={() => console.log(selectedBranchId)} // FOR TESTING
             style={DROPDOWN_STYLES}
             Icon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
@@ -124,7 +149,5 @@ const CorporateAdminDash = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default CorporateAdminDash;

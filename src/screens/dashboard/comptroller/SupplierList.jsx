@@ -21,7 +21,7 @@ const SupplierList = () => {
       // For now change back to static url instead of using .env file
       try {
         const response = await axios.get(
-          `http://10.4.15.12:8004/api/canvas?details_id=${item_id}`,
+          `${apiKey}/canvas?details_id=${item_id}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

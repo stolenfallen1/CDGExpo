@@ -92,15 +92,11 @@ const ApproveItems = () => {
                     })),
                   };
                   axios
-                    .post(
-                      `http://10.4.15.12:8004/api/approve-canvas`,
-                      payload,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${authToken}`,
-                        },
-                      }
-                    )
+                    .post(`${apiKey}/approve-canvas`, payload, {
+                      headers: {
+                        Authorization: `Bearer ${authToken}`,
+                      },
+                    })
                     .then((response) => {
                       console.log(response.data);
                       alert("Remarks Submitted Successfully");
@@ -121,7 +117,7 @@ const ApproveItems = () => {
               })),
             };
             axios
-              .post(`http://10.4.15.12:8004/api/approve-canvas`, payload, {
+              .post(`${apiKey}/approve-canvas`, payload, {
                 headers: {
                   Authorization: `Bearer ${authToken}`,
                 },
@@ -150,7 +146,7 @@ const ApproveItems = () => {
       // For now change back to static url instead of using .env file
       try {
         const response = await axios.get(
-          `http://10.4.15.12:8004/api/purchase-request/${pr_id}?tab=6`,
+          `${apiKey}/purchase-request/${pr_id}?tab=6`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -169,7 +165,7 @@ const ApproveItems = () => {
     const fetchUnits = async () => {
       // For now change back to static url instead of using .env file
       try {
-        const response = await axios.get(`http://10.4.15.12:8004/api/units`, {
+        const response = await axios.get(`${apiKey}/units`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
