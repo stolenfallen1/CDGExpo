@@ -1,10 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import CardData from "../../../components/CardData";
@@ -14,6 +8,7 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
+import CorporateAdminModal from "../../../components/Modals/CorporateAdminModal";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -39,14 +34,19 @@ const CorporateAdminDash = () => {
   const [data, setData] = useState([]);
   const [branch, setBranch] = useState([]);
   const [selectedBranchId, setSelectedBranchId] = useState(1);
+  const [selectedID, setSelectedID] = useState();
   // Pagination states
   const [page, setPage] = useState(1);
+  // Modal states
+  const [modalVisible, setModalVisible] = useState(false);
   // Filter states
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
 
-  const handleCardPress = () => {
-    console.log("TEST");
+  // http://10.4.15.15:8006/api/purchase-order/1
+  const handleCardPress = (id) => {
+    setSelectedID(id);
+    setModalVisible(true);
   };
 
   const fetchBranches = async () => {
@@ -63,7 +63,6 @@ const CorporateAdminDash = () => {
   };
 
   const handleFilterApply = ({ department, item_group }) => {
-    console.log(department, item_group);
     setSelectedDepartment(department);
     setSelectedItemGroup(item_group);
   };
@@ -96,7 +95,7 @@ const CorporateAdminDash = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => handleCardPress()}>
+      <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <CardData
           poId={item?.po_Document_number}
           prId={item?.pr_Request_id}
@@ -145,6 +144,11 @@ const CorporateAdminDash = () => {
         keyExtractor={(item) => item.id}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+      />
+      <CorporateAdminModal
+        modalVisible={modalVisible}
+        selectedID={selectedID}
+        closeModal={() => setModalVisible(false)}
       />
     </View>
   );

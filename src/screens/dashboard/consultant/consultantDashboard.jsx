@@ -351,6 +351,4 @@ const ConsultantDashboard = () => {
   );
 };
 
-const styles = StyleSheet.create({});
-
 export default ConsultantDashboard;
