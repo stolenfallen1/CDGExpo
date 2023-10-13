@@ -36,9 +36,17 @@ const CorporateAdminModal = ({ modalVisible, closeModal, selectedID }) => {
   return (
     <View>
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
-        <ItemHeader />
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <Text>TEST</Text>
+          <ItemHeader
+            prNum={data?.po_Document_number}
+            warehouse={data?.user?.warehouse?.warehouse_description}
+            item_group={data?.purchase_request?.item_group?.name}
+            supplier={data?.vendor?.vendor_Name}
+            requestedBy={data?.purchase_request?.user?.name}
+            dateRequested={new Date(
+              data?.po_Document_transaction_date
+            ).toLocaleDateString()}
+          />
         </View>
         <Button
           title={"Back"}

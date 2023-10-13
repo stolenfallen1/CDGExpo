@@ -11,7 +11,6 @@ const ItemHeader = ({
   dateRequested,
   approvedByDate,
   supplier,
-  category,
   item_group,
 }) => {
   const userRole = useRecoilValue(userRoleState);
@@ -54,36 +53,34 @@ const ItemHeader = ({
         </View>
       );
     } else if (userRole === "corporate admin") {
-      <View>
-        <Text style={styles.modalTextInfo}>
-          PO No:
-          <Text style={{ fontWeight: "400" }}> {prNum}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Department:
-          <Text style={{ fontWeight: "400" }}> {warehouse}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Item Group:
-          <Text style={{ fontWeight: "400" }}> {item_group}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Category:
-          <Text style={{ fontWeight: "400" }}> {category}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Supplier:
-          <Text style={{ fontWeight: "400" }}> {supplier}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Requested By:
-          <Text style={{ fontWeight: "400" }}> {requestedBy}</Text>
-        </Text>
-        <Text style={styles.modalTextInfo}>
-          Date Requested:
-          <Text style={{ fontWeight: "400" }}> {dateRequested}</Text>
-        </Text>
-      </View>;
+      return (
+        <View>
+          <Text style={styles.modalTextInfo}>
+            PO No:
+            <Text style={{ fontWeight: "400" }}> {prNum}</Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Department:
+            <Text style={{ fontWeight: "400" }}> {warehouse}</Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Item Group:
+            <Text style={{ fontWeight: "400" }}> {item_group}</Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Supplier:
+            <Text style={{ fontWeight: "400" }}> {supplier}</Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Requested By:
+            <Text style={{ fontWeight: "400" }}> {requestedBy}</Text>
+          </Text>
+          <Text style={styles.modalTextInfo}>
+            Date Requested:
+            <Text style={{ fontWeight: "400" }}> {dateRequested}</Text>
+          </Text>
+        </View>
+      );
     }
   };
 
