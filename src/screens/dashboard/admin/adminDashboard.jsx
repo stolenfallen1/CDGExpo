@@ -16,6 +16,7 @@ import CardData from "../../../components/CardData";
 import ItemHeader from "../../../components/ItemHeader";
 import Search from "../../../components/Search";
 import ModalFilter from "../../../components/ModalFilter";
+import Toast from "react-native-root-toast";
 import Modal from "react-native-modal";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
@@ -115,8 +116,14 @@ const AdminDashboard = () => {
             })
             .then((response) => {
               console.log(response.data);
-              alert("PR Approved on Selected Items");
               setModalVisible(!modalVisible);
+              Toast.show("PR Approved on Selected Items", {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.TOP,
+                backgroundColor: "green",
+                opacity: 1,
+              });
+              fetchData();
             })
             .catch((error) => {
               console.error(error);

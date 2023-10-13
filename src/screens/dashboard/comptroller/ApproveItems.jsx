@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Toast from "react-native-root-toast";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
@@ -99,7 +100,12 @@ const ApproveItems = () => {
                     })
                     .then((response) => {
                       console.log(response.data);
-                      alert("Remarks Submitted Successfully");
+                      Toast.show("Remarks Submitted Successfully", {
+                        duration: Toast.durations.SHORT,
+                        position: Toast.positions.TOP,
+                        backgroundColor: "red",
+                        opacity: 0.8,
+                      });
                       navigation.goBack();
                     })
                     .catch((error) => {
@@ -124,7 +130,12 @@ const ApproveItems = () => {
               })
               .then((response) => {
                 console.log(response.data);
-                alert("Canvas Approved Successfully");
+                Toast.show("Canvas Approved Successfully", {
+                  duration: Toast.durations.SHORT,
+                  position: Toast.positions.TOP,
+                  backgroundColor: "green",
+                  opacity: 1,
+                });
                 navigation.goBack();
               })
               .catch((error) => {

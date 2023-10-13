@@ -8,6 +8,7 @@ import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
 import { userBranchID } from "../../atoms/userBranchId";
 import { userPassword } from "../../atoms/userPassword";
+import Toast from "react-native-root-toast";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
@@ -23,7 +24,6 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLoginPress = async () => {
-    // For now change back to static url instead of using .env file
     try {
       const response = await fetch(`${apiKey}/login`, {
         method: "POST",
@@ -40,11 +40,19 @@ export default function LoginScreen() {
         setUserRole(data.user.role.name);
         setUserBranchID(data.user.branch_id);
         setUserPassword(data.user.passcode);
-        alert("Login successful!");
         navigation.navigate("Dashboard");
+        Toast.show("Welcome to MMIS Mobile", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          backgroundColor: "green",
+          opacity: 1,
+        });
       } else {
-        // login failed, show error message
-        alert("Login failed. Please try again.");
+        Toast.show("Login failed. Please try again", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.BOTTOM,
+          backgroundColor: "red",
+        });
       }
     } catch (error) {
       console.error(error);

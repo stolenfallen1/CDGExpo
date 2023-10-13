@@ -14,6 +14,7 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import Modal from "react-native-modal";
+import Toast from "react-native-root-toast";
 import ModalFilter from "../../../components/ModalFilter";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -119,8 +120,14 @@ const ConsultantDashboard = () => {
             })
             .then((response) => {
               console.log(response.data);
-              alert("PR Approved on Selected Items");
               toggleModal();
+              Toast.show("PR Approved on Selected Items", {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.TOP,
+                backgroundColor: "green",
+                opacity: 1,
+              });
+              fetchData();
             })
             .catch((error) => {
               console.error(error);

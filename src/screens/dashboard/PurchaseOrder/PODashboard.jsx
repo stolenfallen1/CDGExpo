@@ -75,7 +75,7 @@ const PODashboard = () => {
         // tab=3 for approved by administrator
         // tab=4 for approved by corporate_admin
         // tab=5 for approved by president
-        `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=2`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
