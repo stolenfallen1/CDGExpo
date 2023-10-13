@@ -10,7 +10,7 @@ import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
-const CorporateAdminModal = ({ modalVisible, closeModal, selectedID }) => {
+const POModal = ({ modalVisible, closeModal, selectedID }) => {
   const authToken = useRecoilValue(authTokenState);
   const [data, setData] = useState([]);
 
@@ -58,4 +58,4 @@ const CorporateAdminModal = ({ modalVisible, closeModal, selectedID }) => {
   );
 };
 
-export default CorporateAdminModal;
+export default POModal;

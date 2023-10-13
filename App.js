@@ -46,7 +46,7 @@ function App() {
             <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
               {() => (
                 <Drawer.Navigator drawerContent={DrawerContent}>
-                  <Drawer.Screen name="CDG IT" component={Dashboard} />
+                  <Drawer.Screen name="MMIS" component={Dashboard} />
                 </Drawer.Navigator>
               )}
             </Stack.Screen>

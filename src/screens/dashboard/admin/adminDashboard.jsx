@@ -225,7 +225,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 185 }}>
+    <View style={{ paddingBottom: 78, backgroundColor: "#f7f7f7" }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity

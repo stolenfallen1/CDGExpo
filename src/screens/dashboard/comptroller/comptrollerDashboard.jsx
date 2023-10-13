@@ -99,7 +99,7 @@ const ComptrollerDashboard = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 185 }}>
+    <View style={{ paddingBottom: 78 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity

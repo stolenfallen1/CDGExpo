@@ -8,7 +8,7 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
-import CorporateAdminModal from "../../../components/Modals/CorporateAdminModal";
+import POModal from "../../../components/Modals/POModal";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -27,7 +27,7 @@ const DROPDOWN_STYLES = {
   },
 };
 
-const CorporateAdminDash = () => {
+const PODashboard = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
   // Data states
@@ -121,7 +121,7 @@ const CorporateAdminDash = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 185 }}>
+    <View style={{ paddingBottom: 150, backgroundColor: "#f7f7f7" }}>
       <FilterOptions
         selectedBranchID={selectedBranchId}
         onClose={handleFilterApply}
@@ -150,7 +150,7 @@ const CorporateAdminDash = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
       />
-      <CorporateAdminModal
+      <POModal
         modalVisible={modalVisible}
         selectedID={selectedID}
         closeModal={() => setModalVisible(false)}
@@ -159,4 +159,4 @@ const CorporateAdminDash = () => {
   );
 };
 
-export default CorporateAdminDash;
+export default PODashboard;
