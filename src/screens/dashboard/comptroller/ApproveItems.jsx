@@ -206,46 +206,50 @@ const ApproveItems = () => {
         {data?.purchase_request_details?.map((item, index) => (
           <Card key={index} containerStyle={customStyles.cardContainer}>
             <View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Item Name: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Item Name: </Text>
+                <Text style={styles.textValue}>
                   {item?.item_master?.item_name}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Quantity: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Quantity: </Text>
+                <Text style={styles.textValue}>
                   {item?.item_Branch_Level1_Approved_Qty}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Unit of Measurement: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>
+                  Unit of Measurement:{" "}
+                </Text>
+                <Text style={styles.textValue}>
                   {getUnit(
                     item?.item_Branch_Level1_Approved_UnitofMeasurement_Id
                   )}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Price: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Price: </Text>
+                <Text style={styles.textValue}>
                   {item?.recommended_canvas?.canvas_item_amount}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Total: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>Total: </Text>
+                <Text style={styles.textValue}>
                   {item?.recommended_canvas?.canvas_item_total_amount}
                 </Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTextBold}>Recommended Supplier: </Text>
-                <Text style={styles.inputText}>
+              <View style={customStyles.inputContainer}>
+                <Text style={customStyles.inputText}>
+                  Recommended Supplier:{" "}
+                </Text>
+                <Text style={styles.textValue}>
                   {item?.recommended_canvas?.vendor?.vendor_Name}
                 </Text>
               </View>
               <TouchableOpacity
-                style={styles.inputContainer}
+                style={customStyles.inputContainer}
                 onPress={() => handlePress(item.id)}
               >
                 <Ionicons
@@ -283,20 +287,7 @@ const ApproveItems = () => {
 };
 
 const styles = StyleSheet.create({
-  modalTextInfo: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  inputContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-  },
-  inputTextBold: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  inputText: {
+  textValue: {
     fontSize: 16,
     textDecorationLine: "underline",
     textDecorationColor: "lightgrey",
