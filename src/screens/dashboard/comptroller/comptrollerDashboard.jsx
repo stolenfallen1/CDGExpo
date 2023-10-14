@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
-import CardData from "../../../components/CardData";
+import PRCard from "../../../components/Cards/PRCard";
 import Search from "../../../components/Search";
 import Modal from "react-native-modal";
 import ModalFilter from "../../../components/ModalFilter";
@@ -77,7 +77,7 @@ const ComptrollerDashboard = () => {
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
-        <CardData
+        <PRCard
           prId={item?.pr_Document_Number}
           transactionDate={item?.pr_Transaction_Date}
           requestingName={item?.user?.name}

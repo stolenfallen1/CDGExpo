@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import CardData from "../../../components/CardData";
+import PRCard from "../../../components/Cards/PRCard";
 import Search from "../../../components/Search";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
@@ -20,7 +20,7 @@ import { Card, Button, CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { customStyles } from "../../../styles/customStyles";
 import axios from "axios";
-import ItemHeader from "../../../components/ItemHeader";
+import ModalHeader from "../../../components/Modals/PRModalHeader";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
@@ -216,7 +216,7 @@ const ConsultantDashboard = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
-      <CardData
+      <PRCard
         prId={item?.pr_Document_Number}
         transactionDate={item?.pr_Transaction_Date}
         requestingName={item?.user?.name}
@@ -263,7 +263,7 @@ const ConsultantDashboard = () => {
       />
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <ItemHeader
+          <ModalHeader
             prNum={selectedCardData?.pr_Document_Number}
             name={selectedCardData?.user?.name}
             warehouse={selectedCardData?.warehouse?.warehouse_description}

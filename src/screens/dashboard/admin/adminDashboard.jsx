@@ -12,8 +12,8 @@ import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
-import CardData from "../../../components/CardData";
-import ItemHeader from "../../../components/ItemHeader";
+import PRCard from "../../../components/Cards/PRCard";
+import ModalHeader from "../../../components/Modals/PRModalHeader";
 import Search from "../../../components/Search";
 import ModalFilter from "../../../components/ModalFilter";
 import Toast from "react-native-root-toast";
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
-      <CardData
+      <PRCard
         prId={item?.pr_Document_Number}
         transactionDate={item?.pr_Transaction_Date}
         requestingName={item?.user?.name}
@@ -259,7 +259,7 @@ const AdminDashboard = () => {
       />
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <ItemHeader
+          <ModalHeader
             prNum={selectedCardData?.pr_Document_Number}
             name={selectedCardData?.user?.name}
             warehouse={selectedCardData?.warehouse?.warehouse_description}
@@ -343,7 +343,5 @@ const AdminDashboard = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default AdminDashboard;

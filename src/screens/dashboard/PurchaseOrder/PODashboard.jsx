@@ -1,7 +1,7 @@
 import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
-import CardData from "../../../components/CardData";
+import POCard from "../../../components/Cards/POCard";
 import RNPickerSelect from "react-native-picker-select";
 import Search from "../../../components/Search";
 import { authTokenState } from "../../../atoms/authTokenState";
@@ -101,7 +101,7 @@ const PODashboard = () => {
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
-        <CardData
+        <POCard
           poId={item?.po_Document_number}
           prId={item?.pr_Request_id}
           supplier={item?.vendor?.vendor_Name}

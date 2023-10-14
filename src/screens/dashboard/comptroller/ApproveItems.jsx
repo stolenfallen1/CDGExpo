@@ -15,7 +15,7 @@ import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
-import ItemHeader from "../../../components/ItemHeader";
+import ModalHeader from "../../../components/Modals/PRModalHeader";
 import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -193,7 +193,7 @@ const ApproveItems = () => {
   return (
     <View style={{ paddingBottom: 245 }}>
       <View style={{ marginLeft: 16, marginTop: 15 }}>
-        <ItemHeader
+        <ModalHeader
           prNum={data?.pr_Document_Number}
           name={data?.user?.branch?.name}
           warehouse={data?.warehouse?.warehouse_description}

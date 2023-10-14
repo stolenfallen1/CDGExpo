@@ -1,11 +1,11 @@
 import { Text, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 import React from "react";
-import { customStyles } from "../styles/customStyles";
+import { customStyles } from "../../styles/customStyles";
 import { useRecoilValue } from "recoil";
-import { userRoleState } from "../atoms/userRoleState";
+import { userRoleState } from "../../atoms/userRoleState";
 
-const CardData = ({
+const PRCard = ({
   cardKey,
   prId,
   transactionDate,
@@ -16,8 +16,6 @@ const CardData = ({
   pr_status = "Pending",
   dateApproved = "Pending",
   justification,
-  poId,
-  supplier,
 }) => {
   const userRole = useRecoilValue(userRoleState);
 
@@ -43,21 +41,8 @@ const CardData = ({
           <Text style={styles.cardText}>Remarks: {justification} </Text>
         </Card>
       );
-    } else if (userRole === "corporate admin") {
-      return (
-        <Card containerStyle={customStyles.cardContainer}>
-          <Text style={styles.prId}>PO No: {poId} </Text>
-          <Text style={styles.prId}>PR No: {prId} </Text>
-          <Text style={styles.cardText}>Supplier: {supplier} </Text>
-          <Text style={styles.cardText}>Department: {warehouse} </Text>
-          <Text style={styles.cardText}>
-            Trans. Date: {new Date(transactionDate).toLocaleDateString()}
-          </Text>
-          <Text style={styles.cardText}>Requestee: {requestingName} </Text>
-          <Text style={styles.cardText}>Status: {pr_status} </Text>
-          <Text style={styles.cardText}>Remarks: {justification} </Text>
-        </Card>
-      );
+    } else {
+      null;
     }
   };
 
@@ -76,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardData;
+export default PRCard;

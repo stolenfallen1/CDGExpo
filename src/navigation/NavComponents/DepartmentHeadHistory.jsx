@@ -6,7 +6,7 @@ import { authTokenState } from "../../atoms/authTokenState";
 import axios from "axios";
 import Search from "../../components/Search";
 import { StyleSheet } from "react-native";
-import CardData from "../../components/CardData";
+import PRCard from "../../components/Cards/PRCard";
 import { customStyles } from "../../styles/customStyles";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -60,7 +60,7 @@ const DepartmentHeadHistory = () => {
         renderItem={({ item }) => {
           return (
             <TouchableOpacity>
-              <CardData
+              <PRCard
                 prId={data[item]?.pr_Document_Number}
                 transactionDate={data[item]?.pr_Transaction_Date}
                 requestingName={data[item]?.pr_RequestedBy}
