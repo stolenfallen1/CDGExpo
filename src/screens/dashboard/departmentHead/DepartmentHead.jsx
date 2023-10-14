@@ -6,6 +6,7 @@ import {
   View,
   Alert,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -60,6 +61,8 @@ const DepartmentHead = () => {
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -162,6 +165,7 @@ const DepartmentHead = () => {
 
   // FETCH DATA
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
@@ -174,6 +178,8 @@ const DepartmentHead = () => {
       setData(response.data.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -251,13 +257,19 @@ const DepartmentHead = () => {
           handleClose={() => setFilterModal(false)}
         />
       </Modal>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : data.length === 0 ? (
+        <Text style={customStyles.emptyText}>No purchase request found</Text>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+        />
+      )}
       {/* ITEM CARD DISPLAY MODAL */}
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>

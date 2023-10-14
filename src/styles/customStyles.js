@@ -28,6 +28,13 @@ export const customStyles = {
     marginTop: 160,
     marginBottom: 160,
   },
+  // NO RESULTS TEXT STYLE
+  emptyText: {
+    fontSize: 20,
+    color: "red",
+    textAlign: "center",
+    marginTop: 50,
+  },
   // CARD CONTAINER STYLES
   cardContainer: {
     borderRadius: 10,

@@ -1,4 +1,10 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
@@ -28,6 +34,8 @@ const ComptrollerDashboard = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCardPress = (pr_id) => {
     navigation.navigate("ComptrollerApproveItems", { pr_id, isStatus: true });
@@ -48,7 +56,7 @@ const ComptrollerDashboard = () => {
   };
 
   const fetchData = async () => {
-    // For now change back to static url instead of using .env file
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${apiKey}/purchase-request?page=${page}&per_page=10&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
@@ -61,6 +69,8 @@ const ComptrollerDashboard = () => {
       setData(response.data.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -117,13 +127,19 @@ const ComptrollerDashboard = () => {
           handleClose={() => setFilterModal(false)}
         />
       </Modal>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : data.length === 0 ? (
+        <Text style={customStyles.emptyText}>No purchase request found</Text>
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+        />
+      )}
     </View>
   );
 };

@@ -1,4 +1,10 @@
-import { View, FlatList, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import POCard from "../../../components/Cards/POCard";
@@ -42,6 +48,8 @@ const PODashboard = () => {
   // Filter states
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
 
   // http://10.4.15.15:8006/api/purchase-order/1
   const handleCardPress = (id) => {
@@ -68,6 +76,7 @@ const PODashboard = () => {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         // tab=1 for approval data
@@ -85,6 +94,8 @@ const PODashboard = () => {
       setData(response.data.data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -143,13 +154,19 @@ const PODashboard = () => {
           />
         )}
       </View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : data.length === 0 ? (
+        <Text style={customStyles.emptyText}>No purchase request found</Text>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+        />
+      )}
       <POModal
         modalVisible={modalVisible}
         selectedID={selectedID}

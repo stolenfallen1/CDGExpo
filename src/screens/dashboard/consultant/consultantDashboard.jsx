@@ -3,9 +3,9 @@ import {
   Text,
   ScrollView,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import PRCard from "../../../components/Cards/PRCard";
@@ -45,6 +45,8 @@ const ConsultantDashboard = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
 
   // METHODS ARE DEFINED HERE
   const handleCardPress = (cardData, cardKey) => {
@@ -60,10 +62,6 @@ const ConsultantDashboard = () => {
   // FILTER MODAL
   const toggleFilter = () => {
     setFilterModal(true);
-  };
-
-  const handlePress = () => {
-    navigation.navigate("FilterModal");
   };
 
   // GET VENDOR NAME AND UNIT NAME
@@ -153,6 +151,7 @@ const ConsultantDashboard = () => {
 
   // FETCH DATA
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
@@ -171,6 +170,8 @@ const ConsultantDashboard = () => {
       setData(updatedData);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -254,13 +255,19 @@ const ConsultantDashboard = () => {
           handleClose={() => setFilterModal(false)}
         />
       </Modal>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : data.length === 0 ? (
+        <Text style={customStyles.emptyText}>No purchase request found</Text>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+        />
+      )}
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
           <ModalHeader
