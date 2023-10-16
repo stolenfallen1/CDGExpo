@@ -21,11 +21,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
-// http://10.4.15.12:8004/api/purchase-request/{id}?tab=6 (pr id)
-
-// Display data
-// Approve data
-
 const ApproveItems = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -94,7 +89,7 @@ const ApproveItems = () => {
                 if (remarks) {
                   const payload = {
                     items: data.purchase_request_details.map((item) => ({
-                      item_id: item.item_Id,
+                      item_id: item.id,
                       status: item.status,
                       remarks: remarks,
                     })),
@@ -124,7 +119,7 @@ const ApproveItems = () => {
           } else {
             const payload = {
               items: data.purchase_request_details.map((item) => ({
-                item_id: item.item_Id,
+                item_id: item.id,
                 status: item.status,
                 remarks: null,
               })),
