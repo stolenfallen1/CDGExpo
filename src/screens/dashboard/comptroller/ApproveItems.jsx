@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -28,13 +29,19 @@ const apiKey = process.env.EXPO_PUBLIC_API_URL;
 const ApproveItems = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  // Data passed from selected card
   const { pr_id } = route.params;
   const { isStatus } = route.params;
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
+  // Data states
   const [data, setData] = useState([]);
   const [units, setUnits] = useState([]);
+  // Checkbox states
   const [isUnChecked, setIsUnchecked] = useState(true);
+  // loading states
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePress = (item_id) => {
     navigation.navigate("SupplierCanvasList", { item_id });
@@ -154,7 +161,7 @@ const ApproveItems = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // For now change back to static url instead of using .env file
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `${apiKey}/purchase-request/${pr_id}?tab=6`,
@@ -171,6 +178,8 @@ const ApproveItems = () => {
         setData(newData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     const fetchUnits = async () => {
@@ -192,107 +201,115 @@ const ApproveItems = () => {
 
   return (
     <View style={{ paddingBottom: 245 }}>
-      <View style={{ marginLeft: 16, marginTop: 15 }}>
-        <ModalHeader
-          prNum={data?.pr_Document_Number}
-          name={data?.user?.branch?.name}
-          warehouse={data?.warehouse?.warehouse_description}
-          requestedBy={data?.user?.name}
-          dateRequested={new Date(
-            data?.pr_Transaction_Date
-          ).toLocaleDateString()}
-        />
-        <CheckBox
-          title={"Approve All Request"}
-          containerStyle={{
-            marginRight: 30,
-            backgroundColor: "lightgreen",
-            borderRadius: 10,
-          }}
-          checked={isUnChecked}
-          onPress={() => handleAllItemApproval()}
-        />
-      </View>
-      <ScrollView>
-        {data?.purchase_request_details?.map((item, index) => (
-          <Card key={index} containerStyle={customStyles.cardContainer}>
-            <View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>Item Name: </Text>
-                <Text style={styles.textValue}>
-                  {item?.item_master?.item_name}
-                </Text>
-              </View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>Quantity: </Text>
-                <Text style={styles.textValue}>
-                  {item?.item_Branch_Level1_Approved_Qty}
-                </Text>
-              </View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>
-                  Unit of Measurement:{" "}
-                </Text>
-                <Text style={styles.textValue}>
-                  {getUnit(
-                    item?.item_Branch_Level1_Approved_UnitofMeasurement_Id
-                  )}
-                </Text>
-              </View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>Price: </Text>
-                <Text style={styles.textValue}>
-                  {item?.recommended_canvas?.canvas_item_amount}
-                </Text>
-              </View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>Total: </Text>
-                <Text style={styles.textValue}>
-                  {item?.recommended_canvas?.canvas_item_total_amount}
-                </Text>
-              </View>
-              <View style={customStyles.inputContainer}>
-                <Text style={customStyles.inputText}>
-                  Recommended Supplier:{" "}
-                </Text>
-                <Text style={styles.textValue}>
-                  {item?.recommended_canvas?.vendor?.vendor_Name}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={customStyles.inputContainer}
-                onPress={() => handlePress(item.id)}
-              >
-                <Ionicons
-                  name="eye"
-                  color={"green"}
-                  size={18}
-                  style={{ marginTop: 8 }}
-                />
-              </TouchableOpacity>
-              <CheckBox
-                title={"Approved Canvas"}
-                containerStyle={{ borderRadius: 10 }}
-                checked={item.status}
-                onPress={() => handleItemApproval(item.id)}
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : data.length === 0 ? (
+        <Text style={customStyles.emptyText}>No items found</Text>
+      ) : (
+        <>
+          <View style={{ marginLeft: 16, marginTop: 15 }}>
+            <ModalHeader
+              prNum={data?.pr_Document_Number}
+              name={data?.user?.branch?.name}
+              warehouse={data?.warehouse?.warehouse_description}
+              requestedBy={data?.user?.name}
+              dateRequested={new Date(
+                data?.pr_Transaction_Date
+              ).toLocaleDateString()}
+            />
+            <CheckBox
+              title={"Approve All Request"}
+              containerStyle={{
+                marginRight: 30,
+                backgroundColor: "lightgreen",
+                borderRadius: 10,
+              }}
+              checked={isUnChecked}
+              onPress={() => handleAllItemApproval()}
+            />
+          </View>
+          <ScrollView>
+            {data?.purchase_request_details?.map((item, index) => (
+              <Card key={index} containerStyle={customStyles.cardContainer}>
+                <View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Item Name: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.item_master?.item_name}
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Quantity: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.item_Branch_Level1_Approved_Qty}
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>
+                      Unit of Measurement:{" "}
+                    </Text>
+                    <Text style={styles.textValue}>
+                      {getUnit(
+                        item?.item_Branch_Level1_Approved_UnitofMeasurement_Id
+                      )}
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Price: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.recommended_canvas?.canvas_item_amount}
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Total: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.recommended_canvas?.canvas_item_total_amount}
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>
+                      Recommended Supplier:{" "}
+                    </Text>
+                    <Text style={styles.textValue}>
+                      {item?.recommended_canvas?.vendor?.vendor_Name}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={customStyles.inputContainer}
+                    onPress={() => handlePress(item.id)}
+                  >
+                    <Ionicons
+                      name="eye"
+                      color={"green"}
+                      size={18}
+                      style={{ marginTop: 8 }}
+                    />
+                  </TouchableOpacity>
+                  <CheckBox
+                    title={"Approved Canvas"}
+                    containerStyle={{ borderRadius: 10 }}
+                    checked={item.status}
+                    onPress={() => handleItemApproval(item.id)}
+                  />
+                </View>
+              </Card>
+            ))}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                backgroundColor: "transparent",
+              }}
+            >
+              <Button
+                title={"Submit"}
+                buttonStyle={customStyles.submitButton}
+                onPress={() => handleSubmit()}
               />
             </View>
-          </Card>
-        ))}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            backgroundColor: "transparent",
-          }}
-        >
-          <Button
-            title={"Submit"}
-            buttonStyle={customStyles.submitButton}
-            onPress={() => handleSubmit()}
-          />
-        </View>
-      </ScrollView>
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 };
