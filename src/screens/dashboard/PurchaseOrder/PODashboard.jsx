@@ -79,11 +79,6 @@ const PODashboard = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        // tab=1 for approval data
-        // tab=2 for approved by comproller
-        // tab=3 for approved by administrator
-        // tab=4 for approved by corporate_admin
-        // tab=5 for approved by president
         `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=1`,
         {
           headers: {
@@ -157,7 +152,7 @@ const PODashboard = () => {
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : data.length === 0 ? (
-        <Text style={customStyles.emptyText}>No purchase request found</Text>
+        <Text style={customStyles.emptyText}>No purchase order found</Text>
       ) : (
         <FlatList
           data={data}

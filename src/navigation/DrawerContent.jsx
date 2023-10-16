@@ -3,14 +3,26 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { userRoleState } from "../atoms/userRoleState";
 import { authTokenState } from "../atoms/authTokenState";
+import axios from "axios";
+
+const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const DrawerContent = ({ navigation }) => {
   const userRole = useRecoilValue(userRoleState);
-  const [token, setToken] = useRecoilState(authTokenState);
+  const authToken = useRecoilValue(authTokenState);
 
   const renderMenuItems = () => {
-    const handleLogout = () => {
-      setToken(null);
+    const handleLogout = async () => {
+      try {
+        const response = await axios.post(`${apiKey}/logout`, null, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        navigation.navigate("Home");
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     if (userRole === "administrator") {
@@ -29,10 +41,7 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Department Head</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-              navigation.navigate("Home");
-            }}
+            onPress={handleLogout}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
@@ -61,10 +70,7 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Administrator</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-              navigation.navigate("Home");
-            }}
+            onPress={handleLogout}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
@@ -87,10 +93,7 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Department Head</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-              navigation.navigate("Home");
-            }}
+            onPress={handleLogout}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
@@ -107,17 +110,14 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>Approved Canvas</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-              navigation.navigate("Home");
-            }}
+            onPress={handleLogout}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>
           </TouchableOpacity>
         </View>
       );
-    } else if (userRole === "corporate admin") {
+    } else if (userRole === "corporate admin" || userRole === "president") {
       return (
         <View>
           <TouchableOpacity
@@ -145,10 +145,7 @@ const DrawerContent = ({ navigation }) => {
             <Text style={styles.menuItemText}>President</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-              navigation.navigate("Home");
-            }}
+            onPress={handleLogout}
             style={styles.menuItemButton}
           >
             <Text style={styles.menuItemText}>Logout</Text>

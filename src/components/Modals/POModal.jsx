@@ -2,17 +2,72 @@ import { View, Text, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { customStyles } from "../../styles/customStyles";
 import Modal from "react-native-modal";
-import { Button, Card } from "react-native-elements";
+import { Button, Card, CheckBox } from "react-native-elements";
 import { authTokenState } from "../../atoms/authTokenState";
+import { userPassword } from "../../atoms/userPassword";
 import { useRecoilValue } from "recoil";
 import ModalHeader from "./POModalHeader";
 import axios from "axios";
+import { Alert } from "react-native";
+import Toast from "react-native-root-toast";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 const POModal = ({ modalVisible, closeModal, selectedID }) => {
+  // Auth states
   const authToken = useRecoilValue(authTokenState);
+  const userPasscode = useRecoilValue(userPassword);
+  // Data states
   const [data, setData] = useState([]);
+  // Checkbox states
+  const [isUnchecked, setisUnchecked] = useState(true);
+
+  const handleSelectAllChange = () => {
+    // This function will check all the checkboxes
+    const updatedData = { ...data };
+    updatedData.details.map((item) => (item.isapproved = !isUnchecked));
+    setData(updatedData);
+    setisUnchecked(!isUnchecked);
+  };
+
+  const handleCheckBoxChange = (itemIndex) => {
+    const updatedData = { ...data };
+    updatedData.details[itemIndex].isapproved =
+      !updatedData.details[itemIndex].isapproved;
+    setData(updatedData);
+  };
+
+  const handleSubmit = async () => {
+    // This function will submit the data to the backend
+    // approve-purchase-order
+    Alert.prompt("Please enter your password:", "", (password) => {
+      if (password === userPasscode) {
+        try {
+          axios
+            .post(`${apiKey}/approve-purchase-order`, data, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            })
+            .then((response) => {
+              console.log(response.data);
+              Toast.show("PO Approved Successfully", {
+                duration: Toast.durations.SHORT,
+                position: Toast.positions.TOP,
+                backgroundColor: "green",
+                opacity: 1,
+              });
+              fetchData();
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("Wrong Password");
+        return;
+      }
+    });
+  };
 
   const fetchData = async () => {
     try {
@@ -24,7 +79,13 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
           },
         }
       );
-      setData(response.data);
+      const isApproved = true;
+      const updatedDetails = response.data.details.map((detail) => ({
+        ...detail,
+        isapproved: isApproved,
+      }));
+      const updatedData = { ...response.data, details: updatedDetails };
+      setData(updatedData);
     } catch (error) {
       console.error(error);
     }
@@ -46,6 +107,16 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
             dateRequested={new Date(
               data?.po_Document_transaction_date
             ).toLocaleDateString()}
+          />
+          <CheckBox
+            title={"Approve All PO Request"}
+            containerStyle={{
+              marginRight: 30,
+              backgroundColor: "lightgreen",
+              borderRadius: 10,
+            }}
+            checked={isUnchecked}
+            onPress={handleSelectAllChange}
           />
         </View>
         <ScrollView>
@@ -81,13 +152,18 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
                   {item?.po_Detail_item_listcost}
                 </Text>
               </View>
+              <CheckBox
+                title={"Approve for Purchase Order"}
+                checked={item?.isapproved}
+                onPress={() => handleCheckBoxChange(index)}
+              />
             </Card>
           ))}
         </ScrollView>
         <Button
           title={"Submit"}
           buttonStyle={customStyles.submitButton}
-          onPress={closeModal}
+          onPress={handleSubmit}
         />
         <Button
           title={"Back"}

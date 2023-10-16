@@ -75,6 +75,7 @@ const Dashboard = () => {
       {userRole === "consultant" && <ConsultantDashboard />}
       {userRole === "comptroller" && <ComptrollerDashboardTabs />}
       {userRole === "corporate admin" && <PODashboard />}
+      {userRole === "president" && <PODashboard />}
     </View>
   );
 };
