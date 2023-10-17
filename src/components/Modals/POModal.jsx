@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import { customStyles } from "../../styles/customStyles";
 import Modal from "react-native-modal";
@@ -21,6 +21,8 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
   const [data, setData] = useState([]);
   // Checkbox states
   const [isUnchecked, setisUnchecked] = useState(true);
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSelectAllChange = () => {
     // This function will check all the checkboxes
@@ -70,6 +72,7 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${apiKey}/purchase-order/${selectedID}`,
@@ -88,6 +91,8 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
       setData(updatedData);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -98,26 +103,32 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
     <View>
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
         <View style={{ marginLeft: 16, marginTop: 15 }}>
-          <ModalHeader
-            prNum={data?.po_Document_number}
-            warehouse={data?.user?.warehouse?.warehouse_description}
-            item_group={data?.purchase_request?.item_group?.name}
-            supplier={data?.vendor?.vendor_Name}
-            requestedBy={data?.purchase_request?.user?.name}
-            dateRequested={new Date(
-              data?.po_Document_transaction_date
-            ).toLocaleDateString()}
-          />
-          <CheckBox
-            title={"Approve All PO Request"}
-            containerStyle={{
-              marginRight: 30,
-              backgroundColor: "lightgreen",
-              borderRadius: 10,
-            }}
-            checked={isUnchecked}
-            onPress={handleSelectAllChange}
-          />
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <>
+              <ModalHeader
+                prNum={data?.po_Document_number}
+                warehouse={data?.user?.warehouse?.warehouse_description}
+                item_group={data?.purchase_request?.item_group?.name}
+                supplier={data?.vendor?.vendor_Name}
+                requestedBy={data?.purchase_request?.user?.name}
+                dateRequested={new Date(
+                  data?.po_Document_transaction_date
+                ).toLocaleDateString()}
+              />
+              <CheckBox
+                title={"Approve All PO Request"}
+                containerStyle={{
+                  marginRight: 30,
+                  backgroundColor: "lightgreen",
+                  borderRadius: 10,
+                }}
+                checked={isUnchecked}
+                onPress={handleSelectAllChange}
+              />
+            </>
+          )}
         </View>
         <ScrollView>
           {data?.details?.map((item, index) => (
