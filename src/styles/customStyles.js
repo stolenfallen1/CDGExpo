@@ -1,4 +1,36 @@
 export const customStyles = {
+  // CDUH LOGO STYLE
+  imageContainer: {
+    aspectRatio: 2,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  cduLogo: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+  // DRAWER MENU BUTTON STYLE
+  menuItemButton: {
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingRight: 1,
+    borderBottomWidth: 0.7,
+    borderTopWidth: 0.7,
+    borderColor: "#2596BE",
+  },
+  menuItemText: {
+    fontSize: 17,
+    color: "#000",
+  },
+  logoutContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingBottom: 45,
+  },
   // SEARCH AND FILTER CONTAINER STYLE
   utilsContainer: {
     flexDirection: "row",

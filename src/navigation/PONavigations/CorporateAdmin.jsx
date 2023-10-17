@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const PresidentHistory = () => {
+const CorporateAdmin = () => {
   return (
     <View>
-      <Text>PresidentHistory</Text>
+      <Text>CorporateAdmin</Text>
     </View>
   );
 };
 
-export default PresidentHistory;
+export default CorporateAdmin;
