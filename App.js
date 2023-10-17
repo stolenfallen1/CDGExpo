@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
+import { TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -9,17 +10,23 @@ import HomeScreen from "./src/screens/home/HomeScreen";
 import LoginScreen from "./src/screens/login/LoginScreen";
 import Dashboard from "./src/screens/dashboard/Dashboard";
 import DrawerContent from "./src/navigation/DrawerContent";
-// Drawer Navigation imports
-import AdminHistory from "./src/navigation/PRNavigations/Administrator";
-import DepartmentHeadHistory from "./src/navigation/PRNavigations/DHead";
-import ConsultantHistory from "./src/navigation/PRNavigations/Consultant";
-import CanvasHistory from "./src/navigation/PRNavigations/Comptroller";
+// Drawer Navigation imports for PR
+import PRAdmin from "./src/navigation/PRNavigations/Administrator";
+import PRDepartmentHead from "./src/navigation/PRNavigations/DHead";
+import PRConsultant from "./src/navigation/PRNavigations/Consultant";
+import PRCanvas from "./src/navigation/PRNavigations/Comptroller";
+// Drawer Navigation import for PO
+import POComptroller from "./src/navigation/PONavigations/Comptroller";
+import POAdmin from "./src/navigation/PONavigations/Administrator";
+import POCorporateAdmin from "./src/navigation/PONavigations/CorporateAdmin";
+import POPresident from "./src/navigation/PONavigations/President";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
 import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 // Filter Modal imports
 import ModalFilter from "./src/components/ModalFilter";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,28 +68,52 @@ function App() {
                 },
               }}
             />
-            {/* Drawer Navigation routes */}
+            {/* Drawer Navigation routes for PR */}
             <Stack.Screen
-              name="adminHistory"
-              component={AdminHistory}
+              name="PR Admin"
+              component={PRAdmin}
               options={{ title: "Administrators Transactions" }}
             />
             <Stack.Screen
-              name="dheadHistory"
-              component={DepartmentHeadHistory}
+              name="PR DHead"
+              component={PRDepartmentHead}
               options={{ title: "Department Head Transactions" }}
             />
             <Stack.Screen
-              name="consultantHistory"
-              component={ConsultantHistory}
+              name="PR Consultant"
+              component={PRConsultant}
               options={{ title: "Consultant Transactions" }}
             />
             <Stack.Screen
-              name="comptrollerHistory"
-              component={CanvasHistory}
+              name="PR Canvas"
+              component={PRCanvas}
               options={{ title: "Comptroller Transactions" }}
             />
-            {/* Admin logs routes */}
+            {/* Drawer Navigation routes for PO */}
+            <Stack.Screen
+              name="PO Comptroller"
+              component={POComptroller}
+              options={{ title: "Comptroller Transactions" }}
+            />
+            <Stack.Screen
+              name="PO Admin"
+              component={POAdmin}
+              options={{ title: "Administrators Transactions" }}
+            />
+            <Stack.Screen
+              name="PO CorporateAdmin"
+              component={POCorporateAdmin}
+              options={{ title: "Corporate Admin Transactions" }}
+            />
+            <Stack.Screen
+              name="PO President"
+              component={POPresident}
+              options={{
+                title: "President Transactions",
+                headerBackTitle: "Back",
+              }}
+            />
+            {/* Admin Log routes */}
             <Stack.Screen
               name="AdminLogs"
               component={AdminLogs}

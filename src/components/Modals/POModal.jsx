@@ -59,7 +59,6 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
                 backgroundColor: "green",
                 opacity: 1,
               });
-              fetchData();
             });
         } catch (error) {
           console.error(error);

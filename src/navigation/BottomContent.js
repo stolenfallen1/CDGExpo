@@ -19,7 +19,6 @@ const AdminDashboardTabs = () => {
           ),
         }}
       />
-
       <Tab.Screen
         name="Purchase Order"
         component={PODashboard}
