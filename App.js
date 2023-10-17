@@ -10,12 +10,10 @@ import LoginScreen from "./src/screens/login/LoginScreen";
 import Dashboard from "./src/screens/dashboard/Dashboard";
 import DrawerContent from "./src/navigation/DrawerContent";
 // Drawer Navigation imports
-import AdminHistory from "./src/navigation/NavComponents/AdminHistory";
-import DepartmentHeadHistory from "./src/navigation/NavComponents/DepartmentHeadHistory";
-import ConsultantHistory from "./src/navigation/NavComponents/ConsultantHistory";
-import CanvasHistory from "./src/navigation/NavComponents/CanvasHitory";
-import CorporateAdminHistory from "./src/navigation/NavComponents/CorporateAdminHistory";
-import PresidentHistory from "./src/navigation/NavComponents/PresidentHistory";
+import AdminHistory from "./src/navigation/PRNavigations/Administrator";
+import DepartmentHeadHistory from "./src/navigation/PRNavigations/DHead";
+import ConsultantHistory from "./src/navigation/PRNavigations/Consultant";
+import CanvasHistory from "./src/navigation/PRNavigations/Comptroller";
 // Admin Navigation imports
 import AdminLogs from "./src/screens/dashboard/admin/AdminLogs";
 import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
@@ -50,6 +48,19 @@ function App() {
                 </Drawer.Navigator>
               )}
             </Stack.Screen>
+            {/* Filter Modal */}
+            <Stack.Screen
+              name="FilterModal"
+              component={ModalFilter}
+              options={{
+                title: "Filter Options",
+                presentation: "modal",
+                cardStyle: {
+                  height: 100,
+                  overflow: "hidden",
+                },
+              }}
+            />
             {/* Drawer Navigation routes */}
             <Stack.Screen
               name="adminHistory"
@@ -71,16 +82,6 @@ function App() {
               component={CanvasHistory}
               options={{ title: "Comptroller Transactions" }}
             />
-            <Stack.Screen
-              name="corporateAdminHistory"
-              component={CorporateAdminHistory}
-              options={{ title: "Corporate Admin Transactions" }}
-            />
-            <Stack.Screen
-              name="presidentHistory"
-              component={PresidentHistory}
-              options={{ title: "President Transactions" }}
-            />
             {/* Admin logs routes */}
             <Stack.Screen
               name="AdminLogs"
@@ -98,19 +99,6 @@ function App() {
               name="SupplierCanvasList"
               component={SupplierList}
               options={{ title: "List of Suppliers", presentation: "modal" }}
-            />
-            {/* Filter Modal */}
-            <Stack.Screen
-              name="FilterModal"
-              component={ModalFilter}
-              options={{
-                title: "Filter Options",
-                presentation: "modal",
-                cardStyle: {
-                  height: 100, // Set the height of the modal to 75% of the screen height
-                  overflow: "hidden", // Hide the overflowing content from Modal
-                },
-              }}
             />
           </Stack.Navigator>
         </NavigationContainer>
