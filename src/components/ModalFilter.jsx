@@ -92,7 +92,9 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
     <>
       <View style={styles.modalContainer}>
         {/* Branch Dropdown */}
-        {userRole === "administrator" || userRole === "comptroller"
+        {userRole === "administrator" ||
+        userRole === "comptroller" ||
+        userRole === "consultant"
           ? Object.keys(branches).map((option, index) => (
               <View key={index} style={{ paddingVertical: 15 }}>
                 <Text style={styles.inputText}>Branch:</Text>
@@ -119,7 +121,9 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             ))
           : null}
         {/* Department Dropdown */}
-        {userRole === "administrator" || userRole === "comptroller"
+        {userRole === "administrator" ||
+        userRole === "comptroller" ||
+        userRole === "consultant"
           ? Object.keys(departments).map((option, index) => (
               <View key={index} style={{ paddingVertical: 15 }}>
                 <Text style={styles.inputText}>Department:</Text>
