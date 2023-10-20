@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
+import { unitsData } from "../../../atoms/unitsData";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
 import ModalHeader from "../../../components/Modals/PRModalHeader";
@@ -32,7 +33,7 @@ const ApproveItems = () => {
   const userPasscode = useRecoilValue(userPassword);
   // Data states
   const [data, setData] = useState([]);
-  const [units, setUnits] = useState([]);
+  const units = useRecoilValue(unitsData);
   // Checkbox states
   const [isUnChecked, setIsUnchecked] = useState(true);
   // loading states
@@ -177,20 +178,6 @@ const ApproveItems = () => {
         setIsLoading(false);
       }
     };
-    const fetchUnits = async () => {
-      // For now change back to static url instead of using .env file
-      try {
-        const response = await axios.get(`${apiKey}/units`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setUnits(response.data.units);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUnits();
     fetchData();
   }, [pr_id, authToken, isStatus]);
 

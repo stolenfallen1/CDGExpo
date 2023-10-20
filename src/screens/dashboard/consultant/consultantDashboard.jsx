@@ -13,6 +13,8 @@ import Search from "../../../components/Search";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
+import { vendorsData } from "../../../atoms/vendorsData";
+import { unitsData } from "../../../atoms/unitsData";
 import Modal from "react-native-modal";
 import Toast from "react-native-root-toast";
 import ModalFilter from "../../../components/ModalFilter";
@@ -30,8 +32,8 @@ const ConsultantDashboard = () => {
   const userPasscode = useRecoilValue(userPassword);
   // Data states
   const [data, setData] = useState([]);
-  const [vendors, setVendors] = useState([]);
-  const [units, setUnits] = useState([]);
+  const vendors = useRecoilValue(vendorsData);
+  const units = useRecoilValue(unitsData);
   const [selectedCardData, setSelectedCardData] = useState({});
   // Modal states
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,11 +66,11 @@ const ConsultantDashboard = () => {
     setFilterModal(true);
   };
 
-  // GET VENDOR NAME AND UNIT NAME
   const getVendor = (id) => {
     const vendor = vendors.find((vendor) => vendor.id == id);
-    return vendor?.vendor_Name ? vendor.vendor_Name : "Select a supplier";
+    return vendor?.vendor_Name ? vendor.vendor_Name : "";
   };
+
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
     return unit?.name;
@@ -184,36 +186,6 @@ const ConsultantDashboard = () => {
     selectedCategory,
     selectedItemGroup,
   ]);
-
-  // FETCH VENDORS AND UNITS
-  useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const response = await axios.get(`${apiKey}/vendors`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setVendors(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const fetchUnits = async () => {
-      try {
-        const response = await axios.get(`${apiKey}/units`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setUnits(response.data.units);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUnits();
-    fetchVendors();
-  }, [authToken]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
