@@ -8,7 +8,10 @@ import { authTokenState } from "../../atoms/authTokenState";
 import { userRoleState } from "../../atoms/userRoleState";
 import { userBranchID } from "../../atoms/userBranchId";
 import { userPassword } from "../../atoms/userPassword";
+import { vendorsData } from "../../atoms/vendorsData";
+import { unitsData } from "../../atoms/unitsData";
 import Toast from "react-native-root-toast";
+import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
@@ -20,26 +23,45 @@ export default function LoginScreen() {
   const setUserRole = useSetRecoilState(userRoleState);
   const setUserBranchID = useSetRecoilState(userBranchID);
   const setUserPassword = useSetRecoilState(userPassword);
+  const setVendorsData = useSetRecoilState(vendorsData);
+  const setUnitsData = useSetRecoilState(unitsData);
 
   const navigation = useNavigation();
 
+  // Fetch data to this api's and store to Recoil atom after login
+  // http://10.4.15.12:8004/api/vendors?per_page=-1 and http://10.4.15.12:8004/api/units?per_page=-1
+
   const handleLoginPress = async () => {
     try {
-      const response = await fetch(`${apiKey}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idnumber, password }),
+      const response = await axios.post(`${apiKey}/login`, {
+        idnumber,
+        password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
         // login successful, store token and user role in Recoil atom
         setAuthToken(data.access_token);
         setUserRole(data.user.role.name);
         setUserBranchID(data.user.branch_id);
         setUserPassword(data.user.passcode);
+
+        const authToken = `Bearer ${data.access_token}`;
+        const config = {
+          headers: { Authorization: authToken },
+        };
+
+        // Get all vendors and units
+        const [vendors, units] = await Promise.all([
+          axios.get(`${apiKey}/vendors?per_page=-1`, config),
+          axios.get(`${apiKey}/units?per_page=-1`, config),
+        ]);
+
+        const vendorsData = vendors.data.data;
+        const unitsData = units.data.units;
+        setVendorsData(vendorsData);
+        setUnitsData(unitsData);
+
         navigation.navigate("Dashboard");
         Toast.show("Welcome to MMIS Mobile", {
           duration: Toast.durations.SHORT,

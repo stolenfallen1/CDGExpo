@@ -10,6 +10,8 @@ import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import { userBranchID } from "../../atoms/userBranchId";
+import { vendorsData } from "../../atoms/vendorsData";
+import { unitsData } from "../../atoms/unitsData";
 import axios from "axios";
 import Search from "../../components/Search";
 import PRCard from "../../components/Cards/PRCard";
@@ -26,11 +28,11 @@ const DepartmentHeadHistory = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
   const branchID = useRecoilValue(userBranchID);
+  const vendors = useRecoilValue(vendorsData);
+  const units = useRecoilValue(unitsData);
   // Data states
   const [data, setData] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
-  const [vendors, setVendors] = useState([]);
-  const [units, setUnits] = useState([]);
   // Modal states
   const [filterModal, setFilterModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,16 +53,6 @@ const DepartmentHeadHistory = () => {
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
-  };
-
-  const getVendor = (id) => {
-    const vendor = vendors.find((vendor) => vendor.id == id);
-    return vendor?.vendor_Name ? vendor.vendor_Name : "";
-  };
-
-  const getUnit = (id) => {
-    const unit = units.find((unit) => unit.id == id);
-    return unit?.name;
   };
 
   const handleFilterApply = ({ category, item_group }) => {
@@ -87,36 +79,19 @@ const DepartmentHeadHistory = () => {
       setIsLoading(false);
     }
   };
-  const fetchVendors = async () => {
-    try {
-      const response = await axios.get(`${apiKey}/vendors`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      console.log(response.data.data);
-      setVendors(response.data.data);
-    } catch (error) {
-      console.error(error);
-    }
+
+  const getVendor = (id) => {
+    const vendor = vendors.find((vendor) => vendor.id == id);
+    return vendor?.vendor_Name ? vendor.vendor_Name : "";
   };
-  const fetchUnits = async () => {
-    try {
-      const response = await axios.get(`${apiKey}/units`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      setUnits(response.data.units);
-    } catch (error) {
-      console.error(error);
-    }
+
+  const getUnit = (id) => {
+    const unit = units.find((unit) => unit.id == id);
+    return unit?.name;
   };
 
   useEffect(() => {
     fetchData();
-    fetchVendors();
-    fetchUnits();
   }, [authToken, branchID, selectedItemGroup, selectedCategory]);
 
   const renderItem = ({ item }) => {
