@@ -14,6 +14,8 @@ import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userBranchID } from "../../../atoms/userBranchId";
 import { userPassword } from "../../../atoms/userPassword";
+import { vendorsData } from "../../../atoms/vendorsData";
+import { unitsData } from "../../../atoms/unitsData";
 import PRCard from "../../../components/Cards/PRCard";
 import ModalHeader from "../../../components/Modals/PRModalHeader";
 import Search from "../../../components/Search";
@@ -47,8 +49,8 @@ const DepartmentHead = () => {
   const userPasscode = useRecoilValue(userPassword);
   // Data states
   const [data, setData] = useState([]);
-  const [vendors, setVendors] = useState([]);
-  const [units, setUnits] = useState([]);
+  const vendors = useRecoilValue(vendorsData);
+  const units = useRecoilValue(unitsData);
   const [selectedCardData, setSelectedCardData] = useState({});
   // Modal states
   const [modalVisible, setModalVisible] = useState(false);
@@ -80,11 +82,11 @@ const DepartmentHead = () => {
     setFilterModal(true);
   };
 
-  // GET VENDOR NAME AND UNIT NAME
   const getVendor = (id) => {
     const vendor = vendors.find((vendor) => vendor.id == id);
-    return vendor?.vendor_Name ? vendor.vendor_Name : "Select a supplier";
+    return vendor?.vendor_Name ? vendor.vendor_Name : "";
   };
+
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
     return unit?.name;
@@ -185,37 +187,6 @@ const DepartmentHead = () => {
   useEffect(() => {
     fetchData();
   }, [authToken, page, branchID, selectedCategory, selectedItemGroup]);
-
-  // FETCH VENDORS AND UNITS
-  useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const response = await axios.get(`${apiKey}/vendors`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setVendors(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const fetchUnits = async () => {
-      try {
-        const response = await axios.get(`${apiKey}/units`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setUnits(response.data.units);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchVendors();
-    fetchUnits();
-  }, [authToken]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
