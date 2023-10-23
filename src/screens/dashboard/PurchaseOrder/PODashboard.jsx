@@ -51,7 +51,6 @@ const PODashboard = () => {
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
 
-  // http://10.4.15.15:8006/api/purchase-order/1
   const handleCardPress = (id) => {
     setSelectedID(id);
     setModalVisible(true);

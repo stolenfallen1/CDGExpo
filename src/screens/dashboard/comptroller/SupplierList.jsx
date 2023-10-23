@@ -41,35 +41,35 @@ const SupplierList = () => {
       <ScrollView>
         {data.map((item) => (
           <Card key={item.id} containerStyle={customStyles.cardContainer}>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Supplier Name: </Text>
               <Text style={styles.inputText}>{item?.vendor?.vendor_Name}</Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Price: </Text>
               <Text style={styles.inputText}>{item?.canvas_item_amount}</Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Quantity: </Text>
               <Text style={styles.inputText}>{item?.canvas_Item_Qty}</Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Unit of Measurement: </Text>
               <Text style={styles.inputText}>{item?.unit?.name}</Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Discount: </Text>
               <Text style={styles.inputText}>
-                {(item?.canvas_item_discount_percent * 100).toFixed()}%
+                {item?.canvas_item_discount_percent}%
               </Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Vat Rate: </Text>
               <Text style={styles.inputText}>
-                {(item?.canvas_item_vat_rate * 100).toFixed()}%
+                {item?.canvas_item_vat_rate}%
               </Text>
             </View>
-            <View style={styles.inputContainer}>
+            <View style={customStyles.inputContainer}>
               <Text style={styles.inputTextBold}>Lead Time: </Text>
               <Text style={styles.inputText}>
                 {parseInt(item?.canvas_lead_time)}
@@ -84,10 +84,6 @@ const SupplierList = () => {
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-  },
   inputTextBold: {
     fontSize: 14,
     fontWeight: "bold",

@@ -40,8 +40,6 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
   };
 
   const handleSubmit = async () => {
-    // This function will submit the data to the backend
-    // approve-purchase-order
     Alert.prompt("Please enter your password:", "", (password) => {
       if (password === userPasscode) {
         try {

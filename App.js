@@ -27,6 +27,7 @@ import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 // Filter Modal imports
 import ModalFilter from "./src/components/ModalFilter";
 import { Ionicons } from "@expo/vector-icons";
+import ApprovedCanvas from "./src/screens/dashboard/comptroller/ApprovedCanvas";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -130,6 +131,11 @@ function App() {
               name="SupplierCanvasList"
               component={SupplierList}
               options={{ title: "List of Suppliers", presentation: "modal" }}
+            />
+            <Stack.Screen
+              name="CanvasHistoryDetails"
+              component={ApprovedCanvas}
+              options={{ title: "Approved Canvas", presentation: "modal" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

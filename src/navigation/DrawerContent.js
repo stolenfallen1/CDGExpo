@@ -21,6 +21,7 @@ const DrawerContent = ({ navigation }) => {
         },
       });
       navigation.navigate("Home");
+      // Add toast message here
     } catch (error) {
       console.error(error);
     }
