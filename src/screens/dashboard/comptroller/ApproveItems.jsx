@@ -249,6 +249,18 @@ const ApproveItems = () => {
                     </Text>
                   </View>
                   <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Discount: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.recommended_canvas?.canvas_item_discount_percent}%
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
+                    <Text style={customStyles.inputText}>Vat: </Text>
+                    <Text style={styles.textValue}>
+                      {item?.recommended_canvas?.canvas_item_vat_rate}%
+                    </Text>
+                  </View>
+                  <View style={customStyles.inputContainer}>
                     <Text style={customStyles.inputText}>
                       Recommended Supplier:{" "}
                     </Text>
