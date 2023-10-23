@@ -13,7 +13,6 @@ import ModalFilter from "../../components/ModalFilter";
 import { useNavigation } from "@react-navigation/native";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-// http://10.4.15.12:8004/api/canvas?details_id=13522
 
 const CanvasHitory = () => {
   const navigation = useNavigation();
@@ -95,7 +94,7 @@ const CanvasHitory = () => {
   };
 
   return (
-    <View>
+    <View style={{ paddingBottom: 110 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity

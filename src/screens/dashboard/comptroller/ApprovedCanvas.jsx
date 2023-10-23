@@ -16,6 +16,7 @@ import { unitsData } from "../../../atoms/unitsData";
 import ModalHeader from "../../../components/Modals/PRModalHeader";
 import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
+import SupplierModal from "../../../components/Modals/SupplierModal";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
@@ -28,7 +29,16 @@ const ApprovedCanvas = () => {
   // Data states
   const [data, setData] = useState([]);
   const units = useRecoilValue(unitsData);
+  const [selectedID, setSelectedID] = useState();
+  // Modal states
+  const [modalVisible, setModalVisible] = useState(false);
+  // Loading states
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleCardPress = (id) => {
+    setSelectedID(id);
+    setModalVisible(true);
+  };
 
   const getUnit = (id) => {
     const unit = units.find((unit) => unit.id == id);
@@ -58,7 +68,7 @@ const ApprovedCanvas = () => {
   }, [authToken, pr_id]);
 
   return (
-    <View>
+    <View style={{ paddingBottom: 165 }}>
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : data.length === 0 ? (
@@ -134,7 +144,10 @@ const ApprovedCanvas = () => {
                       {item?.recommended_canvas?.vendor?.vendor_Name}
                     </Text>
                   </View>
-                  <TouchableOpacity style={customStyles.inputContainer}>
+                  <TouchableOpacity
+                    style={customStyles.inputContainer}
+                    onPress={() => handleCardPress(item.id)}
+                  >
                     <Ionicons
                       name="eye"
                       color={"green"}
@@ -146,6 +159,11 @@ const ApprovedCanvas = () => {
               </Card>
             ))}
           </ScrollView>
+          <SupplierModal
+            modalVisible={modalVisible}
+            selectedID={selectedID}
+            closeModal={() => setModalVisible(false)}
+          />
         </>
       )}
     </View>
