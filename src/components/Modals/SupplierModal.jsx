@@ -23,25 +23,27 @@ const SupplierModal = ({ modalVisible, closeModal, selectedID }) => {
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
 
+  const fetchData = async () => {
+    if (!selectedID) return;
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiKey}/canvas?details_id=${selectedID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setData(response.data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          `${apiKey}/canvas?details_id=${selectedID}`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        setData(response.data.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchData();
   }, [authToken, selectedID]);
 

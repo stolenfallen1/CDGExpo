@@ -69,6 +69,7 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
   };
 
   const fetchData = async () => {
+    if (!selectedID) return;
     setIsLoading(true);
     try {
       const response = await axios.get(
