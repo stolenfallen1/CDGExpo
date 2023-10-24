@@ -16,8 +16,8 @@ import axios from "axios";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("test_comptroller");
-  const [password, setPassword] = useState("test_comptroller");
+  const [idnumber, setIdnumber] = useState("consultant");
+  const [password, setPassword] = useState("consultant");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
@@ -27,9 +27,6 @@ export default function LoginScreen() {
   const setUnitsData = useSetRecoilState(unitsData);
 
   const navigation = useNavigation();
-
-  // Fetch data to this api's and store to Recoil atom after login
-  // http://10.4.15.12:8004/api/vendors?per_page=-1 and http://10.4.15.12:8004/api/units?per_page=-1
 
   const handleLoginPress = async () => {
     try {

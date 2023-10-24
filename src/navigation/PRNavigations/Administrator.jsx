@@ -77,17 +77,17 @@ const AdminHistory = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => handlePress(data[item].id)}>
+      <TouchableOpacity onPress={() => handlePress(item.id)}>
         <PRCard
-          prId={data[item]?.pr_Document_Number}
-          transactionDate={data[item]?.pr_Transaction_Date}
-          requestingName={data[item]?.pr_RequestedBy}
-          warehouse={data[item]?.warehouse?.warehouse_description}
-          itemGroup={data[item]?.item_group?.name}
-          category={data[item]?.category?.name}
-          pr_status={data[item]?.status?.Status_description}
-          dateApproved={data[item]?.pr_Branch_Level1_ApprovedDate}
-          justification={data[item]?.pr_Justication}
+          prId={item?.pr_Document_Number}
+          transactionDate={item?.pr_Transaction_Date}
+          requestingName={item?.pr_RequestedBy}
+          warehouse={item?.warehouse?.warehouse_description}
+          itemGroup={item?.item_group?.name}
+          category={item?.category?.name}
+          pr_status={item?.status?.Status_description}
+          dateApproved={item?.pr_Branch_Level1_ApprovedDate}
+          justification={item?.pr_Justication}
         />
       </TouchableOpacity>
     );
@@ -118,9 +118,9 @@ const AdminHistory = () => {
         <Text style={customStyles.emptyText}>No results found</Text>
       ) : (
         <FlatList
-          data={Object.keys(data)}
-          keyExtractor={(key) => key}
+          data={data}
           renderItem={renderItem}
+          keyExtractor={(item) => item.id}
         />
       )}
     </View>

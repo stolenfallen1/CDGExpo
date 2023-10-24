@@ -27,6 +27,7 @@ import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 // Filter Modal imports
 import ModalFilter from "./src/components/ModalFilter";
 import ApprovedCanvas from "./src/screens/dashboard/comptroller/ApprovedCanvas";
+import ConsultantLogs from "./src/screens/dashboard/consultant/ConsultantLogs";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -117,6 +118,12 @@ function App() {
             <Stack.Screen
               name="AdminLogs"
               component={AdminLogs}
+              options={{ title: "Logs" }}
+            />
+            {/* Consultant Log routes */}
+            <Stack.Screen
+              name="ConsultantLogs"
+              component={ConsultantLogs}
               options={{ title: "Logs" }}
             />
             {/* Approve Items for Comptroller */}

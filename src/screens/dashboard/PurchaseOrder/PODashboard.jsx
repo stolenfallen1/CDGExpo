@@ -119,6 +119,12 @@ const PODashboard = () => {
     );
   };
 
+  const handleEndReached = () => {
+    if (data.length >= 10) {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <View style={{ paddingBottom: 150, backgroundColor: "#f7f7f7" }}>
       <POModal
@@ -156,6 +162,8 @@ const PODashboard = () => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
         />
       )}
     </View>
