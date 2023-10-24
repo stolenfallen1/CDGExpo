@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
 import { useRoute } from "@react-navigation/native";

@@ -1,6 +1,5 @@
 import { Text, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
-import React from "react";
 import { customStyles } from "../../styles/customStyles";
 import { useRecoilValue } from "recoil";
 import { userRoleState } from "../../atoms/userRoleState";

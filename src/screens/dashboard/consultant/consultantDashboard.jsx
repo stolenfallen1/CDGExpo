@@ -7,7 +7,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PRCard from "../../../components/Cards/PRCard";
 import Search from "../../../components/Search";
 import { useRecoilValue } from "recoil";

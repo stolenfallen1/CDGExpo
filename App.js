@@ -1,6 +1,6 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
-import { TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -26,7 +26,6 @@ import ApproveCompItems from "./src/screens/dashboard/comptroller/ApproveItems";
 import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 // Filter Modal imports
 import ModalFilter from "./src/components/ModalFilter";
-import { Ionicons } from "@expo/vector-icons";
 import ApprovedCanvas from "./src/screens/dashboard/comptroller/ApprovedCanvas";
 
 const Stack = createStackNavigator();

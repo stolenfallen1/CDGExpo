@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import React from "react";
 import { useRecoilValue } from "recoil";
 import { userRoleState } from "../../atoms/userRoleState";
 import DepartmentHead from "./departmentHead/DepartmentHead";

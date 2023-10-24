@@ -6,7 +6,7 @@ import {
   ScrollView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
 import { userBranchID } from "../../atoms/userBranchId";

@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, ActivityIndicator } from "react-native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { customStyles } from "../../styles/customStyles";
 import Modal from "react-native-modal";
 import { Button, Card, CheckBox } from "react-native-elements";

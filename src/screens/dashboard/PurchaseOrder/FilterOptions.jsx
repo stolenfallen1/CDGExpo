@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { Calendar } from "react-native-calendars";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";

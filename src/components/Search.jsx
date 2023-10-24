@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SearchFilter = () => {
   const [searchText, setSearchText] = useState("");

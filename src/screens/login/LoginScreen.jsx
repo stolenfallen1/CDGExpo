@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,8 +16,8 @@ import axios from "axios";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("test_comptroller");
-  const [password, setPassword] = useState("test_comptroller");
+  const [idnumber, setIdnumber] = useState("president");
+  const [password, setPassword] = useState("president");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);

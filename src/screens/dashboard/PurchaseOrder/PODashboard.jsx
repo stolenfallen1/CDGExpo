@@ -5,7 +5,7 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import POCard from "../../../components/Cards/POCard";
 import RNPickerSelect from "react-native-picker-select";
@@ -119,14 +119,13 @@ const PODashboard = () => {
     );
   };
 
-  const handleEndReached = () => {
-    if (data.length >= 10) {
-      setPage(page + 1);
-    }
-  };
-
   return (
     <View style={{ paddingBottom: 150, backgroundColor: "#f7f7f7" }}>
+      <POModal
+        modalVisible={modalVisible}
+        selectedID={selectedID}
+        closeModal={() => setModalVisible(false)}
+      />
       <FilterOptions
         selectedBranchID={selectedBranchId}
         onClose={handleFilterApply}
@@ -157,15 +156,8 @@ const PODashboard = () => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
         />
       )}
-      <POModal
-        modalVisible={modalVisible}
-        selectedID={selectedID}
-        closeModal={() => setModalVisible(false)}
-      />
     </View>
   );
 };

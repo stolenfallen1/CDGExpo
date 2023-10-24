@@ -1,4 +1,3 @@
-import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AdminDashboard from "../screens/dashboard/admin/adminDashboard";

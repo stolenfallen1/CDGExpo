@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useRecoilValue } from "recoil";
 import { userRoleState } from "../atoms/userRoleState";
