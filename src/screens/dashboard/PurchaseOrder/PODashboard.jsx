@@ -8,7 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import FilterOptions from "./FilterOptions";
 import POCard from "../../../components/Cards/POCard";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 import Search from "../../../components/Search";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
@@ -18,21 +18,6 @@ import POModal from "../../../components/Modals/POModal";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-
-const INPUT_ANDROID_STYLES = {
-  width: 76,
-  fontSize: 17,
-  borderBottomWidth: 2,
-  padding: 6,
-};
-
-const DROPDOWN_STYLES = {
-  inputAndroid: INPUT_ANDROID_STYLES,
-  inputIOS: {
-    ...INPUT_ANDROID_STYLES,
-  },
-};
-
 const PODashboard = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
@@ -139,15 +124,18 @@ const PODashboard = () => {
       <View style={customStyles.utilsContainer}>
         <Search />
         {branch?.length > 0 && (
-          <RNPickerSelect
-            value={selectedBranchId}
-            items={branch?.map((branches) => ({
-              label: branches?.abbreviation,
-              value: branches?.id,
+          <SelectDropdown
+            data={branch?.map((branches) => ({
+              id: branches?.id,
+              name: branches?.abbreviation,
             }))}
-            onValueChange={(value) => setSelectedBranchId(value)}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
+            defaultValueByIndex={0}
+            onSelect={(selectedBranch) =>
+              setSelectedBranchId(selectedBranch.id)
+            }
+            buttonTextAfterSelection={(selectedBranch) => selectedBranch.name}
+            rowTextForSelection={(item) => item.name}
+            renderDropdownIcon={() => {
               return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
           />
