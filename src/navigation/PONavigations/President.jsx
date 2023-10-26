@@ -3,7 +3,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../atoms/authTokenState";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 import Search from "../../components/Search";
 import POCard from "../../components/Cards/POCard";
 import { customStyles } from "../../styles/customStyles";
@@ -12,21 +12,6 @@ import FilterOptions from "../../screens/dashboard/PurchaseOrder/FilterOptions";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-
-const INPUT_ANDROID_STYLES = {
-  width: 76,
-  fontSize: 17,
-  borderBottomWidth: 2,
-  padding: 6,
-};
-
-const DROPDOWN_STYLES = {
-  inputAndroid: INPUT_ANDROID_STYLES,
-  inputIOS: {
-    ...INPUT_ANDROID_STYLES,
-  },
-};
-
 const President = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
@@ -106,16 +91,19 @@ const President = () => {
       <View style={customStyles.utilsContainer}>
         <Search />
         {branch?.length > 0 && (
-          <RNPickerSelect
-            value={selectedBranchId}
-            items={branch?.map((branches) => ({
-              label: branches?.abbreviation,
-              value: branches?.id,
+          <SelectDropdown
+            data={branch?.map((branches) => ({
+              id: branches?.id,
+              name: branches?.abbreviation,
             }))}
-            onValueChange={(value) => setSelectedBranchId(value)}
-            style={DROPDOWN_STYLES}
-            Icon={() => {
-              return <Ionicons name="chevron-down" size={18} color="black" />;
+            defaultValueByIndex={0}
+            onSelect={(selectedBranch) =>
+              setSelectedBranchId(selectedBranch.id)
+            }
+            buttonTextAfterSelection={(selectedBranch) => selectedBranch.name}
+            rowTextForSelection={(item) => item.name}
+            renderDropdownIcon={() => {
+              return <Ionicons name="chevron-down" size={18} color="gray" />;
             }}
           />
         )}

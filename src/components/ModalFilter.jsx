@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
 import axios from "axios";
@@ -13,20 +13,6 @@ import { userRoleState } from "../atoms/userRoleState";
 import { useRecoilValue } from "recoil";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-
-const INPUT_ANDROID_STYLES = {
-  fontSize: 16,
-  borderBottomWidth: 0.5,
-  paddingBottom: 6,
-};
-
-const DROPDOWN_STYLES = {
-  inputAndroid: INPUT_ANDROID_STYLES,
-  inputIOS: {
-    ...INPUT_ANDROID_STYLES,
-  },
-};
-
 const ModalFilter = ({ onSubmit, handleClose }) => {
   // Auth Token
   const authToken = useRecoilValue(authTokenState);
@@ -98,20 +84,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           ? Object.keys(branches).map((option, index) => (
               <View key={index} style={{ paddingVertical: 15 }}>
                 <Text style={styles.inputText}>Branch:</Text>
-                <RNPickerSelect
+                <SelectDropdown
                   key={option?.id}
-                  value={option?.id}
-                  items={branches?.branches.map((branch) => ({
-                    label: branch?.abbreviation,
-                    value: branch?.id,
+                  data={branches?.branches.map((branch) => ({
+                    id: branch.id,
+                    name: branch.abbreviation,
                   }))}
-                  onValueChange={setSelectedBranch}
-                  placeholder={{
-                    label: "Select Branch",
-                    value: "",
-                  }}
-                  style={DROPDOWN_STYLES}
-                  Icon={() => {
+                  onSelect={(selectedBranch) =>
+                    setSelectedBranch(selectedBranch.id)
+                  }
+                  defaultButtonText={"Select Branch"}
+                  buttonTextAfterSelection={(selectedBranch) =>
+                    selectedBranch.name
+                  }
+                  rowTextForSelection={(item) => item.name}
+                  renderDropdownIcon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
@@ -127,20 +114,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           ? Object.keys(departments).map((option, index) => (
               <View key={index} style={{ paddingVertical: 15 }}>
                 <Text style={styles.inputText}>Department:</Text>
-                <RNPickerSelect
+                <SelectDropdown
                   key={option?.id}
-                  value={option?.id}
-                  items={departments?.departments.map((dept) => ({
-                    label: dept?.warehouse_description,
-                    value: dept?.id,
+                  data={departments?.departments.map((dept) => ({
+                    id: dept.id,
+                    name: dept.warehouse_description,
                   }))}
-                  onValueChange={setSelectedDepartment}
-                  placeholder={{
-                    label: "Select Department",
-                    value: "",
-                  }}
-                  style={DROPDOWN_STYLES}
-                  Icon={() => {
+                  onSelect={(selectedDepartment) =>
+                    setSelectedDepartment(selectedDepartment.id)
+                  }
+                  defaultButtonText={"Select Department"}
+                  buttonTextAfterSelection={(selectedDepartment) =>
+                    selectedDepartment.name
+                  }
+                  rowTextForSelection={(item) => item.name}
+                  renderDropdownIcon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
@@ -153,20 +141,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         {Object.keys(itemGroups).map((option, index) => (
           <View key={index} style={{ paddingVertical: 15 }}>
             <Text style={styles.inputText}>Item Group:</Text>
-            <RNPickerSelect
+            <SelectDropdown
               key={option?.id}
-              value={option?.id}
-              items={itemGroups?.item_groups.map((item_group) => ({
-                label: item_group?.name,
-                value: item_group?.id,
+              data={itemGroups?.item_groups.map((item_group) => ({
+                id: item_group.id,
+                name: item_group.name,
               }))}
-              onValueChange={setSelectedItemGroup}
-              placeholder={{
-                label: "Select Item Group",
-                value: "",
-              }}
-              style={DROPDOWN_STYLES}
-              Icon={() => {
+              onSelect={(selectedItemGroup) =>
+                setSelectedItemGroup(selectedItemGroup.id)
+              }
+              defaultButtonText={"Select Item Group"}
+              buttonTextAfterSelection={(selectedItemGroup) =>
+                selectedItemGroup.name
+              }
+              rowTextForSelection={(item) => item.name}
+              renderDropdownIcon={() => {
                 return <Ionicons name="chevron-down" size={18} color="gray" />;
               }}
             />
@@ -176,20 +165,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         {Object.keys(categories).map((option, index) => (
           <View key={index} style={{ paddingVertical: 15 }}>
             <Text style={styles.inputText}>Categories:</Text>
-            <RNPickerSelect
+            <SelectDropdown
               key={option?.id}
-              value={option?.id}
-              items={categories?.categories.map((category) => ({
-                label: category?.name,
-                value: category?.id,
+              data={categories?.categories.map((category) => ({
+                id: category.id,
+                name: category.name,
               }))}
-              onValueChange={setSelectedCategory}
-              placeholder={{
-                label: "Select Category",
-                value: "",
-              }}
-              style={DROPDOWN_STYLES}
-              Icon={() => {
+              onSelect={(selectedCategory) =>
+                setSelectedCategory(selectedCategory.id)
+              }
+              defaultButtonText={"Select Category"}
+              buttonTextAfterSelection={(selectedCategory) =>
+                selectedCategory.name
+              }
+              rowTextForSelection={(item) => item.name}
+              renderDropdownIcon={() => {
                 return <Ionicons name="chevron-down" size={18} color="gray" />;
               }}
             />

@@ -24,24 +24,10 @@ import Toast from "react-native-root-toast";
 import ModalFilter from "../../../components/ModalFilter";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-
-const INPUT_ANDROID_STYLES = {
-  fontSize: 16,
-  borderBottomWidth: 0.5,
-  paddingBottom: 6,
-};
-
-const DROPDOWN_STYLES = {
-  inputAndroid: INPUT_ANDROID_STYLES,
-  inputIOS: {
-    ...INPUT_ANDROID_STYLES,
-  },
-};
-
 const DepartmentHead = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
@@ -280,25 +266,27 @@ const DepartmentHead = () => {
               </View>
               <View style={customStyles.inputContainer}>
                 <Text style={customStyles.inputText}>Preferred Supplier:</Text>
-                <RNPickerSelect
-                  value={item?.prepared_supplier_id}
-                  onValueChange={(value) => {
+                <SelectDropdown
+                  data={vendors?.map((vendor) => ({
+                    id: vendor.id,
+                    name: vendor.vendor_Name,
+                  }))}
+                  defaultValueByIndex={vendors.findIndex(
+                    (vendor) => vendor.id == item.prepared_supplier_id
+                  )}
+                  onSelect={(selectedVendor) => {
                     const updatedData = { ...selectedCardData };
                     updatedData.purchase_request_details[
                       index
-                    ].prepared_supplier_id = value;
+                    ].prepared_supplier_id = selectedVendor.id;
                     setSelectedCardData(updatedData);
                   }}
-                  items={vendors.map((vendor) => ({
-                    label: vendor.vendor_Name,
-                    value: vendor.id,
-                  }))}
-                  placeholder={{
-                    label: getVendor(item.prepared_supplier_id),
-                    value: item.prepared_supplier_id,
-                  }}
-                  style={DROPDOWN_STYLES}
-                  Icon={() => {
+                  defaultButtonText={getVendor(item.prepared_supplier_id)}
+                  buttonTextAfterSelection={(selectedVendor) =>
+                    selectedVendor.name
+                  }
+                  rowTextForSelection={(item) => item.name}
+                  renderDropdownIcon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
@@ -309,7 +297,7 @@ const DepartmentHead = () => {
                 <Text style={customStyles.inputText}>Approved Quantity: </Text>
                 <TextInput
                   keyboardType="numeric"
-                  placeholder={item?.item_Request_Qty}
+                  placeholder={item?.item_Request_Qty.toString()}
                   placeholderTextColor={"gray"}
                   style={customStyles.dataInput}
                   value={item?.item_Request_Department_Approved_Qty}
@@ -326,28 +314,30 @@ const DepartmentHead = () => {
                 <Text style={customStyles.inputText}>
                   Approved Unit of Measurement:
                 </Text>
-                <RNPickerSelect
-                  value={
-                    item?.item_Request_Department_Approved_UnitofMeasurement_Id
-                  }
-                  onValueChange={(value) => {
+                <SelectDropdown
+                  data={units?.map((unit) => ({
+                    id: unit.id,
+                    name: unit.name,
+                  }))}
+                  defaultValueByIndex={units.findIndex(
+                    (unit) =>
+                      unit.id ==
+                      item.item_Request_Department_Approved_UnitofMeasurement_Id
+                  )}
+                  onSelect={(selectedUnit) => {
                     const updatedData = { ...selectedCardData };
                     updatedData.purchase_request_details[
                       index
                     ].item_Request_Department_Approved_UnitofMeasurement_Id =
-                      value;
+                      selectedUnit.id;
                     setSelectedCardData(updatedData);
                   }}
-                  items={units.map((unit) => ({
-                    label: unit.name,
-                    value: unit.id,
-                  }))}
-                  placeholder={{
-                    label: getUnit(item.item_Request_UnitofMeasurement_Id),
-                    value: item.item_Request_UnitofMeasurement_Id,
-                  }}
-                  style={DROPDOWN_STYLES}
-                  Icon={() => {
+                  defaultButtonText={getUnit(
+                    item.item_Request_UnitofMeasurement_Id
+                  )}
+                  buttonTextAfterSelection={(selectedUnit) => selectedUnit.name}
+                  rowTextForSelection={(item) => item.name}
+                  renderDropdownIcon={() => {
                     return (
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
