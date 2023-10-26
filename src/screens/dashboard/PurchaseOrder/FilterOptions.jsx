@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 import { Calendar } from "react-native-calendars";
 import { useState, useEffect } from "react";
 import Modal from "react-native-modal";
@@ -13,27 +13,10 @@ import { Button } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { useRecoilValue } from "recoil";
+import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
-
-const INPUT_ANDROID_STYLES = {
-  fontSize: 17,
-  paddingHorizontal: 12,
-  paddingVertical: 8,
-  borderRadius: 4,
-  marginRight: 22,
-  borderColor: "#2596BE",
-  borderWidth: 1,
-};
-
-const DROPDOWN_STYLES = {
-  inputAndroid: INPUT_ANDROID_STYLES,
-  inputIOS: {
-    ...INPUT_ANDROID_STYLES,
-  },
-};
-
 const FilterOptions = ({ selectedBranchID, onClose }) => {
   // Auth token
   const authToken = useRecoilValue(authTokenState);
@@ -77,10 +60,20 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
     fetchFilterOptions();
   }, [authToken, selectedBranchID]);
 
-  const applyFilter = () => {
+  // Department Filter
+  const handleSelectDepartment = (selectedDepartment) => {
+    setSelectedDepartment(selectedDepartment.id);
+    onClose({
+      department: selectedDepartment.id,
+      item_group: selectedItemGroup,
+    });
+  };
+  // Item group Filter
+  const handleSelectItemGroup = (selectedItemGroup) => {
+    setSelectedItemGroup(selectedItemGroup.id);
     onClose({
       department: selectedDepartment,
-      item_group: selectedItemGroup,
+      item_group: selectedItemGroup.id,
     });
   };
 
@@ -88,32 +81,44 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
     <View style={styles.filterContainer}>
       <ScrollView horizontal={true}>
         {Object.keys(departments).map((option, index) => (
-          <RNPickerSelect
-            key={index}
-            value={option?.id}
-            placeholder={{ label: "Department", value: "" }}
-            items={departments?.departments.map((dept) => ({
-              label: dept?.warehouse_description,
-              value: dept?.id,
-            }))}
-            onValueChange={setSelectedDepartment}
-            onClose={applyFilter}
-            style={DROPDOWN_STYLES}
-          />
+          <View key={index}>
+            <SelectDropdown
+              key={option.id}
+              data={departments?.departments.map((dept) => ({
+                id: dept.id,
+                name: dept.warehouse_description,
+              }))}
+              onSelect={handleSelectDepartment}
+              defaultButtonText={"Department"}
+              buttonTextAfterSelection={(selectedDepartment) =>
+                selectedDepartment.name
+              }
+              rowTextForSelection={(item) => item.name}
+              renderDropdownIcon={() => {
+                return <Ionicons name="chevron-down" size={18} color="gray" />;
+              }}
+            />
+          </View>
         ))}
         {Object.keys(itemGroups).map((option, index) => (
-          <RNPickerSelect
-            key={index}
-            value={option?.id}
-            placeholder={{ label: "Inventory Group", value: "" }}
-            onValueChange={setSelectedItemGroup}
-            onClose={applyFilter}
-            items={itemGroups?.item_groups.map((item_group) => ({
-              label: item_group?.name,
-              value: item_group?.id,
-            }))}
-            style={DROPDOWN_STYLES}
-          />
+          <View key={index}>
+            <SelectDropdown
+              key={option.id}
+              data={itemGroups?.item_groups.map((item_group) => ({
+                id: item_group.id,
+                name: item_group.name,
+              }))}
+              onSelect={handleSelectItemGroup}
+              defaultButtonText={"Item Group"}
+              buttonTextAfterSelection={(selectedItemGroup) =>
+                selectedItemGroup.name
+              }
+              rowTextForSelection={(item) => item.name}
+              renderDropdownIcon={() => {
+                return <Ionicons name="chevron-down" size={18} color="gray" />;
+              }}
+            />
+          </View>
         ))}
         <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
           <Text style={styles.calendarText}>Transaction Start Date</Text>
