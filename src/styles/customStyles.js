@@ -42,23 +42,26 @@ export const customStyles = {
   },
   // FILTER BUTTON STYLE
   filterButton: {
-    width: "20%",
+    width: "27%",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#50C878",
+    marginLeft: 10,
     borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 13,
+    paddingHorizontal: 3,
   },
   // FILTER TEXT STYLE
   filterText: {
-    fontSize: 17,
+    fontSize: 15,
   },
   // FILTER POPUP MODAL STYLE
   filterModalContainer: {
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
-    marginTop: 160,
-    marginBottom: 160,
+    marginTop: 100,
+    marginBottom: 100,
   },
   // NO RESULTS TEXT STYLE
   emptyText: {
@@ -171,6 +174,8 @@ export const customStyles = {
     borderRadius: 5,
     borderWidth: 0.5,
     marginRight: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 3,
   },
   branchFilterText: {
     fontSize: 15,

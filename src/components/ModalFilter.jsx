@@ -82,8 +82,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         userRole === "comptroller" ||
         userRole === "consultant"
           ? Object.keys(branches).map((option, index) => (
-              <View key={index} style={{ paddingVertical: 15 }}>
-                <Text style={styles.inputText}>Branch:</Text>
+              <View key={index} style={{ paddingVertical: 5 }}>
+                <Text style={customStyles.inputText}>Branch:</Text>
                 <SelectDropdown
                   key={option?.id}
                   data={branches?.branches.map((branch) => ({
@@ -100,9 +100,11 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
                   rowTextForSelection={(item) => item.name}
                   renderDropdownIcon={() => {
                     return (
-                      <Ionicons name="chevron-down" size={18} color="gray" />
+                      <Ionicons name="chevron-down" size={18} color="#2596BE" />
                     );
                   }}
+                  buttonStyle={customStyles.buttonStyle}
+                  buttonTextStyle={customStyles.buttonTextStyle}
                 />
               </View>
             ))
@@ -112,8 +114,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         userRole === "comptroller" ||
         userRole === "consultant"
           ? Object.keys(departments).map((option, index) => (
-              <View key={index} style={{ paddingVertical: 15 }}>
-                <Text style={styles.inputText}>Department:</Text>
+              <View key={index} style={{ paddingVertical: 5 }}>
+                <Text style={customStyles.inputText}>Department:</Text>
                 <SelectDropdown
                   key={option?.id}
                   data={departments?.departments.map((dept) => ({
@@ -130,17 +132,19 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
                   rowTextForSelection={(item) => item.name}
                   renderDropdownIcon={() => {
                     return (
-                      <Ionicons name="chevron-down" size={18} color="gray" />
+                      <Ionicons name="chevron-down" size={18} color="#2596BE" />
                     );
                   }}
+                  buttonStyle={customStyles.buttonStyle}
+                  buttonTextStyle={customStyles.buttonTextStyle}
                 />
               </View>
             ))
           : null}
         {/* Item Group Dropdown */}
         {Object.keys(itemGroups).map((option, index) => (
-          <View key={index} style={{ paddingVertical: 15 }}>
-            <Text style={styles.inputText}>Item Group:</Text>
+          <View key={index} style={{ paddingVertical: 5 }}>
+            <Text style={customStyles.inputText}>Item Group:</Text>
             <SelectDropdown
               key={option?.id}
               data={itemGroups?.item_groups.map((item_group) => ({
@@ -156,15 +160,19 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               }
               rowTextForSelection={(item) => item.name}
               renderDropdownIcon={() => {
-                return <Ionicons name="chevron-down" size={18} color="gray" />;
+                return (
+                  <Ionicons name="chevron-down" size={18} color="#2596BE" />
+                );
               }}
+              buttonStyle={customStyles.buttonStyle}
+              buttonTextStyle={customStyles.buttonTextStyle}
             />
           </View>
         ))}
         {/* Category Dropdown */}
         {Object.keys(categories).map((option, index) => (
-          <View key={index} style={{ paddingVertical: 15 }}>
-            <Text style={styles.inputText}>Categories:</Text>
+          <View key={index} style={{ paddingVertical: 5 }}>
+            <Text style={customStyles.inputText}>Categories:</Text>
             <SelectDropdown
               key={option?.id}
               data={categories?.categories.map((category) => ({
@@ -180,8 +188,12 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
               }
               rowTextForSelection={(item) => item.name}
               renderDropdownIcon={() => {
-                return <Ionicons name="chevron-down" size={18} color="gray" />;
+                return (
+                  <Ionicons name="chevron-down" size={18} color="#2596BE" />
+                );
               }}
+              buttonStyle={customStyles.buttonStyle}
+              buttonTextStyle={customStyles.buttonTextStyle}
             />
           </View>
         ))}
@@ -191,7 +203,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             style={styles.calendarButton}
           >
             <Text>
-              Start Date <Ionicons name="calendar-outline" size={15} />
+              Start Date{" "}
+              <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -199,7 +212,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             style={styles.calendarButton}
           >
             <Text>
-              End Date <Ionicons name="calendar-outline" size={15} />
+              End Date{" "}
+              <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
         </View>
@@ -223,6 +237,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             onPress={() => setModalVisible(false)}
           />
         </Modal>
+      </View>
+      <View style={styles.buttonContainer}>
         <Button
           title={"Filter"}
           buttonStyle={customStyles.submitButton}
@@ -240,21 +256,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  inputText: {
-    fontWeight: "bold",
-    fontSize: 14,
-    marginBottom: 2,
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
   },
   calendarButton: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 4,
     marginRight: 22,
-    borderColor: "#2596BE",
-    borderWidth: 1,
+    borderWidth: 0.5,
   },
 });
 

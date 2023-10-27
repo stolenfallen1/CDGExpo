@@ -34,13 +34,12 @@ const SearchFilter = () => {
 const styles = StyleSheet.create({
   container: {
     width: "70%",
-    backgroundColor: "#fff",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#2596BE",
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 0.5,
-    borderRadius: 5,
   },
   searchIcon: {
     marginLeft: 10,
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     paddingVertical: 14,
     paddingHorizontal: 3,
   },
