@@ -34,7 +34,7 @@ export const customStyles = {
   // SEARCH AND FILTER CONTAINER STYLE
   utilsContainer: {
     flexDirection: "row",
-    marginTop: 30,
+    marginTop: 25,
     marginBottom: 13,
     paddingHorizontal: 15,
     flexDirection: "row",
@@ -133,5 +133,46 @@ export const customStyles = {
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 5,
+  },
+  /* Filter Options */
+  /* Select Dropdown Styling for Filter Options */
+  buttonStyle: {
+    width: 260,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 0.5,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  buttonTextStyle: {
+    color: "#000",
+    textAlign: "left",
+    fontSize: 15,
+  },
+  calendarButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
+    width: 175,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 0.5,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  calendarText: {
+    fontSize: 15,
+  },
+  /* Select Dropdown Branch Filter for Purchase Orders */
+  branchFilter: {
+    width: "27%",
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 0.5,
+    marginRight: 10,
+  },
+  branchFilterText: {
+    fontSize: 15,
   },
 };

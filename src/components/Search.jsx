@@ -1,11 +1,6 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 const SearchFilter = () => {
   const [searchText, setSearchText] = useState("");
@@ -16,29 +11,46 @@ const SearchFilter = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Search"
-        style={styles.searchInput}
-        value={searchText}
-        onChangeText={setSearchText}
-        onSubmitEditing={handleSearch}
-      />
+      <View style={styles.searchContainer}>
+        <Ionicons
+          name="search"
+          size={24}
+          color="#2596BE"
+          style={styles.searchIcon}
+        />
+        <TextInput
+          placeholder="Search"
+          placeholderTextColor={"#000"}
+          style={styles.searchInput}
+          value={searchText}
+          onChangeText={setSearchText}
+          onSubmitEditing={handleSearch}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: "70%",
+    backgroundColor: "#fff",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.5,
+    borderRadius: 5,
+  },
+  searchIcon: {
+    marginLeft: 10,
+    marginRight: 5,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginRight: 10,
-    borderWidth: 0.5,
-    borderRadius: 5,
+    paddingVertical: 14,
+    paddingHorizontal: 3,
   },
 });
 

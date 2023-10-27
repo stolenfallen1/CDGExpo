@@ -95,8 +95,12 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
               }
               rowTextForSelection={(item) => item.name}
               renderDropdownIcon={() => {
-                return <Ionicons name="chevron-down" size={18} color="gray" />;
+                return (
+                  <Ionicons name="chevron-down" size={18} color="#2596BE" />
+                );
               }}
+              buttonStyle={customStyles.buttonStyle}
+              buttonTextStyle={customStyles.buttonTextStyle}
             />
           </View>
         ))}
@@ -115,16 +119,28 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
               }
               rowTextForSelection={(item) => item.name}
               renderDropdownIcon={() => {
-                return <Ionicons name="chevron-down" size={18} color="gray" />;
+                return (
+                  <Ionicons name="chevron-down" size={18} color="#2596BE" />
+                );
               }}
+              buttonStyle={customStyles.buttonStyle}
+              buttonTextStyle={customStyles.buttonTextStyle}
             />
           </View>
         ))}
-        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
-          <Text style={styles.calendarText}>Transaction Start Date</Text>
+        <TouchableOpacity
+          onPress={calendarModal}
+          style={customStyles.calendarButton}
+        >
+          <Text style={customStyles.calendarText}>Start Date</Text>
+          <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={calendarModal} style={styles.calendarButton}>
-          <Text style={styles.calendarText}>Transaction End Date</Text>
+        <TouchableOpacity
+          onPress={calendarModal}
+          style={customStyles.calendarButton}
+        >
+          <Text style={customStyles.calendarText}>End Date</Text>
+          <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
       </ScrollView>
       <Modal isVisible={modalVisible}>
@@ -153,20 +169,8 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
 
 const styles = StyleSheet.create({
   filterContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     marginTop: 30,
-  },
-  calendarButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 4,
-    marginRight: 22,
-    borderColor: "#2596BE",
-    borderWidth: 1,
-  },
-  calendarText: {
-    fontSize: 17,
-    color: "lightgray",
   },
 });
 
