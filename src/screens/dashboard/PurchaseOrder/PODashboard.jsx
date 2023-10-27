@@ -136,8 +136,10 @@ const PODashboard = () => {
             buttonTextAfterSelection={(selectedBranch) => selectedBranch.name}
             rowTextForSelection={(item) => item.name}
             renderDropdownIcon={() => {
-              return <Ionicons name="chevron-down" size={18} color="gray" />;
+              return <Ionicons name="chevron-down" size={18} color="#2596BE" />;
             }}
+            buttonStyle={customStyles.branchFilter}
+            buttonTextStyle={customStyles.branchFilterText}
           />
         )}
       </View>
