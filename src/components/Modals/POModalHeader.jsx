@@ -42,7 +42,7 @@ const POModalHeader = ({
             <Text style={{ fontWeight: "400" }}> {requestedBy}</Text>
           </Text>
           <Text style={styles.modalTextInfo}>
-            Date Requested:
+            Date:
             <Text style={{ fontWeight: "400" }}> {dateRequested}</Text>
           </Text>
         </View>
