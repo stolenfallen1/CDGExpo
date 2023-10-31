@@ -8,7 +8,9 @@ import Search from "../../components/Search";
 import POCard from "../../components/Cards/POCard";
 import { customStyles } from "../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
+import Modal from "react-native-modal";
 import FilterOptions from "../../screens/dashboard/PurchaseOrder/FilterOptions";
+import TransactionHistory from "../../screens/dashboard/PurchaseOrder/TransactionHistory";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -18,12 +20,24 @@ const CorporateAdmin = () => {
   // Data states
   const [data, setData] = useState([]);
   const [branch, setBranch] = useState([]);
+  const [selectedID, setSelectedID] = useState();
   // Filter states
   const [selectedBranchId, setSelectedBranchId] = useState(1);
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  // Modal states
+  const [modalVisible, setModalVisible] = useState(false);
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleCardPress = (id) => {
+    setSelectedID(id);
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const fetchBranches = async () => {
     try {
@@ -68,7 +82,7 @@ const CorporateAdmin = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <POCard
           poId={item?.po_Document_number}
           prId={item?.pr_Request_id}
@@ -121,6 +135,12 @@ const CorporateAdmin = () => {
           keyExtractor={(item) => item.id}
         />
       )}
+      <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
+        <TransactionHistory
+          selectedID={selectedID}
+          toggleModal={() => setModalVisible(false)}
+        />
+      </Modal>
     </View>
   );
 };
