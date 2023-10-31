@@ -2,7 +2,7 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import { authTokenState } from "../../../atoms/authTokenState.js";
 import { useRecoilValue } from "recoil";
-import { Button } from "react-native-elements";
+import { Button, Card } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
 import ModalHeader from "../../../components/Modals/POModalHeader.jsx";
 import axios from "axios";
@@ -62,7 +62,44 @@ const TransactionHistory = ({ selectedID, toggleModal }) => {
               ).toLocaleDateString()}
             />
           </View>
-          <ScrollView></ScrollView>
+          <ScrollView
+            style={{ borderTopWidth: 1, borderTopColor: "lightgrey" }}
+          >
+            {data?.details?.map((item, index) => (
+              <Card key={index} containerStyle={customStyles.cardContainer}>
+                <View style={customStyles.inputContainer}>
+                  <Text style={customStyles.inputText}>Item Name: </Text>
+                  <Text style={customStyles.dataInput}>
+                    {item?.item?.item_name}
+                  </Text>
+                </View>
+                <View style={customStyles.inputContainer}>
+                  <Text style={customStyles.inputText}>Quantity: </Text>
+                  <Text style={customStyles.dataInput}>
+                    {item?.po_Detail_item_qty}
+                  </Text>
+                </View>
+                <View style={customStyles.inputContainer}>
+                  <Text style={customStyles.inputText}>
+                    Unit of Measurement:{" "}
+                  </Text>
+                  <Text style={customStyles.dataInput}>{item?.unit?.name}</Text>
+                </View>
+                <View style={customStyles.inputContainer}>
+                  <Text style={customStyles.inputText}>Price: </Text>
+                  <Text style={customStyles.dataInput}>
+                    {item?.purchase_request_detail?.item_ListCost}
+                  </Text>
+                </View>
+                <View style={customStyles.inputContainer}>
+                  <Text style={customStyles.inputText}>Total Cost: </Text>
+                  <Text style={customStyles.dataInput}>
+                    {item?.po_Detail_net_amount}
+                  </Text>
+                </View>
+              </Card>
+            ))}
+          </ScrollView>
           <Button
             title={"Back"}
             buttonStyle={customStyles.cancelButton}
