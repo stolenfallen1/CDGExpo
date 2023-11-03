@@ -180,4 +180,15 @@ export const customStyles = {
   branchFilterText: {
     fontSize: 15,
   },
+  /* Load more button and text styles */
+  loadMoreButton: {
+    padding: 10,
+    alignItems: "center",
+    marginVertical: 10,
+    marginHorizontal: 20,
+  },
+  loadMoreText: {
+    fontSize: 16,
+    color: "#0000ff",
+  },
 };

@@ -3,7 +3,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
@@ -69,7 +69,7 @@ const Comptroller = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=2`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=2`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -110,12 +110,12 @@ const Comptroller = () => {
           requestingName={item?.user?.name}
           justification={item?.purchase_request?.pr_Justication}
         />
-        {index === data.length - 1 && data.length >= 10 && (
+        {index === data.length - 1 && data.length >= 15 && (
           <TouchableOpacity
             onPress={handleLoadMore}
-            style={styles.loadMoreButton}
+            style={customStyles.loadMoreButton}
           >
-            <Text style={styles.loadMoreText}>Load More...</Text>
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
           </TouchableOpacity>
         )}
       </TouchableOpacity>
@@ -123,7 +123,7 @@ const Comptroller = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 200, backgroundColor: "#f7f7f7" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <FilterOptions
         selectedBranchID={selectedBranchId}
         onClose={handleFilterApply}
@@ -167,21 +167,8 @@ const Comptroller = () => {
           toggleModal={() => setModalVisible(false)}
         />
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  loadMoreButton: {
-    padding: 10,
-    alignItems: "center",
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  loadMoreText: {
-    fontSize: 16,
-    color: "#0000ff",
-  },
-});
 
 export default Comptroller;
