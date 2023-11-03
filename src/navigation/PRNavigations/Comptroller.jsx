@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  SafeAreaView,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
@@ -20,6 +26,8 @@ const CanvasHitory = () => {
   const authToken = useRecoilValue(authTokenState);
   // Data states
   const [data, setData] = useState([]);
+  // Pagination states
+  const [page, setPage] = useState(1);
   // Modal states
   const [filterModal, setFilterModal] = useState(false);
   // Filter states
@@ -51,7 +59,7 @@ const CanvasHitory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${apiKey}/purchase-request?page=1&per_page=10&tab=7&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
+          `${apiKey}/purchase-request?page=${page}&per_page=15&tab=7&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -68,13 +76,18 @@ const CanvasHitory = () => {
     fetchData();
   }, [
     authToken,
+    page,
     selectedBranch,
     selectedDepartment,
     selectedCategory,
     selectedItemGroup,
   ]);
 
-  const renderItem = ({ item }) => {
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
       // To Continue since no data to test to
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
@@ -89,12 +102,20 @@ const CanvasHitory = () => {
           dateApproved={item?.pr_Branch_Level1_ApprovedDate}
           justification={item?.pr_Justication}
         />
+        {index === data.length - 1 && data.length >= 15 && (
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            style={customStyles.loadMoreButton}
+          >
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={{ paddingBottom: 110 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
@@ -123,7 +144,7 @@ const CanvasHitory = () => {
           keyExtractor={(item) => item.id}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

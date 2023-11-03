@@ -1,6 +1,7 @@
 import {
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
   TextInput,
   Text,
   View,
@@ -196,7 +197,7 @@ const DepartmentHead = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 90 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
@@ -372,7 +373,7 @@ const DepartmentHead = () => {
           />
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

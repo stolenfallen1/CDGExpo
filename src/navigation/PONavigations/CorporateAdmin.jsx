@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  SafeAreaView,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
@@ -21,6 +27,8 @@ const CorporateAdmin = () => {
   const [data, setData] = useState([]);
   const [branch, setBranch] = useState([]);
   const [selectedID, setSelectedID] = useState();
+  // Pagination states
+  const [page, setPage] = useState(1);
   // Filter states
   const [selectedBranchId, setSelectedBranchId] = useState(1);
   const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -61,7 +69,7 @@ const CorporateAdmin = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-orders?page=1&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=4`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=4`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -78,9 +86,19 @@ const CorporateAdmin = () => {
   useEffect(() => {
     fetchBranches();
     fetchData();
-  }, [authToken, selectedBranchId, selectedDepartment, selectedItemGroup]);
+  }, [
+    authToken,
+    page,
+    selectedBranchId,
+    selectedDepartment,
+    selectedItemGroup,
+  ]);
 
-  const renderItem = ({ item }) => {
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <POCard
@@ -92,12 +110,20 @@ const CorporateAdmin = () => {
           requestingName={item?.user?.name}
           justification={item?.purchase_request?.pr_Justication}
         />
+        {index === data.length - 1 && data.length >= 15 && (
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            style={customStyles.loadMoreButton}
+          >
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     );
   };
 
   return (
-    <View>
+    <SafeAreaView style={{ flex: 1 }}>
       <FilterOptions
         selectedBranchID={selectedBranchId}
         onClose={handleFilterApply}
@@ -141,7 +167,7 @@ const CorporateAdmin = () => {
           toggleModal={() => setModalVisible(false)}
         />
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

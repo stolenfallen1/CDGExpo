@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useState, useEffect } from "react";
@@ -33,6 +34,8 @@ const DepartmentHeadHistory = () => {
   // Data states
   const [data, setData] = useState([]);
   const [selectedCardData, setSelectedCardData] = useState({});
+  // Pagination states
+  const [page, setPage] = useState(1);
   // Modal states
   const [filterModal, setFilterModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,7 +68,7 @@ const DepartmentHeadHistory = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=1&per_page=10&tab=2&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=2&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -92,9 +95,13 @@ const DepartmentHeadHistory = () => {
 
   useEffect(() => {
     fetchData();
-  }, [authToken, branchID, selectedItemGroup, selectedCategory]);
+  }, [authToken, page, branchID, selectedItemGroup, selectedCategory]);
 
-  const renderItem = ({ item }) => {
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item)}>
         <PRCard
@@ -109,12 +116,20 @@ const DepartmentHeadHistory = () => {
           dateApproved={item?.pr_DepartmentHead_ApprovedDate}
           justification={item?.pr_Justication}
         />
+        {index === data.length - 1 && data.length >= 15 && (
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            style={customStyles.loadMoreButton}
+          >
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={{ paddingBottom: 110 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
@@ -193,7 +208,7 @@ const DepartmentHeadHistory = () => {
           onPress={toggleModal}
         />
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
