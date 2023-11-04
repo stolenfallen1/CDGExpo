@@ -157,7 +157,7 @@ const DepartmentHead = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=1&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -175,7 +175,11 @@ const DepartmentHead = () => {
     fetchData();
   }, [authToken, page, branchID, selectedCategory, selectedItemGroup]);
 
-  const renderItem = ({ item }) => (
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
       <PRCard
         prId={item?.pr_Document_Number}
@@ -187,14 +191,16 @@ const DepartmentHead = () => {
         justification={item?.pr_Justication}
         cardKey={item?.id}
       />
+      {index === data.length - 1 && data.length >= 15 && (
+        <TouchableOpacity
+          onPress={handleLoadMore}
+          style={customStyles.loadMoreButton}
+        >
+          <Text style={customStyles.loadMoreText}>Load More...</Text>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
-
-  const handleEndReached = () => {
-    if (data.length >= 10) {
-      setPage(page + 1);
-    }
-  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -224,8 +230,6 @@ const DepartmentHead = () => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
         />
       )}
       {/* ITEM CARD DISPLAY MODAL */}

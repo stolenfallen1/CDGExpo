@@ -3,6 +3,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -59,7 +60,7 @@ const ComptrollerDashboard = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -84,7 +85,11 @@ const ComptrollerDashboard = () => {
     selectedItemGroup,
   ]);
 
-  const renderItem = ({ item }) => {
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <PRCard
@@ -98,18 +103,20 @@ const ComptrollerDashboard = () => {
           dateApproved={item?.pr_Branch_Level1_ApprovedDate}
           justification={item?.pr_Justication}
         />
+        {index === data.length - 1 && data.length >= 15 && (
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            style={customStyles.loadMoreButton}
+          >
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     );
   };
 
-  const handleEndReached = () => {
-    if (data.length >= 10) {
-      setPage(page + 1);
-    }
-  };
-
   return (
-    <View style={{ paddingBottom: 78 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
@@ -136,11 +143,9 @@ const ComptrollerDashboard = () => {
           data={data}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
