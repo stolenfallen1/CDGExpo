@@ -4,6 +4,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  SafeAreaView,
   Alert,
   ActivityIndicator,
 } from "react-native";
@@ -156,7 +157,7 @@ const ConsultantDashboard = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=10&tab=1&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=1&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -187,7 +188,11 @@ const ConsultantDashboard = () => {
     selectedItemGroup,
   ]);
 
-  const renderItem = ({ item }) => (
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => handleCardPress(item, item.id)}>
       <PRCard
         prId={item?.pr_Document_Number}
@@ -199,17 +204,19 @@ const ConsultantDashboard = () => {
         justification={item?.pr_Justication}
         cardKey={item?.id}
       />
+      {index === data.length - 1 && data.length >= 15 && (
+        <TouchableOpacity
+          onPress={handleLoadMore}
+          style={customStyles.loadMoreButton}
+        >
+          <Text style={customStyles.loadMoreText}>Load More...</Text>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 
-  const handleEndReached = () => {
-    if (data.length >= 10) {
-      setPage(page + 1);
-    }
-  };
-
   return (
-    <View style={{ paddingBottom: 185 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={customStyles.utilsContainer}>
         <Search />
         <TouchableOpacity
@@ -236,8 +243,6 @@ const ConsultantDashboard = () => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
         />
       )}
       <Modal isVisible={modalVisible} style={customStyles.modalContainer}>
@@ -333,7 +338,7 @@ const ConsultantDashboard = () => {
           />
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

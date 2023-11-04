@@ -3,6 +3,7 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
+  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -63,7 +64,7 @@ const PODashboard = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-orders?page=${page}&per_page=10&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=1`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -88,7 +89,11 @@ const PODashboard = () => {
     selectedItemGroup,
   ]);
 
-  const renderItem = ({ item }) => {
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity onPress={() => handleCardPress(item.id)}>
         <POCard
@@ -100,18 +105,20 @@ const PODashboard = () => {
           requestingName={item?.user?.name}
           justification={item?.purchase_request?.pr_Justication}
         />
+        {index === data.length - 1 && data.length >= 15 && (
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            style={customStyles.loadMoreButton}
+          >
+            <Text style={customStyles.loadMoreText}>Load More...</Text>
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     );
   };
 
-  const handleEndReached = () => {
-    if (data.length >= 10) {
-      setPage(page + 1);
-    }
-  };
-
   return (
-    <View style={{ paddingBottom: 150, backgroundColor: "#f7f7f7" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <POModal
         modalVisible={modalVisible}
         selectedID={selectedID}
@@ -152,11 +159,9 @@ const PODashboard = () => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
