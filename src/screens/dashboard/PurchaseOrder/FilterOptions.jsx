@@ -26,13 +26,22 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
   // Selected Filter Options state
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
-  // Selected date state
-  const [selected, setSelected] = useState("");
   // Calendar modal state
-  const [modalVisible, setModalVisible] = useState(false);
+  const [requestedDateModal, setRequestedDateModal] = useState(false);
+  const [requiredDateModal, setRequiredDateModal] = useState(false);
+  // Selected date state
+  // start date = requested_date
+  // end date = required_date
+  // sample format for both are = year-month-day (2023-11-6)
+  const [requestDate, setRequestedDate] = useState("");
+  const [requiredDate, setRequiredDate] = useState("");
 
-  const calendarModal = () => {
-    setModalVisible(true);
+  const requestedDateCalendar = () => {
+    setRequestedDateModal(true);
+  };
+
+  const requiredDateCalendar = () => {
+    setRequiredDateModal(true);
   };
 
   const fetchFilterOptions = async () => {
@@ -129,28 +138,33 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           </View>
         ))}
         <TouchableOpacity
-          onPress={calendarModal}
+          onPress={requestedDateCalendar}
           style={customStyles.calendarButton}
         >
-          <Text style={customStyles.calendarText}>Start Date</Text>
+          <Text style={customStyles.calendarText}>
+            {requestDate === "" ? "Requested Date" : requestDate}
+          </Text>
           <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={calendarModal}
+          onPress={requiredDateCalendar}
           style={customStyles.calendarButton}
         >
-          <Text style={customStyles.calendarText}>End Date</Text>
+          <Text style={customStyles.calendarText}>
+            {requiredDate === "" ? "Required Date" : requiredDate}
+          </Text>
           <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
       </ScrollView>
-      <Modal isVisible={modalVisible}>
+      {/* Requested Date Calendar Modal */}
+      <Modal isVisible={requestedDateModal}>
         <Calendar
           style={{ borderRadius: 10 }}
           onDayPress={(day) => {
-            setSelected(day.dateString);
+            setRequestedDate(day.dateString);
           }}
           markedDates={{
-            [selected]: {
+            [requestDate]: {
               selected: true,
               disableTouchEvent: true,
               selectedDotColor: "orange",
@@ -160,7 +174,28 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
         <Button
           title={"Back"}
           buttonStyle={customStyles.cancelButton}
-          onPress={() => setModalVisible(false)}
+          onPress={() => setRequestedDateModal(false)}
+        />
+      </Modal>
+      {/* Required Date Calendar Modal */}
+      <Modal isVisible={requiredDateModal}>
+        <Calendar
+          style={{ borderRadius: 10 }}
+          onDayPress={(day) => {
+            setRequiredDate(day.dateString);
+          }}
+          markedDates={{
+            [requiredDate]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedDotColor: "orange",
+            },
+          }}
+        />
+        <Button
+          title={"Back"}
+          buttonStyle={customStyles.cancelButton}
+          onPress={() => setRequiredDateModal(false)}
         />
       </Modal>
     </View>

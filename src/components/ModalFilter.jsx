@@ -29,12 +29,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
   // Calendar modal state
-  const [modalVisible, setModalVisible] = useState(false);
+  const [requestedDateModal, setRequestedDateModal] = useState(false);
+  const [requiredDateModal, setRequiredDateModal] = useState(false);
   // Selected date state
-  const [selected, setSelected] = useState("");
+  // start date = requested_date
+  // end date = required_date
+  // sample format for both are = year-month-day (2023-11-6)
+  const [requestDate, setRequestedDate] = useState("");
+  const [requiredDate, setRequiredDate] = useState("");
 
-  const calendarModal = () => {
-    setModalVisible(true);
+  const requestedDateCalendar = () => {
+    setRequestedDateModal(true);
+  };
+
+  const requiredDateCalendar = () => {
+    setRequiredDateModal(true);
   };
 
   const handleApplyButtonPress = () => {
@@ -199,32 +208,33 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         ))}
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <TouchableOpacity
-            onPress={calendarModal}
+            onPress={requestedDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              Start Date{" "}
+              {requestDate === "" ? "Requested Date" : requestDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={calendarModal}
+            onPress={requiredDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              End Date{" "}
+              {requiredDate === "" ? "Required Date" : requiredDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
         </View>
-        <Modal isVisible={modalVisible}>
+        {/* Requested Date Calendar Modal */}
+        <Modal isVisible={requestedDateModal}>
           <Calendar
             style={{ borderRadius: 10 }}
             onDayPress={(day) => {
-              setSelected(day.dateString);
+              setRequestedDate(day.dateString);
             }}
             markedDates={{
-              [selected]: {
+              [requestDate]: {
                 selected: true,
                 disableTouchEvent: true,
                 selectedDotColor: "orange",
@@ -234,7 +244,28 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           <Button
             title={"Back"}
             buttonStyle={customStyles.cancelButton}
-            onPress={() => setModalVisible(false)}
+            onPress={() => setRequestedDateModal(false)}
+          />
+        </Modal>
+        {/* Required Date Calendar Modal */}
+        <Modal isVisible={requiredDateModal}>
+          <Calendar
+            style={{ borderRadius: 10 }}
+            onDayPress={(day) => {
+              setRequiredDate(day.dateString);
+            }}
+            markedDates={{
+              [requiredDate]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: "orange",
+              },
+            }}
+          />
+          <Button
+            title={"Back"}
+            buttonStyle={customStyles.cancelButton}
+            onPress={() => setRequiredDateModal(false)}
           />
         </Modal>
       </View>
