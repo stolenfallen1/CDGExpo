@@ -27,21 +27,18 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
   // Calendar modal state
-  const [requestedDateModal, setRequestedDateModal] = useState(false);
-  const [requiredDateModal, setRequiredDateModal] = useState(false);
+  const [startDateModal, setStartDateModal] = useState(false);
+  const [endDateModal, setEndDateModal] = useState(false);
   // Selected date state
-  // start date = requested_date
-  // end date = required_date
-  // sample format for both are = year-month-day (2023-11-6)
-  const [requestDate, setRequestedDate] = useState("");
-  const [requiredDate, setRequiredDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const requestedDateCalendar = () => {
-    setRequestedDateModal(true);
+  const startDateCalendar = () => {
+    setStartDateModal(true);
   };
 
-  const requiredDateCalendar = () => {
-    setRequiredDateModal(true);
+  const endDateCalendar = () => {
+    setEndDateModal(true);
   };
 
   const fetchFilterOptions = async () => {
@@ -75,6 +72,8 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
     onClose({
       department: selectedDepartment.id,
       item_group: selectedItemGroup,
+      start_date: startDate,
+      end_date: endDate,
     });
   };
   // Item group Filter
@@ -83,6 +82,30 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
     onClose({
       department: selectedDepartment,
       item_group: selectedItemGroup.id,
+      start_date: startDate,
+      end_date: endDate,
+    });
+  };
+
+  // Start Date Filter
+  const handleSelectRequestedDate = (date) => {
+    setStartDate(date);
+    onClose({
+      department: selectedDepartment,
+      item_group: selectedItemGroup,
+      start_date: date,
+      end_date: endDate,
+    });
+  };
+
+  // End Date Filter
+  const handleSelectRequiredDate = (date) => {
+    setEndDate(date);
+    onClose({
+      department: selectedDepartment,
+      item_group: selectedItemGroup,
+      start_date: startDate,
+      end_date: date,
     });
   };
 
@@ -138,33 +161,33 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           </View>
         ))}
         <TouchableOpacity
-          onPress={requestedDateCalendar}
+          onPress={startDateCalendar}
           style={customStyles.calendarButton}
         >
           <Text style={customStyles.calendarText}>
-            {requestDate === "" ? "Requested Date" : requestDate}
+            {startDate === "" ? "Start Date" : startDate}
           </Text>
           <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={requiredDateCalendar}
+          onPress={endDateCalendar}
           style={customStyles.calendarButton}
         >
           <Text style={customStyles.calendarText}>
-            {requiredDate === "" ? "Required Date" : requiredDate}
+            {endDate === "" ? "End Date" : endDate}
           </Text>
           <Ionicons name="calendar-outline" size={18} color="#2596BE" />
         </TouchableOpacity>
       </ScrollView>
-      {/* Requested Date Calendar Modal */}
-      <Modal isVisible={requestedDateModal}>
+      {/* Start Date Calendar Modal */}
+      <Modal isVisible={startDateModal}>
         <Calendar
           style={{ borderRadius: 10 }}
           onDayPress={(day) => {
-            setRequestedDate(day.dateString);
+            setStartDate(day.dateString);
           }}
           markedDates={{
-            [requestDate]: {
+            [startDate]: {
               selected: true,
               disableTouchEvent: true,
               selectedDotColor: "orange",
@@ -172,20 +195,28 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           }}
         />
         <Button
+          title={"Apply"}
+          buttonStyle={customStyles.submitButton}
+          onPress={() => {
+            handleSelectRequestedDate(startDate);
+            setStartDateModal(false);
+          }}
+        />
+        <Button
           title={"Back"}
           buttonStyle={customStyles.cancelButton}
-          onPress={() => setRequestedDateModal(false)}
+          onPress={() => setStartDateModal(false)}
         />
       </Modal>
-      {/* Required Date Calendar Modal */}
-      <Modal isVisible={requiredDateModal}>
+      {/* End Date Calendar Modal */}
+      <Modal isVisible={endDateModal}>
         <Calendar
           style={{ borderRadius: 10 }}
           onDayPress={(day) => {
-            setRequiredDate(day.dateString);
+            setEndDate(day.dateString);
           }}
           markedDates={{
-            [requiredDate]: {
+            [endDate]: {
               selected: true,
               disableTouchEvent: true,
               selectedDotColor: "orange",
@@ -193,9 +224,17 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           }}
         />
         <Button
+          title={"Apply"}
+          buttonStyle={customStyles.submitButton}
+          onPress={() => {
+            handleSelectRequiredDate(endDate);
+            setEndDateModal(false);
+          }}
+        />
+        <Button
           title={"Back"}
           buttonStyle={customStyles.cancelButton}
-          onPress={() => setRequiredDateModal(false)}
+          onPress={() => setEndDateModal(false)}
         />
       </Modal>
     </View>

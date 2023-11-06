@@ -145,7 +145,19 @@ const AdminDashboard = () => {
   };
 
   // FILTER DATA
-  const handleFilterApply = ({ branch, department, category, item_group }) => {
+  const handleFilterApply = ({
+    branch,
+    department,
+    category,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
+    // The params for dates are below
+    // requested_date = start_date
+    // required_date = end_date
+    console.log(start_date);
+    console.log(end_date);
     setSelectedBranch(branch);
     setSelectedDepartment(department);
     setSelectedCategory(category);

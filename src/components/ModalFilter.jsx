@@ -29,21 +29,21 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
   // Calendar modal state
-  const [requestedDateModal, setRequestedDateModal] = useState(false);
-  const [requiredDateModal, setRequiredDateModal] = useState(false);
+  const [startDateModal, setStartDateModal] = useState(false);
+  const [endDateModal, setEndDateModal] = useState(false);
   // Selected date state
   // start date = requested_date
   // end date = required_date
   // sample format for both are = year-month-day (2023-11-6)
-  const [requestDate, setRequestedDate] = useState("");
-  const [requiredDate, setRequiredDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const requestedDateCalendar = () => {
-    setRequestedDateModal(true);
+  const startDateCalendar = () => {
+    setStartDateModal(true);
   };
 
-  const requiredDateCalendar = () => {
-    setRequiredDateModal(true);
+  const endDateCalendar = () => {
+    setEndDateModal(true);
   };
 
   const handleApplyButtonPress = () => {
@@ -52,6 +52,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
       department: selectedDepartment,
       category: selectedCategory,
       item_group: selectedItemGroup,
+      start_date: startDate,
+      end_date: endDate,
     });
   };
 
@@ -208,33 +210,33 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
         ))}
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <TouchableOpacity
-            onPress={requestedDateCalendar}
+            onPress={startDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              {requestDate === "" ? "Requested Date" : requestDate} {""}
+              {startDate === "" ? "Start Date" : startDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={requiredDateCalendar}
+            onPress={endDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              {requiredDate === "" ? "Required Date" : requiredDate} {""}
+              {endDate === "" ? "End Date" : endDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
         </View>
-        {/* Requested Date Calendar Modal */}
-        <Modal isVisible={requestedDateModal}>
+        {/* Start Date Calendar Modal */}
+        <Modal isVisible={startDateModal}>
           <Calendar
             style={{ borderRadius: 10 }}
             onDayPress={(day) => {
-              setRequestedDate(day.dateString);
+              setStartDate(day.dateString);
             }}
             markedDates={{
-              [requestDate]: {
+              [startDate]: {
                 selected: true,
                 disableTouchEvent: true,
                 selectedDotColor: "orange",
@@ -244,18 +246,18 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           <Button
             title={"Back"}
             buttonStyle={customStyles.cancelButton}
-            onPress={() => setRequestedDateModal(false)}
+            onPress={() => setStartDateModal(false)}
           />
         </Modal>
-        {/* Required Date Calendar Modal */}
-        <Modal isVisible={requiredDateModal}>
+        {/* End Date Calendar Modal */}
+        <Modal isVisible={endDateModal}>
           <Calendar
             style={{ borderRadius: 10 }}
             onDayPress={(day) => {
-              setRequiredDate(day.dateString);
+              setEndDate(day.dateString);
             }}
             markedDates={{
-              [requiredDate]: {
+              [endDate]: {
                 selected: true,
                 disableTouchEvent: true,
                 selectedDotColor: "orange",
@@ -265,7 +267,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           <Button
             title={"Back"}
             buttonStyle={customStyles.cancelButton}
-            onPress={() => setRequiredDateModal(false)}
+            onPress={() => setEndDateModal(false)}
           />
         </Modal>
       </View>

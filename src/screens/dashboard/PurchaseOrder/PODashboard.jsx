@@ -55,7 +55,17 @@ const PODashboard = () => {
     }
   };
 
-  const handleFilterApply = ({ department, item_group }) => {
+  const handleFilterApply = ({
+    department,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
+    // The params for dates are below
+    // start_date = start_date
+    // end_date = end_date
+    console.log(start_date);
+    console.log(end_date);
     setSelectedDepartment(department);
     setSelectedItemGroup(item_group);
   };
