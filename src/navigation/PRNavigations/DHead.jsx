@@ -42,6 +42,8 @@ const DepartmentHeadHistory = () => {
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,9 +60,16 @@ const DepartmentHeadHistory = () => {
     setModalVisible(!modalVisible);
   };
 
-  const handleFilterApply = ({ category, item_group }) => {
+  const handleFilterApply = ({
+    category,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
     setSelectedCategory(category);
     setSelectedItemGroup(item_group);
+    setSelectedStartDate(start_date);
+    setSelectedEndDate(end_date);
     setFilterModal(false);
   };
 
@@ -68,7 +77,7 @@ const DepartmentHeadHistory = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=2&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=2&branch=${branchID}&item_group=${selectedItemGroup}&category=${selectedCategory}&requested_date=${selectedStartDate}&required_date=${selectedEndDate}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -95,7 +104,15 @@ const DepartmentHeadHistory = () => {
 
   useEffect(() => {
     fetchData();
-  }, [authToken, page, branchID, selectedItemGroup, selectedCategory]);
+  }, [
+    authToken,
+    page,
+    branchID,
+    selectedItemGroup,
+    selectedCategory,
+    selectedStartDate,
+    selectedEndDate,
+  ]);
 
   const handleLoadMore = () => {
     setPage(page + 1);
