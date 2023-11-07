@@ -34,6 +34,8 @@ const PODashboard = () => {
   // Filter states
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,16 +57,23 @@ const PODashboard = () => {
     }
   };
 
-  const handleFilterApply = ({ department, item_group }) => {
+  const handleFilterApply = ({
+    department,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
     setSelectedDepartment(department);
     setSelectedItemGroup(item_group);
+    setSelectedStartDate(start_date);
+    setSelectedEndDate(end_date);
   };
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=1`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&start_date=${selectedStartDate}&end_date=${selectedEndDate}&tab=1`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -87,6 +96,8 @@ const PODashboard = () => {
     selectedBranchId,
     selectedDepartment,
     selectedItemGroup,
+    selectedStartDate,
+    selectedEndDate,
   ]);
 
   const handleLoadMore = () => {

@@ -33,6 +33,8 @@ const Comptroller = () => {
   const [selectedBranchId, setSelectedBranchId] = useState(1);
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
   // Modal states
   const [modalVisible, setModalVisible] = useState(false);
   // Loading states
@@ -60,16 +62,23 @@ const Comptroller = () => {
     }
   };
 
-  const handleFilterApply = ({ department, item_group }) => {
+  const handleFilterApply = ({
+    department,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
     setSelectedDepartment(department);
     setSelectedItemGroup(item_group);
+    setSelectedStartDate(start_date);
+    setSelectedEndDate(end_date);
   };
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&tab=2`,
+        `${apiKey}/purchase-orders?page=${page}&per_page=15&branch=${selectedBranchId}&department=${selectedDepartment}&item_group=${selectedItemGroup}&start_date=${selectedStartDate}&end_date=${selectedEndDate}&tab=2`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -92,6 +101,8 @@ const Comptroller = () => {
     selectedBranchId,
     selectedDepartment,
     selectedItemGroup,
+    selectedStartDate,
+    selectedEndDate,
   ]);
 
   const handleLoadMore = () => {

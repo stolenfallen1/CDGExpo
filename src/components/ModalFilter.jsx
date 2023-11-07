@@ -29,12 +29,18 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
   // Calendar modal state
-  const [modalVisible, setModalVisible] = useState(false);
+  const [startDateModal, setStartDateModal] = useState(false);
+  const [endDateModal, setEndDateModal] = useState(false);
   // Selected date state
-  const [selected, setSelected] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  const calendarModal = () => {
-    setModalVisible(true);
+  const startDateCalendar = () => {
+    setStartDateModal(true);
+  };
+
+  const endDateCalendar = () => {
+    setEndDateModal(true);
   };
 
   const handleApplyButtonPress = () => {
@@ -43,6 +49,8 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
       department: selectedDepartment,
       category: selectedCategory,
       item_group: selectedItemGroup,
+      start_date: startDate,
+      end_date: endDate,
     });
   };
 
@@ -197,34 +205,41 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             />
           </View>
         ))}
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <TouchableOpacity
-            onPress={calendarModal}
+            onPress={startDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              Start Date{" "}
+              {startDate === "" ? "Start Date" : startDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={calendarModal}
+            onPress={endDateCalendar}
             style={styles.calendarButton}
           >
             <Text>
-              End Date{" "}
+              {endDate === "" ? "End Date" : endDate} {""}
               <Ionicons name="calendar-outline" size={15} color={"#2596BE"} />
             </Text>
           </TouchableOpacity>
         </View>
-        <Modal isVisible={modalVisible}>
+        {/* Start Date Calendar Modal */}
+        <Modal isVisible={startDateModal}>
           <Calendar
             style={{ borderRadius: 10 }}
             onDayPress={(day) => {
-              setSelected(day.dateString);
+              setStartDate(day.dateString);
             }}
             markedDates={{
-              [selected]: {
+              [startDate]: {
                 selected: true,
                 disableTouchEvent: true,
                 selectedDotColor: "orange",
@@ -234,7 +249,28 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
           <Button
             title={"Back"}
             buttonStyle={customStyles.cancelButton}
-            onPress={() => setModalVisible(false)}
+            onPress={() => setStartDateModal(false)}
+          />
+        </Modal>
+        {/* End Date Calendar Modal */}
+        <Modal isVisible={endDateModal}>
+          <Calendar
+            style={{ borderRadius: 10 }}
+            onDayPress={(day) => {
+              setEndDate(day.dateString);
+            }}
+            markedDates={{
+              [endDate]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: "orange",
+              },
+            }}
+          />
+          <Button
+            title={"Back"}
+            buttonStyle={customStyles.cancelButton}
+            onPress={() => setEndDateModal(false)}
           />
         </Modal>
       </View>
@@ -256,6 +292,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

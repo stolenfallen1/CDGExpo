@@ -35,6 +35,8 @@ const ComptrollerDashboard = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedItemGroup, setSelectedItemGroup] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,11 +50,20 @@ const ComptrollerDashboard = () => {
   };
 
   // FILTER DATA
-  const handleFilterApply = ({ branch, department, category, item_group }) => {
+  const handleFilterApply = ({
+    branch,
+    department,
+    category,
+    item_group,
+    start_date,
+    end_date,
+  }) => {
     setSelectedBranch(branch);
     setSelectedDepartment(department);
     setSelectedCategory(category);
     setSelectedItemGroup(item_group);
+    setSelectedStartDate(start_date);
+    setSelectedEndDate(end_date);
     setFilterModal(false);
   };
 
@@ -60,7 +71,7 @@ const ComptrollerDashboard = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}`,
+        `${apiKey}/purchase-request?page=${page}&per_page=15&tab=6&branch=${selectedBranch}&department=${selectedDepartment}&category=${selectedCategory}&item_group=${selectedItemGroup}&requested_date=${selectedStartDate}&required_date=${selectedEndDate}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -83,6 +94,8 @@ const ComptrollerDashboard = () => {
     selectedDepartment,
     selectedCategory,
     selectedItemGroup,
+    selectedStartDate,
+    selectedEndDate,
   ]);
 
   const handleLoadMore = () => {
