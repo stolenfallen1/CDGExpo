@@ -32,9 +32,6 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
   const [startDateModal, setStartDateModal] = useState(false);
   const [endDateModal, setEndDateModal] = useState(false);
   // Selected date state
-  // start date = requested_date
-  // end date = required_date
-  // sample format for both are = year-month-day (2023-11-6)
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -208,7 +205,13 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
             />
           </View>
         ))}
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <TouchableOpacity
             onPress={startDateCalendar}
             style={styles.calendarButton}
@@ -289,6 +292,7 @@ const ModalFilter = ({ onSubmit, handleClose }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

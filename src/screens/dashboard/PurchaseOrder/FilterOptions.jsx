@@ -198,8 +198,8 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           title={"Apply"}
           buttonStyle={customStyles.submitButton}
           onPress={() => {
-            handleSelectRequestedDate(startDate);
             setStartDateModal(false);
+            handleSelectRequestedDate(startDate);
           }}
         />
         <Button
@@ -227,8 +227,8 @@ const FilterOptions = ({ selectedBranchID, onClose }) => {
           title={"Apply"}
           buttonStyle={customStyles.submitButton}
           onPress={() => {
-            handleSelectRequiredDate(endDate);
             setEndDateModal(false);
+            handleSelectRequiredDate(endDate);
           }}
         />
         <Button
