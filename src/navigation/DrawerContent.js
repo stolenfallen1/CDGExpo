@@ -21,7 +21,7 @@ const DrawerContent = ({ navigation }) => {
         },
       });
       if (response.status === 200) {
-        navigation.navigate("Home");
+        navigation.navigate("Login");
         Toast.show("Successfully logged out", {
           duration: Toast.durations.SHORT,
           position: Toast.positions.TOP,
