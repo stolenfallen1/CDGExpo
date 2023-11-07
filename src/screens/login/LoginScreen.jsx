@@ -63,19 +63,22 @@ export default function LoginScreen() {
         Toast.show("Welcome to MMIS Mobile", {
           duration: Toast.durations.SHORT,
           position: Toast.positions.TOP,
-          backgroundColor: "green",
+          backgroundColor: "#5cb85c",
           opacity: 1,
         });
       } else {
         Toast.show("Login failed. Please try again", {
           duration: Toast.durations.SHORT,
           position: Toast.positions.BOTTOM,
-          backgroundColor: "red",
+          backgroundColor: "#d9534f",
         });
       }
     } catch (error) {
-      console.error(error);
-      alert("An error occurred. Please try again later.");
+      Toast.show("Login failed. Please try again", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        backgroundColor: "#d9534f",
+      });
     }
   };
 

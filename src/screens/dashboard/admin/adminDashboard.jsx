@@ -128,7 +128,7 @@ const AdminDashboard = () => {
               Toast.show("PR Approved on Selected Items", {
                 duration: Toast.durations.SHORT,
                 position: Toast.positions.TOP,
-                backgroundColor: "green",
+                backgroundColor: "#5cb85c",
                 opacity: 1,
               });
               fetchData();

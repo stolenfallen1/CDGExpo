@@ -106,7 +106,7 @@ const ApproveItems = () => {
                       Toast.show("Remarks Submitted Successfully", {
                         duration: Toast.durations.SHORT,
                         position: Toast.positions.TOP,
-                        backgroundColor: "red",
+                        backgroundColor: "#d9534f",
                         opacity: 0.8,
                       });
                       navigation.goBack();
@@ -136,7 +136,7 @@ const ApproveItems = () => {
                 Toast.show("Canvas Approved Successfully", {
                   duration: Toast.durations.SHORT,
                   position: Toast.positions.TOP,
-                  backgroundColor: "green",
+                  backgroundColor: "#5cb85c",
                   opacity: 1,
                 });
                 navigation.goBack();

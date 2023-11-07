@@ -4,6 +4,7 @@ import { userRoleState } from "../atoms/userRoleState";
 import { authTokenState } from "../atoms/authTokenState";
 import CDUHLOGO from "../../assets/HomeScreenAssets/CDUH-logo.png";
 import { customStyles } from "../styles/customStyles";
+import Toast from "react-native-root-toast";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
@@ -19,8 +20,15 @@ const DrawerContent = ({ navigation }) => {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      navigation.navigate("Home");
-      // Add toast message here
+      if (response.status === 200) {
+        navigation.navigate("Home");
+        Toast.show("Successfully logged out", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+          backgroundColor: "#5cb85c",
+          opacity: 1,
+        });
+      }
     } catch (error) {
       console.error(error);
     }

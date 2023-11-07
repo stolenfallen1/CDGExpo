@@ -54,7 +54,7 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
               Toast.show("PO Approved Successfully", {
                 duration: Toast.durations.SHORT,
                 position: Toast.positions.TOP,
-                backgroundColor: "green",
+                backgroundColor: "#5cb85c",
                 opacity: 1,
               });
             });
