@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import { userBranchID } from "../../atoms/userBranchId";
 import { userPassword } from "../../atoms/userPassword";
 import { vendorsData } from "../../atoms/vendorsData";
 import { unitsData } from "../../atoms/unitsData";
+import CDUHLOGO from "../../../assets/HomeScreenAssets/CDUH-logo.png";
 import HomeSplash from "../home/HomeSplash";
 import Toast from "react-native-root-toast";
 import axios from "axios";
@@ -17,8 +18,8 @@ import axios from "axios";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("corporate_admin");
-  const [password, setPassword] = useState("corporate_admin");
+  const [idnumber, setIdnumber] = useState("consultant");
+  const [password, setPassword] = useState("consultant");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
@@ -98,6 +99,9 @@ export default function LoginScreen() {
     <View style={styles.container}>
       {isSplashReady ? (
         <>
+          <View style={styles.imageContainer}>
+            <Image source={CDUHLOGO} />
+          </View>
           <Input
             label="ID"
             value={idnumber}
@@ -119,6 +123,7 @@ export default function LoginScreen() {
             buttonStyle={{ backgroundColor: "#2596BE", paddingHorizontal: 25 }}
             onPress={handleLoginPress}
           />
+          <Text style={styles.footerText}>© 2023 CebuDocGroup</Text>
         </>
       ) : (
         <HomeSplash />
@@ -134,5 +139,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 40,
+  },
+  imageContainer: {
+    width: "100%",
+    height: "auto",
+    alignItems: "center",
+  },
+  footerText: {
+    position: "absolute",
+    bottom: 15,
+    fontSize: 16,
+    color: "gray",
   },
 });
