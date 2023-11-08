@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -10,14 +10,16 @@ import { userBranchID } from "../../atoms/userBranchId";
 import { userPassword } from "../../atoms/userPassword";
 import { vendorsData } from "../../atoms/vendorsData";
 import { unitsData } from "../../atoms/unitsData";
+import CDUHLOGO from "../../../assets/HomeScreenAssets/CDUH-logo.png";
+import HomeSplash from "../home/HomeSplash";
 import Toast from "react-native-root-toast";
 import axios from "axios";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("corporate_admin");
-  const [password, setPassword] = useState("corporate_admin");
+  const [idnumber, setIdnumber] = useState("test_comptroller");
+  const [password, setPassword] = useState("test_comptroller");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);
@@ -25,8 +27,19 @@ export default function LoginScreen() {
   const setUserPassword = useSetRecoilState(userPassword);
   const setVendorsData = useSetRecoilState(vendorsData);
   const setUnitsData = useSetRecoilState(unitsData);
+  const [isSplashReady, setSplashReady] = useState(false);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSplashReady(true);
+    }, 4000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   const handleLoginPress = async () => {
     try {
@@ -84,25 +97,37 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Input
-        label="ID"
-        value={idnumber}
-        onChangeText={setIdnumber}
-        leftIcon={<Ionicons name="md-person" size={18} color="gray" />}
-      />
-      <Input
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        leftIcon={<Ionicons name="ios-lock-closed" size={18} color="gray" />}
-      />
-      <Button
-        title={"Login"}
-        raised={true}
-        buttonStyle={{ backgroundColor: "#2596BE", paddingHorizontal: 25 }}
-        onPress={handleLoginPress}
-      />
+      {isSplashReady ? (
+        <>
+          <View style={styles.imageContainer}>
+            <Image source={CDUHLOGO} />
+          </View>
+          <Input
+            label="ID"
+            value={idnumber}
+            onChangeText={setIdnumber}
+            leftIcon={<Ionicons name="md-person" size={18} color="gray" />}
+          />
+          <Input
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            leftIcon={
+              <Ionicons name="ios-lock-closed" size={18} color="gray" />
+            }
+          />
+          <Button
+            title={"Login"}
+            raised={true}
+            buttonStyle={{ backgroundColor: "#2596BE", paddingHorizontal: 25 }}
+            onPress={handleLoginPress}
+          />
+          <Text style={styles.footerText}>© 2023 CebuDocGroup</Text>
+        </>
+      ) : (
+        <HomeSplash />
+      )}
     </View>
   );
 }
@@ -114,5 +139,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 40,
+  },
+  imageContainer: {
+    width: "100%",
+    height: "auto",
+    alignItems: "center",
+  },
+  footerText: {
+    position: "absolute",
+    bottom: 15,
+    fontSize: 16,
+    color: "gray",
   },
 });

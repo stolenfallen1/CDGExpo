@@ -6,8 +6,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 // Navigation imports
-import HomeScreen from "./src/screens/home/HomeScreen";
-import LoginScreen from "./src/screens/login/LoginScreen";
 import Dashboard from "./src/screens/dashboard/Dashboard";
 import DrawerContent from "./src/navigation/DrawerContent";
 // Drawer Navigation imports for PR
@@ -28,6 +26,7 @@ import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 import ModalFilter from "./src/components/ModalFilter";
 import ApprovedCanvas from "./src/screens/dashboard/comptroller/ApprovedCanvas";
 import ConsultantLogs from "./src/screens/dashboard/consultant/ConsultantLogs";
+import AuthNavigtors from "./src/navigation/AuthNavigators";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,11 +43,10 @@ function App() {
             }}
           >
             <Stack.Screen
-              name="Home"
-              component={HomeScreen}
+              name="Auth"
+              component={AuthNavigtors}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
               {() => (
                 <Drawer.Navigator drawerContent={DrawerContent}>
