@@ -18,8 +18,8 @@ import axios from "axios";
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
 export default function LoginScreen() {
-  const [idnumber, setIdnumber] = useState("consultant");
-  const [password, setPassword] = useState("consultant");
+  const [idnumber, setIdnumber] = useState("test_comptroller");
+  const [password, setPassword] = useState("test_comptroller");
 
   const setAuthToken = useSetRecoilState(authTokenState);
   const setUserRole = useSetRecoilState(userRoleState);

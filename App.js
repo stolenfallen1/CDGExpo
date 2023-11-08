@@ -26,7 +26,7 @@ import SupplierList from "./src/screens/dashboard/comptroller/SupplierList";
 import ModalFilter from "./src/components/ModalFilter";
 import ApprovedCanvas from "./src/screens/dashboard/comptroller/ApprovedCanvas";
 import ConsultantLogs from "./src/screens/dashboard/consultant/ConsultantLogs";
-import AuthNavigtors from "./src/navigation/AuthNavigtors";
+import AuthNavigtors from "./src/navigation/AuthNavigators";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
