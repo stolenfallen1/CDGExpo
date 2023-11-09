@@ -11,10 +11,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Toast from "react-native-root-toast";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { userPassword } from "../../../atoms/userPassword";
 import { unitsData } from "../../../atoms/unitsData";
+import { approveCanvasState } from "../../../atoms/approveCanvasState";
 import { Card, Button, CheckBox } from "react-native-elements";
 import { customStyles } from "../../../styles/customStyles";
 import ModalHeader from "../../../components/Modals/PRModalHeader";
@@ -31,6 +32,7 @@ const ApproveItems = () => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
+  const [approveCanvas, setApproveCanvas] = useRecoilState(approveCanvasState);
   // Data states
   const [data, setData] = useState([]);
   const units = useRecoilValue(unitsData);
@@ -103,13 +105,14 @@ const ApproveItems = () => {
                     })
                     .then((response) => {
                       console.log(response.data);
+                      navigation.goBack();
+                      setApproveCanvas(true);
                       Toast.show("Remarks Submitted Successfully", {
                         duration: Toast.durations.SHORT,
                         position: Toast.positions.TOP,
                         backgroundColor: "#d9534f",
                         opacity: 0.8,
                       });
-                      navigation.goBack();
                     })
                     .catch((error) => {
                       console.error(error);
@@ -133,13 +136,14 @@ const ApproveItems = () => {
               })
               .then((response) => {
                 console.log(response.data);
+                navigation.goBack();
+                setApproveCanvas(true);
                 Toast.show("Canvas Approved Successfully", {
                   duration: Toast.durations.SHORT,
                   position: Toast.positions.TOP,
                   backgroundColor: "#5cb85c",
                   opacity: 1,
                 });
-                navigation.goBack();
               })
               .catch((error) => {
                 console.error(error);

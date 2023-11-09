@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
+import { approveCanvasState } from "../../../atoms/approveCanvasState";
 import PRCard from "../../../components/Cards/PRCard";
 import Search from "../../../components/Search";
 import Modal from "react-native-modal";
@@ -24,6 +25,7 @@ const ComptrollerDashboard = () => {
   const navigation = useNavigation();
   // Auth states
   const authToken = useRecoilValue(authTokenState);
+  const approveCanvas = useRecoilValue(approveCanvasState);
   // Data states
   const [data, setData] = useState([]);
   // Pagination states
@@ -100,6 +102,11 @@ const ComptrollerDashboard = () => {
     selectedStartDate,
     selectedEndDate,
   ]);
+  useEffect(() => {
+    if (approveCanvas) {
+      fetchData();
+    }
+  });
 
   const handleLoadMore = () => {
     setPage(page + 1);
