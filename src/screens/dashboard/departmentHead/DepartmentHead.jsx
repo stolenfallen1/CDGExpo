@@ -313,6 +313,8 @@ const DepartmentHead = () => {
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
                   }}
+                  buttonStyle={{ width: "100%" }}
+                  buttonTextStyle={customStyles.branchFilterText}
                 />
               </View>
               <View style={customStyles.inputContainer}>
@@ -364,6 +366,8 @@ const DepartmentHead = () => {
                       <Ionicons name="chevron-down" size={18} color="gray" />
                     );
                   }}
+                  buttonStyle={{ width: "100%" }}
+                  buttonTextStyle={customStyles.branchFilterText}
                 />
               </View>
               <CheckBox

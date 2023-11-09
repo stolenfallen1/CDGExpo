@@ -80,7 +80,10 @@ const ComptrollerDashboard = () => {
       );
       setData(response.data.data);
     } catch (error) {
-      console.error(error);
+      if (error) {
+        navigation.navigate("Login");
+        alert("Session expired or another user has logged in.");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -13,11 +13,10 @@ const AdminDashboardTabs = () => {
 
   const handleTabPress = (tabName) => {
     setSelectedTabState(tabName);
-    console.log("selectedTabState: ", selectedTab);
   };
 
   return (
-    <Tab.Navigator initialRouteName={selectedTab}>
+    <Tab.Navigator>
       <Tab.Screen
         name="Purchase Request"
         component={AdminDashboard}
@@ -51,7 +50,6 @@ const ComptrollerDashboardTabs = () => {
 
   const handleTabPress = (tabName) => {
     setSelectedTabState(tabName);
-    console.log("selectedTabState: ", selectedTab);
   };
 
   return (

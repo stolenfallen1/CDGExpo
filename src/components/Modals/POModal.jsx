@@ -13,7 +13,12 @@ import Toast from "react-native-root-toast";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 
-const POModal = ({ modalVisible, closeModal, selectedID }) => {
+const POModal = ({
+  modalVisible,
+  closeModal,
+  selectedID,
+  handleFormSubmit,
+}) => {
   // Auth states
   const authToken = useRecoilValue(authTokenState);
   const userPasscode = useRecoilValue(userPassword);
@@ -51,6 +56,7 @@ const POModal = ({ modalVisible, closeModal, selectedID }) => {
             })
             .then((response) => {
               console.log(response.data);
+              handleFormSubmit();
               Toast.show("PO Approved Successfully", {
                 duration: Toast.durations.SHORT,
                 position: Toast.positions.TOP,

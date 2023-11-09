@@ -17,9 +17,11 @@ import { customStyles } from "../../../styles/customStyles";
 import { Ionicons } from "@expo/vector-icons";
 import POModal from "../../../components/Modals/POModal";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const apiKey = process.env.EXPO_PUBLIC_API_URL;
 const PODashboard = () => {
+  const navigation = useNavigation();
   // Auth states
   const authToken = useRecoilValue(authTokenState);
   // Data states
@@ -82,7 +84,10 @@ const PODashboard = () => {
       );
       setData(response.data.data);
     } catch (error) {
-      console.error(error);
+      if (error) {
+        navigation.navigate("Login");
+        alert("Session expired or another user has logged in.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -99,6 +104,11 @@ const PODashboard = () => {
     selectedStartDate,
     selectedEndDate,
   ]);
+
+  const handleFormSubmit = () => {
+    setModalVisible(false);
+    fetchData();
+  };
 
   const handleLoadMore = () => {
     setPage(page + 1);
@@ -134,6 +144,7 @@ const PODashboard = () => {
         modalVisible={modalVisible}
         selectedID={selectedID}
         closeModal={() => setModalVisible(false)}
+        handleFormSubmit={handleFormSubmit}
       />
       <FilterOptions
         selectedBranchID={selectedBranchId}
