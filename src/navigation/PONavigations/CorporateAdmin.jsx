@@ -87,7 +87,12 @@ const CorporateAdmin = () => {
       );
       setData(response.data.data);
     } catch (error) {
-      console.error(error);
+      if (error.response.status === 401) {
+        navigation.navigate("Login");
+        alert("Session expired or another user has logged in.");
+      } else {
+        alert("Something went wrong. Please try again.", error.response.status);
+      }
     } finally {
       setIsLoading(false);
     }
