@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { authTokenState } from "../../../atoms/authTokenState";
 import { approveCanvasState } from "../../../atoms/approveCanvasState";
 import PRCard from "../../../components/Cards/PRCard";
@@ -25,7 +25,7 @@ const ComptrollerDashboard = () => {
   const navigation = useNavigation();
   // Auth states
   const authToken = useRecoilValue(authTokenState);
-  const approveCanvas = useRecoilValue(approveCanvasState);
+  const [approveCanvas, setApproveCanvas] = useRecoilState(approveCanvasState);
   // Data states
   const [data, setData] = useState([]);
   // Pagination states
@@ -107,6 +107,7 @@ const ComptrollerDashboard = () => {
   useEffect(() => {
     if (approveCanvas) {
       fetchData();
+      setApproveCanvas(false);
     }
   });
 
